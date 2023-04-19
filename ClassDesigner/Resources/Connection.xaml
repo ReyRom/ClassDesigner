@@ -1,0 +1,185 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
+                    xmlns:c="clr-namespace:ClassDesigner.Controls">
+    <ContextMenu x:Key="ConnectionContextMenu">
+        
+    </ContextMenu>
+
+    <SolidColorBrush x:Key="SolidBorderBrush" Color="Black"/>
+
+    <Style TargetType="{x:Type c:Connection}">
+        <Style.Resources>
+            <!-- Style for the ConnectorAdorner thumbs -->
+            <Style x:Key="ConnectionAdornerThumbStyle" TargetType="{x:Type Thumb}">
+                <Setter Property="Width" Value="12"/>
+                <Setter Property="Height" Value="12"/>
+                <Setter Property="SnapsToDevicePixels" Value="true"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform X="-6" Y="-6"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Rectangle Fill="#AADCDCDC" Stroke="DodgerBlue" StrokeThickness="1" RadiusX="0" RadiusY="0"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Style for the ConnectorAdorner thumbs -->
+            <Style x:Key="ConnectionAdornerAddNodeThumbStyle" TargetType="{x:Type Thumb}">
+                <Setter Property="Width" Value="8"/>
+                <Setter Property="Height" Value="8"/>
+                <Setter Property="SnapsToDevicePixels" Value="true"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform X="-4" Y="-4"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Rectangle Fill="#AADCDCDC" Stroke="DodgerBlue" StrokeThickness="1" RadiusX="0" RadiusY="0"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+            <!-- Arrow Grid Style --><!--
+            <Style x:Key="ArrowGridStyle" TargetType="Grid">
+                <Setter Property="Width" Value="10"/>
+                <Setter Property="Height" Value="10"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform X="-5" Y="-5"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>-->
+            <!-- base style for all arrow shapes -->
+            <Style x:Key="ArrowSymbolBaseStyle" TargetType="Path">
+                <Setter Property="Stroke" Value="{StaticResource SolidBorderBrush}"/>
+                <Setter Property="StrokeThickness" Value="2"/>
+                <Setter Property="StrokeStartLineCap" Value="Round"/>
+                <Setter Property="StrokeEndLineCap" Value="Round"/>
+                <Setter Property="StrokeLineJoin" Value="Round"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+            </Style>
+            
+            <Style x:Key="NotFilled" TargetType="Path" BasedOn="{StaticResource ArrowSymbolBaseStyle}">
+                <Setter Property="Fill" Value="Transparent"/>
+            </Style>
+            <Style x:Key="FilledWhite" TargetType="Path" BasedOn="{StaticResource ArrowSymbolBaseStyle}">
+                <Setter Property="Fill" Value="White"/>
+            </Style>
+            <Style x:Key="Filled" TargetType="Path" BasedOn="{StaticResource ArrowSymbolBaseStyle}">
+                <Setter Property="Fill" Value="Black"/>
+            </Style>
+
+            <Style x:Key="LineBaseStyle" TargetType="Path">
+                <Setter Property="Stroke" Value="{StaticResource SolidBorderBrush}"/>
+                <Setter Property="StrokeThickness" Value="2"/>
+                <Setter Property="StrokeStartLineCap" Value="Round"/>
+                <Setter Property="StrokeEndLineCap" Value="Round"/>
+                <Setter Property="StrokeLineJoin" Value="Round"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+            </Style>
+
+            <Style x:Key="SolidLine" TargetType="Path" BasedOn="{StaticResource LineBaseStyle}">
+                
+            </Style>
+
+            <Style x:Key="DashedLine" TargetType="Path" BasedOn="{StaticResource LineBaseStyle}">
+                <Setter Property="StrokeDashArray" Value="2 2"/>
+            </Style>
+            
+        </Style.Resources>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:Connection}">
+                    <Canvas DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                            ContextMenu="{StaticResource ConnectionContextMenu}">
+                        <Path Name="PART_ConnectionPath"
+                              Data="{Binding PathGeometry}">
+                        </Path>
+                        <Path Name="PART_HeaderSinkConnectionPath"
+                              Data="{Binding HeaderSinkPathGeometry}">
+                        </Path>
+                        <Path Name="PART_HeaderSourceConnectionPath"
+                              Data="{Binding HeaderSourcePathGeometry}">
+                        </Path>
+
+                        <!--<Grid Style="{StaticResource ArrowGridStyle}"
+                              Canvas.Left="{Binding AnchorPositionSource.X}"
+                              Canvas.Top="{Binding AnchorPositionSource.Y}">
+                            <Path Name="PART_SourceAnchorPath"/>
+                            <Grid.LayoutTransform>
+                                <RotateTransform Angle="{Binding AnchorAngleSource}"/>
+                            </Grid.LayoutTransform>
+                        </Grid>
+                        <Grid Style="{StaticResource ArrowGridStyle}"
+                              Canvas.Left="{Binding AnchorPositionSink.X}"
+                              Canvas.Top="{Binding AnchorPositionSink.Y}">
+                            <Path Name="PART_SinkAnchorPath"/>
+                            <Grid.LayoutTransform>
+                                <RotateTransform Angle="{Binding AnchorAngleSink}"/>
+                            </Grid.LayoutTransform>
+                        </Grid>-->
+
+                        <!--Uncomment this to show default label text-->
+                        <!--<TextBlock Width="100" Height="35"
+                                       Text="{Binding Path=(Canvas.ZIndex)}"
+                                       Canvas.Left="{Binding LabelPosition.X}"
+                                       Canvas.Top="{Binding LabelPosition.Y}">
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform X="5" Y="5"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>-->
+
+                        <Canvas.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="315" ShadowDepth="10" Softness="0" Opacity="0.1"/>
+                        </Canvas.BitmapEffect>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Self},Path=ConnectionViewModel.RelationType}" Value="Dependency">
+                            <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource DashedLine}"/>
+                            <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource NotFilled}"/>
+                        </DataTrigger>
+                        <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Self},Path=ConnectionViewModel.RelationType}" Value="Association">
+                            <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource SolidLine}"/>
+                            <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource NotFilled}"/>
+                        </DataTrigger>
+                        <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Self},Path=ConnectionViewModel.RelationType}" Value="Aggregation">
+                            <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource SolidLine}"/>
+                            <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource FilledWhite}"/>
+                        </DataTrigger>
+                        <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Self},Path=ConnectionViewModel.RelationType}" Value="Composition">
+                            <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource SolidLine}"/>
+                            <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource Filled}"/>
+                        </DataTrigger>
+                        <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Self},Path=ConnectionViewModel.RelationType}" Value="Generalization">
+                            <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource SolidLine}"/>
+                            <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource FilledWhite}"/>
+                        </DataTrigger>
+                        <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Self},Path=ConnectionViewModel.RelationType}" Value="Realization">
+                            <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource DashedLine}"/>
+                            <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource Filled}"/>
+                        </DataTrigger>
+                        <!--<DataTrigger Value="Diamond" Binding="{Binding RelativeSource={RelativeSource Self},Path=SourceArrowSymbol}">
+                            <Setter TargetName="PART_SourceAnchorPath" Property="Style" Value="{StaticResource Diamond}"/>
+                        </DataTrigger>
+                        <DataTrigger Value="Arrow" Binding="{Binding RelativeSource={RelativeSource Self},Path=SinkArrowSymbol}">
+                            <Setter TargetName="PART_SinkAnchorPath" Property="Style" Value="{StaticResource Arrow}"/>
+                        </DataTrigger>
+                        <DataTrigger Value="Diamond" Binding="{Binding RelativeSource={RelativeSource Self},Path=SinkArrowSymbol}">
+                            <Setter TargetName="PART_SinkAnchorPath" Property="Style" Value="{StaticResource Diamond}"/>
+                        </DataTrigger>-->
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

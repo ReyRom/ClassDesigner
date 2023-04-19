@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="ClassDesigner.Views.Class"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys ="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:ClassDesigner.Views"
+             xmlns:v="clr-namespace:ClassDesigner.Views"
+             xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
+             xmlns:m="clr-namespace:ClassDesigner.Models"
+             xmlns:h="clr-namespace:ClassDesigner.Helping"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="150">
+    <UserControl.Resources>
+        <vm:ClassViewModel x:Key="viewModel"/>
+
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <ObjectDataProvider x:Key="Stereotypes" MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="m:Stereotype"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <h:EnumConverter x:Key="enumConverter"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <StaticResource ResourceKey="viewModel"/>
+    </UserControl.DataContext>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Добавить атрибут" Command="{Binding Source={StaticResource viewModel}, Path=AddAttributeCommand}"/>
+            <MenuItem Header="Добавить метод" Command="{Binding  Source={StaticResource viewModel}, Path=AddMethodCommand}"/>
+            <Separator/>
+            <MenuItem Header="Стереотип" ItemsSource="{Binding Source={StaticResource Stereotypes}}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Header" Value="{Binding Converter={StaticResource enumConverter}}"/>
+                        <Setter Property="Command" Value="{Binding  Source={StaticResource viewModel}, Path=AddStereotypeCommand}"/>
+                        <Setter Property="CommandParameter" Value="{Binding}"/>
+                        <Setter Property="IsCheckable" Value="True"/>
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem Header="Свойства" DataContext="{StaticResource viewModel}">
+                <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+                <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+
+    <Grid Background="White" DataContext="{StaticResource viewModel}">
+        <StackPanel>
+            <ItemsControl ItemsSource="{Binding Stereotypes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat=&lt;&lt;{0}&gt;&gt;}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <TextBox Text="{Binding Header}" HorizontalAlignment="Center">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                <Setter Property="FontStyle" Value="Italic"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                <Setter Property="TextDecorations" Value="Underline"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <Separator />
+            <ItemsControl ItemsSource="{Binding Attributes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding AttributeString, Mode=TwoWay}">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                            <Setter Property="TextDecorations" Value="Underline"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Separator />
+            <ItemsControl ItemsSource="{Binding Methods}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding MethodString, Mode=TwoWay}">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                            <Setter Property="TextDecorations" Value="Underline"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+        <Border BorderThickness="1"  BorderBrush="Black"/>
+    </Grid>
+</UserControl>
