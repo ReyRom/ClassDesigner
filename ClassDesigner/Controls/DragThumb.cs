@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace ClassDesigner.Controls
@@ -25,8 +22,9 @@ namespace ClassDesigner.Controls
                 double minLeft = double.MaxValue;
                 double minTop = double.MaxValue;
 
-#warning we only move DesignerItems
                 var designerItems = designer.SelectionService.Selection.OfType<DesignerItem>();
+
+                var connections = designer.SelectionService.Selection.OfType<Connection>();
 
                 foreach (DesignerItem item in designerItems)
                 {
@@ -50,6 +48,15 @@ namespace ClassDesigner.Controls
 
                     Canvas.SetLeft(item, left + deltaHorizontal);
                     Canvas.SetTop(item, top + deltaVertical);
+
+                    foreach (var connection in connections.Where(x => x.Source.ParentDesignerItem == item))
+                    {
+                        foreach (var node in connection.Nodes)
+                        {
+                            node.Point = new System.Windows.Point(node.Point.X + deltaHorizontal, node.Point.Y + deltaVertical);
+                        }
+                        connection.UpdateConnection();
+                    }
                 }
 
                 designer.InvalidateMeasure();

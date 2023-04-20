@@ -1,14 +1,8 @@
-﻿using ClassDesigner.Helping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows;
 
 namespace ClassDesigner.Controls
 {
@@ -81,18 +75,31 @@ namespace ClassDesigner.Controls
             Rect rubberBand = new Rect(startPoint.Value, endPoint.Value);
             foreach (Control item in designerCanvas.Children)
             {
-                Rect itemRect = VisualTreeHelper.GetDescendantBounds(item);
-                Rect itemBounds = item.TransformToAncestor(designerCanvas).TransformBounds(itemRect);
-
-                if (rubberBand.Contains(itemBounds))
+                if (item is DesignerItem di)
                 {
-                    if (item is Connection)
-                        designerCanvas.SelectionService.AddSelection(item as ISelectable);
-                    else
+                    Rect itemRect = VisualTreeHelper.GetDescendantBounds(item);
+                    Rect itemBounds = di.TransformToAncestor(designerCanvas).TransformBounds(itemRect);
+
+                    if (rubberBand.Contains(itemBounds))
                     {
-                        DesignerItem di = item as DesignerItem;
+
                         //if (di.ParentID == Guid.Empty)
                         designerCanvas.SelectionService.AddSelection(di);
+                    }
+                }
+                if (item is Connection c)
+                {
+                    Rect itemRect = c.PathGeometry.Bounds;
+                    Rect itemBounds = c.TransformToAncestor(designerCanvas).TransformBounds(itemRect);
+                    if (rubberBand.Contains(itemBounds))
+                    {
+                        designerCanvas.SelectionService.AddSelection(c);
+                        if (!c.Sink.ParentDesignerItem.IsSelected)
+                            designerCanvas.SelectionService.AddSelection(c.Sink.ParentDesignerItem);
+
+                        if (!c.Source.ParentDesignerItem.IsSelected)
+                            designerCanvas.SelectionService.AddSelection(c.Source.ParentDesignerItem);
+
                     }
                 }
             }

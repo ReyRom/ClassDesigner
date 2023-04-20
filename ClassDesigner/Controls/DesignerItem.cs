@@ -124,9 +124,9 @@ namespace ClassDesigner.Controls
         }
 
 
-        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            base.OnPreviewMouseDown(e);
+            base.OnMouseDown(e);
             DesignerCanvas designer = VisualTreeHelper.GetParent(this) as DesignerCanvas;
 
             // update selection
@@ -136,6 +136,11 @@ namespace ClassDesigner.Controls
                     if (this.IsSelected)
                     {
                         designer.SelectionService.RemoveSelection(this);
+
+                        foreach (var item in designer.GetConnections(this))
+                        {
+                            designer.SelectionService.RemoveSelection(item);
+                        }
                     }
                     else
                     {
@@ -145,10 +150,10 @@ namespace ClassDesigner.Controls
                 {
                     designer.SelectionService.SelectItem(this);
                 }
-                Focus();
+                //Focus();
             }
 
-            e.Handled = false;
+            e.Handled = true;
         }
 
         void DesignerItem_Loaded(object sender, RoutedEventArgs e)

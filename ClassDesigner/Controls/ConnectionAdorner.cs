@@ -1,17 +1,13 @@
 ﻿using ClassDesigner.Helping;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows;
-using System.Xml.Linq;
 
 namespace ClassDesigner.Controls
 {
@@ -94,17 +90,12 @@ namespace ClassDesigner.Controls
 
         void AnchorPositionChanged(object sender, PropertyChangedEventArgs e)
         {
-            //if (e.PropertyName.Equals("AnchorPositionSource"))
-            //{
-            //    Canvas.SetLeft(sourceDragThumb, connection.AnchorPositionSource.X);
-            //    Canvas.SetTop(sourceDragThumb, connection.AnchorPositionSource.Y);
-            //}
 
-            //if (e.PropertyName.Equals("AnchorPositionSink"))
-            //{
-            //    Canvas.SetLeft(sinkDragThumb, connection.AnchorPositionSink.X);
-            //    Canvas.SetTop(sinkDragThumb, connection.AnchorPositionSink.Y);
-            //}
+            if (e.PropertyName.Equals("AnchorPositionSource") || e.PropertyName.Equals("AnchorPositionSink"))
+            {
+                InitializeDragThumbs();
+                this.InvalidateVisual();
+            }
         }
 
         void thumbDragThumb_DragCompleted(object sender, DragCompletedEventArgs e)
@@ -156,7 +147,7 @@ namespace ClassDesigner.Controls
                 //    fixConnector = connection.Source;
                 //}
             }
-            
+
         }
 
         void thumbDragThumb_DragDelta(object sender, DragDeltaEventArgs e)
@@ -164,7 +155,7 @@ namespace ClassDesigner.Controls
             Point currentPosition = Mouse.GetPosition(this);
             //this.HitTesting(currentPosition);
 
-            
+
 
             this.pathGeometry = UpdatePathGeometry(currentPosition);
             this.InvalidateVisual();
@@ -174,6 +165,7 @@ namespace ClassDesigner.Controls
         {
             base.OnRender(dc);
             dc.DrawGeometry(null, drawingPen, this.pathGeometry);
+
         }
 
         protected override Size ArrangeOverride(Size finalSize)
@@ -198,26 +190,9 @@ namespace ClassDesigner.Controls
                 item.DragStarted -= new DragStartedEventHandler(thumbDragThumb_DragStarted);
                 item.DragCompleted -= new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
                 item.PreviewMouseRightButtonUp -= new MouseButtonEventHandler(DragThumb_PreviewMouseRightButtonUp);
-                item.PreviewMouseUp -= new MouseButtonEventHandler(AddNodeDrag_PreviewMouseUp);
+                item.PreviewMouseDoubleClick -= new MouseButtonEventHandler(AddNodeThumb_PreviewMouseDoubleClick);
             }
 
-        }
-
-        private void AddNodeDrag_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            var t = (AddNodeThumb)sender;
-            if (t.Guid1 == null)
-            {
-                connection.Nodes.InsertNode(t.Guid2, new Node(t.Position));
-            }
-            else
-            {
-                connection.Nodes.InsertNode(t.Guid1, new Node(t.Position),false);
-            }
-
-            this.connection.UpdateConnection();
-            InitializeDragThumbs();
-            this.InvalidateVisual();
         }
 
         private void InitializeDragThumbs()
@@ -259,7 +234,7 @@ namespace ClassDesigner.Controls
             this.adornerCanvas.Children.Add(addNodeThumb1);
             if (dragThumbStyle != null)
                 addNodeThumb1.Style = addThumbStyle;
-            addNodeThumb1.PreviewMouseUp += new MouseButtonEventHandler(AddNodeDrag_PreviewMouseUp);
+            addNodeThumb1.PreviewMouseDoubleClick += new MouseButtonEventHandler(AddNodeThumb_PreviewMouseDoubleClick);
 
             thumbs.Add(addNodeThumb1);
 
@@ -277,7 +252,7 @@ namespace ClassDesigner.Controls
                 this.adornerCanvas.Children.Add(addNodeThumb);
                 if (dragThumbStyle != null)
                     addNodeThumb.Style = addThumbStyle;
-                addNodeThumb.PreviewMouseUp += new MouseButtonEventHandler(AddNodeDrag_PreviewMouseUp);
+                addNodeThumb.PreviewMouseDoubleClick += new MouseButtonEventHandler(AddNodeThumb_PreviewMouseDoubleClick);
 
                 thumbs.Add(addNodeThumb);
             }
@@ -293,7 +268,7 @@ namespace ClassDesigner.Controls
             this.adornerCanvas.Children.Add(addNodeThumb2);
             if (dragThumbStyle != null)
                 addNodeThumb2.Style = addThumbStyle;
-            addNodeThumb2.PreviewMouseUp += new MouseButtonEventHandler(AddNodeDrag_PreviewMouseUp);
+            addNodeThumb2.PreviewMouseDoubleClick += new MouseButtonEventHandler(AddNodeThumb_PreviewMouseDoubleClick);
 
             thumbs.Add(addNodeThumb2);
 
@@ -321,6 +296,23 @@ namespace ClassDesigner.Controls
             //sinkDragThumb.DragDelta += new DragDeltaEventHandler(thumbDragThumb_DragDelta);
             //sinkDragThumb.DragStarted += new DragStartedEventHandler(thumbDragThumb_DragStarted);
             //sinkDragThumb.DragCompleted += new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
+        }
+
+        private void AddNodeThumb_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var t = (AddNodeThumb)sender;
+            if (t.Guid1 == null)
+            {
+                connection.Nodes.InsertNode(t.Guid2, new Node(t.Position));
+            }
+            else
+            {
+                connection.Nodes.InsertNode(t.Guid1, new Node(t.Position), false);
+            }
+
+            this.connection.UpdateConnection();
+            InitializeDragThumbs();
+            this.InvalidateVisual();
         }
 
         private void DragThumb_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)

@@ -1,11 +1,11 @@
 ﻿using ClassDesigner.Helping;
-using System.IO;
-using System.Windows;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Xml;
 
 namespace ClassDesigner.Controls
 {
@@ -139,6 +139,11 @@ namespace ClassDesigner.Controls
                 if (decorator != null && template != null)
                     decorator.Template = template;
             }
+        }
+
+        public List<Connection> GetConnections(DesignerItem item)
+        {
+            return this.Children.OfType<Connection>().Where(x => (x.Source.ParentDesignerItem == item || x.Sink.ParentDesignerItem == item)).ToList();
         }
     }
 }

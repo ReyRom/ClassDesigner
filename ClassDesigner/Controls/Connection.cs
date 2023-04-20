@@ -19,7 +19,13 @@ namespace ClassDesigner.Controls
     {
         private Adorner connectionAdorner;
 
-        public ConnectionViewModel ConnectionViewModel { get; set; }
+        public ConnectionViewModel ConnectionViewModel
+        {
+            get => connectionViewModel; set
+            {
+                connectionViewModel = value;
+            }
+        }
 
         #region Properties
 
@@ -267,7 +273,8 @@ namespace ClassDesigner.Controls
             this.Source = source;
             this.Sink = sink;
             ConnectionViewModel = new ConnectionViewModel();
-            switch (ConnectionViewModel.RelationType)
+
+            switch (connectionViewModel.RelationType)
             {
                 case RelationType.Dependency:
                     SinkArrowSymbol = ArrowSymbol.Arrow;
@@ -293,6 +300,39 @@ namespace ClassDesigner.Controls
         }
 
 
+        public Connection(Connector source, Connector sink, RelationType relationType)
+        {
+            this.ID = Guid.NewGuid();
+            this.Source = source;
+            this.Sink = sink;
+            ConnectionViewModel = new ConnectionViewModel();
+            ConnectionViewModel.RelationType = relationType;
+
+            switch (connectionViewModel.RelationType)
+            {
+                case RelationType.Dependency:
+                    SinkArrowSymbol = ArrowSymbol.Arrow;
+                    break;
+                case RelationType.Association:
+                    SinkArrowSymbol = ArrowSymbol.None;
+                    break;
+                case RelationType.Aggregation:
+                    SinkArrowSymbol = ArrowSymbol.Diamond;
+                    break;
+                case RelationType.Composition:
+                    SinkArrowSymbol = ArrowSymbol.Diamond;
+                    break;
+                case RelationType.Generalization:
+                    SinkArrowSymbol = ArrowSymbol.ClosedArrow;
+                    break;
+                case RelationType.Realization:
+                    SinkArrowSymbol = ArrowSymbol.ClosedArrow;
+                    break;
+            }
+
+            base.Unloaded += new RoutedEventHandler(Connection_Unloaded);
+        }
+
         protected override void OnMouseDown(System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
@@ -309,13 +349,24 @@ namespace ClassDesigner.Controls
                     else
                     {
                         designer.SelectionService.AddSelection(this);
+                        if (!this.Sink.ParentDesignerItem.IsSelected) 
+                            designer.SelectionService.AddSelection(this.Sink.ParentDesignerItem);
+
+                        if (!this.Source.ParentDesignerItem.IsSelected) 
+                            designer.SelectionService.AddSelection(this.Source.ParentDesignerItem);
                     }
                 else if (!this.IsSelected)
                 {
                     designer.SelectionService.SelectItem(this);
+
+                    if (!this.Sink.ParentDesignerItem.IsSelected)
+                        designer.SelectionService.AddSelection(this.Sink.ParentDesignerItem);
+
+                    if (!this.Source.ParentDesignerItem.IsSelected)
+                        designer.SelectionService.AddSelection(this.Source.ParentDesignerItem);
                 }
 
-                Focus();
+                //Focus();
             }
             e.Handled = false;
         }
@@ -432,7 +483,7 @@ namespace ClassDesigner.Controls
         }
 
         private PathGeometry headerSourcePathGeometry;
-        
+        private ConnectionViewModel connectionViewModel;
 
         public PathGeometry HeaderSourcePathGeometry
         {
