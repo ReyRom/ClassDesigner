@@ -19,13 +19,6 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
-        <ObjectDataProvider x:Key="Stereotypes" MethodName="GetValues"
-                            ObjectType="{x:Type sys:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="m:Stereotype"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-        <h:EnumConverter x:Key="enumConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <StaticResource ResourceKey="viewModel"/>
@@ -52,7 +45,7 @@
         </ContextMenu>
     </UserControl.ContextMenu>
 
-    <Grid Background="White" DataContext="{StaticResource viewModel}">
+    <Grid Background="White">
         <StackPanel>
             <ItemsControl ItemsSource="{Binding Stereotypes}">
                 <ItemsControl.ItemTemplate>

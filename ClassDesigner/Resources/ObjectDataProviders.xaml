@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys ="clr-namespace:System;assembly=mscorlib"
+                    xmlns:m="clr-namespace:ClassDesigner.Models"
+                    xmlns:h="clr-namespace:ClassDesigner.Helping">
+    
+    <!--Enum Data-->
+    <ObjectDataProvider x:Key="Stereotypes" MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="m:Stereotype"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider x:Key="RelationTypes" MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="m:RelationType"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider x:Key="VisibilityTypes" MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="m:VisibilityType"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+    
+    <h:EnumConverter x:Key="enumConverter"/>
+    <h:IsInCollectionConverter x:Key="isInCollectionConverter"/>
+</ResourceDictionary>

@@ -1,5 +1,6 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
+using ClassDesigner.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,7 +45,7 @@ namespace ClassDesigner.ViewModels
             }
         }
         public ObservableCollection<AttributeViewModel> Attributes { get; set; } = new ObservableCollection<AttributeViewModel>() { new AttributeViewModel() };
-        public ObservableCollection<Stereotype> Stereotypes { get; set; } = new ObservableCollection<Stereotype>();
+        public ObservableCollection<Stereotype> Stereotypes { get; set; } = new ObservableCollection<Stereotype>() ;
         public ObservableCollection<MethodViewModel> Methods { get; set; } = new ObservableCollection<MethodViewModel>() { new MethodViewModel() };
 
 
@@ -86,6 +87,21 @@ namespace ClassDesigner.ViewModels
                     this.Stereotypes.Add((Stereotype)obj);
                 }
             }));
+        }
+
+        Command openPropertiesCommand;
+        public Command OpenPropertiesCommand
+        {
+            get => openPropertiesCommand ??= new Command(obj =>
+            {
+                PropertiesService.Instance.SelectedCollection = obj;
+
+                PropertiesCollectionWindow window = new PropertiesCollectionWindow();
+
+                window.ShowDialog();
+
+                PropertiesService.Instance.SelectedCollection = null;
+            });
         }
     }
 }

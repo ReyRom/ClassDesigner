@@ -1,17 +1,15 @@
-﻿using ClassDesigner.Models;
+﻿using ClassDesigner.Helping;
+using ClassDesigner.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class MethodViewModel:ViewModelBase
+    public class MethodViewModel : ViewModelBase
     {
+
+
         public MethodViewModel()
         {
             Name = "Method";
@@ -61,5 +59,17 @@ namespace ClassDesigner.ViewModels
         {
             return (char)Visibility + " " + Name + "(" + String.Join(", ", Parameters) + ")" + (string.IsNullOrWhiteSpace(Type) ? "" : " : " + Type);
         }
+
+        private Command addParameterCommand;
+        public Command AddParameterCommand => addParameterCommand ??= new Command(obj =>
+        {
+            this.Parameters.Add(new ParameterViewModel());
+        });
+
+        private Command removeParameterCommand;
+        public Command RemoveParameterCommand => removeParameterCommand ??= new Command(obj =>
+        {
+            this.Parameters.Remove((ParameterViewModel)obj);
+        });
     }
 }

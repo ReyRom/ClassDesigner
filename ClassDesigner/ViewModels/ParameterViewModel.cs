@@ -10,8 +10,8 @@ namespace ClassDesigner.ViewModels
 {
     public class ParameterViewModel: ViewModelBase
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
+        public string Name { get; set; } = "name";
+        public string Type { get; set; } = "Type";
 
         public string ParameterString
         {

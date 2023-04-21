@@ -14,13 +14,6 @@
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <vm:MainViewModel x:Key="viewModel"/>
-        <ObjectDataProvider x:Key="RelationTypes" MethodName="GetValues"
-                            ObjectType="{x:Type sys:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="m:RelationType"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-        <h:EnumConverter x:Key="enumConverter"/>
     </Window.Resources>
     
     <Grid DataContext="{StaticResource viewModel}">
@@ -82,7 +75,7 @@
                 <c:DesignerCanvas x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
                     <c:DesignerItem Height="100" Width="100" Canvas.Left="342" Canvas.Top="87">
                         <c:DesignerItem.Content>
-                            <v:Class/>
+                            <vm:ClassViewModel/>
                         </c:DesignerItem.Content>
                     </c:DesignerItem>
                     <c:DesignerItem Height="100" Width="100" Canvas.Left="567" Canvas.Top="117">
