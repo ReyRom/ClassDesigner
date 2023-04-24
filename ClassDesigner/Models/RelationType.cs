@@ -2,11 +2,11 @@
 {
     public enum RelationType
     {
-        Dependency,
         Association,
         Aggregation,
         Composition,
         Generalization,
-        Realization
+        Realization,
+        Dependency
     }
 }

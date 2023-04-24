@@ -8,18 +8,60 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class AttributeViewModel:ViewModelBase
+    public class AttributeViewModel : ViewModelBase
     {
-        public string Name { get; set; } = "attribute";
-        public VisibilityType Visibility { get; set; } = VisibilityType.Private;
-        public string Type { get; set; } = string.Empty;
-        public bool IsStatic { get; set; } = false;
+        private string name = "attribute";
+        private VisibilityType visibility = VisibilityType.Private;
+        private string type = string.Empty;
+        private bool isStatic = false;
+
+        public string Name
+        {
+            get => name; set
+            {
+                name = value;
+                OnPropertyChanged(nameof(Name));
+
+                OnPropertyChanged(nameof(AttributeString));
+            }
+        }
+        public VisibilityType Visibility
+        {
+            get => visibility; set
+            {
+                visibility = value;
+                OnPropertyChanged(nameof(Visibility));
+
+                OnPropertyChanged(nameof(AttributeString));
+            }
+        }
+        public string Type
+        {
+            get => type; set
+            {
+                type = value;
+                OnPropertyChanged(nameof(Type));
+
+                OnPropertyChanged(nameof(AttributeString));
+            }
+        }
+        public bool IsStatic
+        {
+            get => isStatic; set
+            {
+                isStatic = value;
+                OnPropertyChanged(nameof(IsStatic));
+
+                OnPropertyChanged(nameof(AttributeString));
+            }
+        }
         public string AttributeString
         {
             get => this.ToString();
             set
             {
                 ParseFromString(value);
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 

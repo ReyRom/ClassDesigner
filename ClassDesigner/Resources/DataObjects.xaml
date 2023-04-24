@@ -2,13 +2,47 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:ClassDesigner.ViewModels">
 
+    <ContextMenu x:Key="ClassContextMenu">
+        <MenuItem Header="Добавить атрибут" Command="{Binding AddAttributeCommand}"/>
+        <MenuItem Header="Добавить метод" Command="{Binding  AddMethodCommand}"/>
+        <Separator/>
+        <MenuItem Header="Стереотип" x:Name="Stereotypes" ItemsSource="{Binding Stereotypes}">
+            <MenuItem.ItemContainerStyle>
+                <Style TargetType="MenuItem">
+                    <Setter Property="Header" Value="{Binding Stereotype, Converter={StaticResource enumConverter}}"/>
+                    <!--<Setter Property="Command" Value="{Binding AddStereotypeCommand}"/>
+                    <Setter Property="CommandParameter" Value="{Binding}"/>-->
+                    <Setter Property="IsCheckable" Value="True"/>
+                    <Setter Property="IsChecked" Value="{Binding IsSelected}"/>
+                </Style>
+            </MenuItem.ItemContainerStyle>
+        </MenuItem>
+        <MenuItem Header="Свойства">
+            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+        </MenuItem>
+    </ContextMenu>
+
     <DataTemplate DataType="{x:Type vm:ClassViewModel}">
-        <Grid Background="White">
+        <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
             <StackPanel>
                 <ItemsControl ItemsSource="{Binding Stereotypes}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding StringFormat=&lt;&lt;{0}&gt;&gt;}"/>
+                            <TextBlock Text="{Binding Stereotype, StringFormat=&lt;&lt;{0}&gt;&gt;}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="False">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -30,7 +64,7 @@
                 <ItemsControl ItemsSource="{Binding Attributes}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding AttributeString, Mode=TwoWay}">
+                            <TextBox Text="{Binding AttributeString}">
                                 <TextBox.Style>
                                     <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
                                         <Style.Triggers>
@@ -48,7 +82,7 @@
                 <ItemsControl ItemsSource="{Binding Methods}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding MethodString, Mode=TwoWay}">
+                            <TextBox Text="{Binding MethodString}">
                                 <TextBox.Style>
                                     <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
                                         <Style.Triggers>

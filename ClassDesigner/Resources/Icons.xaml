@@ -66,4 +66,111 @@
     <Style x:Key="RadioUnchecked" TargetType="TextBlock" BasedOn="{StaticResource IconBaseStyle}">
         <Setter Property="Text" Value="&#xea56;"/>
     </Style>
+
+    
+    
+    <Path x:Key="Assotiation" Stroke="Black" StrokeThickness="2">
+        <Path.Data>
+            <PathGeometry>
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure StartPoint ="0 5">
+                            <LineSegment Point="30 5"/>
+                            <LineSegment Point="30 10" IsStroked="False"/>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+        </Path.Data>
+    </Path>
+
+    <Path x:Key="Realization" Stroke="Black" StrokeThickness="2" Fill="Black" StrokeDashArray="2 1 2 1 30" StrokeLineJoin="Round">
+        <Path.Data>
+            <PathGeometry>
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure StartPoint ="0 5" IsFilled="True">
+                            <LineSegment Point="15 5"/>
+                            <LineSegment Point="15 10"/>
+                            <LineSegment Point="30 5"/>
+                            <LineSegment Point="15 0"/>
+                            <LineSegment Point="15 5"/>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+        </Path.Data>
+    </Path>
+
+    <Path x:Key="Generalization" Stroke="Black" StrokeThickness="2" StrokeLineJoin="Round"> 
+        <Path.Data>
+            <PathGeometry>
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure StartPoint ="0 5" IsFilled="True">
+                            <LineSegment Point="15 5"/>
+                            <LineSegment Point="15 10"/>
+                            <LineSegment Point="30 5"/>
+                            <LineSegment Point="15 0"/>
+                            <LineSegment Point="15 5"/>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+        </Path.Data>
+    </Path>
+
+    <Path x:Key="Dependency" Stroke="Black" StrokeThickness="2" StrokeDashArray="2 1 2 1 2 1 2 1 80" StrokeLineJoin="Round">
+        <Path.Data>
+            <PathGeometry>
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure StartPoint ="0 5" IsFilled="True">
+                            <LineSegment Point="30 5"/>
+                            <LineSegment Point="15 10"/>
+                            <LineSegment Point="30 5"/>
+                            <LineSegment Point="15 0"/>
+                            <LineSegment Point="30 5"/>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+        </Path.Data>
+    </Path>
+
+    <Path x:Key="Aggregation" Stroke="Black" StrokeThickness="2" StrokeLineJoin="Round">
+        <Path.Data>
+            <PathGeometry>
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure StartPoint ="0 5" IsFilled="True">
+                            <LineSegment Point="10 5"/>
+                            <LineSegment Point="20 10"/>
+                            <LineSegment Point="30 5"/>
+                            <LineSegment Point="20 0"/>
+                            <LineSegment Point="10 5"/>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+        </Path.Data>
+    </Path>
+
+    <Path x:Key="Composition" Stroke="Black" Fill="Black" StrokeThickness="2" StrokeLineJoin="Round">
+        <Path.Data>
+            <PathGeometry>
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure StartPoint ="0 5" IsFilled="True">
+                            <LineSegment Point="10 5"/>
+                            <LineSegment Point="20 10"/>
+                            <LineSegment Point="30 5"/>
+                            <LineSegment Point="20 0"/>
+                            <LineSegment Point="10 5"/>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+        </Path.Data>
+    </Path>
 </ResourceDictionary>

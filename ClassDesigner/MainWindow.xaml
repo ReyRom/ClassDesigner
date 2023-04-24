@@ -21,7 +21,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ToolBar>
+        <!--<ToolBar>
             <ListBox ItemsSource="{Binding Source={StaticResource RelationTypes}}" SelectedItem="{Binding SettingsService.RelationType}" Width="144">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -62,27 +62,36 @@
             <Button Command="{x:Static c:DesignerCanvas.SendBackward}" CommandTarget="{Binding ElementName=Designer}">
                 <TextBlock Style="{StaticResource DownIcon}"/>
             </Button>
-        </ToolBar>
+        </ToolBar>-->
+        <ContentControl Content="{StaticResource ApplicationToolbar}"/>
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            
+            <Expander IsExpanded="True">
+                <ItemsControl ItemsSource="{Binding Templates}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <c:DragItem DragContent="{Binding Content}">
+                                <TextBlock Width="50" Height="20" Background="LightGray" Margin="2" Text="{Binding Name}"/>
+                            </c:DragItem>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
+                
+            </Expander>
 
             <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-                <c:DesignerCanvas x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
-                    <c:DesignerItem Height="100" Width="100" Canvas.Left="342" Canvas.Top="87">
-                        <c:DesignerItem.Content>
-                            <vm:ClassViewModel/>
-                        </c:DesignerItem.Content>
-                    </c:DesignerItem>
-                    <c:DesignerItem Height="100" Width="100" Canvas.Left="567" Canvas.Top="117">
-                        <c:DesignerItem.Content>
-                            <v:Class/>
-                        </c:DesignerItem.Content>
-                    </c:DesignerItem>
+                <c:DesignerCanvas Margin="15" x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
                 </c:DesignerCanvas>
             </ScrollViewer>
         </Grid>

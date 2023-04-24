@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows;
 using ClassDesigner.Models;
 using ClassDesigner.ViewModels;
+using System.Runtime.CompilerServices;
 
 namespace ClassDesigner.Controls
 {
@@ -329,7 +330,7 @@ namespace ClassDesigner.Controls
                     SinkArrowSymbol = ArrowSymbol.ClosedArrow;
                     break;
             }
-
+            DesignerCanvas designer = VisualTreeHelper.GetParent(this) as DesignerCanvas;
             base.Unloaded += new RoutedEventHandler(Connection_Unloaded);
         }
 
@@ -349,26 +350,26 @@ namespace ClassDesigner.Controls
                     else
                     {
                         designer.SelectionService.AddSelection(this);
-                        if (!this.Sink.ParentDesignerItem.IsSelected) 
-                            designer.SelectionService.AddSelection(this.Sink.ParentDesignerItem);
+                        //if (!this.Sink.ParentDesignerItem.IsSelected) 
+                        //    designer.SelectionService.AddSelection(this.Sink.ParentDesignerItem);
 
-                        if (!this.Source.ParentDesignerItem.IsSelected) 
-                            designer.SelectionService.AddSelection(this.Source.ParentDesignerItem);
+                        //if (!this.Source.ParentDesignerItem.IsSelected) 
+                        //    designer.SelectionService.AddSelection(this.Source.ParentDesignerItem);
                     }
                 else if (!this.IsSelected)
                 {
                     designer.SelectionService.SelectItem(this);
 
-                    if (!this.Sink.ParentDesignerItem.IsSelected)
-                        designer.SelectionService.AddSelection(this.Sink.ParentDesignerItem);
+                    //if (!this.Sink.ParentDesignerItem.IsSelected)
+                    //    designer.SelectionService.AddSelection(this.Sink.ParentDesignerItem);
 
-                    if (!this.Source.ParentDesignerItem.IsSelected)
-                        designer.SelectionService.AddSelection(this.Source.ParentDesignerItem);
+                    //if (!this.Source.ParentDesignerItem.IsSelected)
+                    //    designer.SelectionService.AddSelection(this.Source.ParentDesignerItem);
                 }
 
                 //Focus();
             }
-            e.Handled = false;
+            e.Handled = true;
         }
 
         void OnConnectorPositionChanged(object sender, PropertyChangedEventArgs e)

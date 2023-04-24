@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class StereotypeViewModel:ViewModelBase
+    public class StereotypeViewModel : ViewModelBase
     {
+        private bool isSelected;
+
         public StereotypeViewModel(Stereotype stereotype, bool isSelected)
         {
             Stereotype = stereotype;
@@ -17,6 +19,13 @@ namespace ClassDesigner.ViewModels
 
         public Stereotype Stereotype { get; set; }
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected
+        {
+            get => isSelected; set
+            {
+                isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
+            }
+        }
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root TemplateName="Interface">
+  <DesignerItems>
+    <DesignerItem>
+      <Left>0</Left>
+      <Top>0</Top>
+      <Width>85</Width>
+      <Heigth>50</Heigth>
+      <ID>6074f658-1729-40c3-8b9a-126fe03ef350</ID>
+      <ZIndex>0</ZIndex>
+      <Content>
+        <Class>
+          <Header>IClass</Header>
+          <Visibility>Public</Visibility>
+          <IsStatic>false</IsStatic>
+          <IsAbstract>false</IsAbstract>
+          <Attributes />
+          <Methods />
+          <Stereotypes>
+            <Stereotype>Interface</Stereotype>
+          </Stereotypes>
+        </Class>
+      </Content>
+    </DesignerItem>
+  </DesignerItems>
+  <Connections />
+</Root>

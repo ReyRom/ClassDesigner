@@ -94,11 +94,11 @@ namespace ClassDesigner.Controls
                     if (rubberBand.Contains(itemBounds))
                     {
                         designerCanvas.SelectionService.AddSelection(c);
-                        if (!c.Sink.ParentDesignerItem.IsSelected)
-                            designerCanvas.SelectionService.AddSelection(c.Sink.ParentDesignerItem);
+                        //if (!c.Sink.ParentDesignerItem.IsSelected)
+                        //    designerCanvas.SelectionService.AddSelection(c.Sink.ParentDesignerItem);
 
-                        if (!c.Source.ParentDesignerItem.IsSelected)
-                            designerCanvas.SelectionService.AddSelection(c.Source.ParentDesignerItem);
+                        //if (!c.Source.ParentDesignerItem.IsSelected)
+                        //    designerCanvas.SelectionService.AddSelection(c.Source.ParentDesignerItem);
 
                     }
                 }

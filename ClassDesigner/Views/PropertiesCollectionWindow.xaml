@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
         xmlns:h="clr-namespace:ClassDesigner.Helping"
         mc:Ignorable="d"
-        Title="PropertiesCollectionWindow" Height="450" Width="400">
+        Title="PropertiesCollectionWindow" Height="450" Width="400" WindowStyle="ToolWindow">
     <Window.Resources>
         <vm:PropertiesCollectionViewModel x:Key="viewModel"/>
     </Window.Resources>
@@ -24,7 +24,7 @@
                 <h:PropertiesTemplateSelector>
                     <h:PropertiesTemplateSelector.DefaultTemplate>
                         <DataTemplate>
-                            
+                            <TextBlock Text="{Binding}"/>
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.DefaultTemplate>
 
@@ -33,6 +33,18 @@
                             <TextBlock Text="{Binding Header}"/>
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.ClassTemplate>
+                    
+                    <h:PropertiesTemplateSelector.MethodTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding MethodString}"/>
+                        </DataTemplate>
+                    </h:PropertiesTemplateSelector.MethodTemplate>
+
+                    <h:PropertiesTemplateSelector.AttributeTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding AttributeString}"/>
+                        </DataTemplate>
+                    </h:PropertiesTemplateSelector.AttributeTemplate>
                 </h:PropertiesTemplateSelector>
             </ListView.ItemTemplateSelector>
         </ListView>

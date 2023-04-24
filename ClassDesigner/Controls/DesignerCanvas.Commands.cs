@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml;
@@ -179,6 +180,8 @@ namespace ClassDesigner.Controls
         {
             var itemsXML = xElement.Elements("DesignerItems").Elements("DesignerItem");
 
+            this.SelectionService.ClearSelection();
+
             Dictionary<Guid, Guid> mappingOldToNewIDs = new Dictionary<Guid, Guid>();
 
             foreach (var item in itemsXML)
@@ -244,9 +247,8 @@ namespace ClassDesigner.Controls
             return item;
         }
 
-        private static Class DeserializeClass(XElement itemXML)
+        private static ClassViewModel DeserializeClass(XElement itemXML)
         {
-            Class item = new Class();
             ClassViewModel model = new ClassViewModel();
             model.Header = itemXML.Element("Header").Value;
             model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
@@ -279,9 +281,9 @@ namespace ClassDesigner.Controls
             }
             foreach (var stereotype in itemXML.Element("Stereotypes").Elements("Stereotype"))
             {
-                model.Stereotypes.Add((Stereotype)Enum.Parse(typeof(Stereotype), stereotype.Value));
+                model.Stereotypes.FirstOrDefault(x => x.Stereotype.ToString() == stereotype.Value).IsSelected = true;
             }
-            return item;
+            return model;
         }
         private Connector GetConnector(Guid itemID, String connectorName)
         {
@@ -380,7 +382,7 @@ namespace ClassDesigner.Controls
                                                         new XElement("ID", x.ID),
                                                         new XElement("ZIndex", Canvas.GetZIndex(x)),
                                                         new XElement("Content",
-                                                            SerializeClass(((Class)x.Content).DataContext as ClassViewModel)
+                                                            SerializeClass(((ClassViewModel)x.Content))
                                                         ))));
             return serializedItems;
         }
@@ -416,8 +418,8 @@ namespace ClassDesigner.Controls
                                                                 ))
                                                         )))),
                                                      new XElement("Stereotypes",
-                                                        model.Stereotypes.Select(s =>
-                                                        new XElement("Stereotype", s))
+                                                         model.Stereotypes.Where(s=>s.IsSelected).Select(s =>
+                                                         new XElement("Stereotype", s.Stereotype))
                                                      ));
             return serializedClass;
         }

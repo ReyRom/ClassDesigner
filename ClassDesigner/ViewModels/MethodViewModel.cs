@@ -2,36 +2,99 @@
 using ClassDesigner.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace ClassDesigner.ViewModels
 {
     public class MethodViewModel : ViewModelBase
     {
-
-
         public MethodViewModel()
         {
             Name = "Method";
             Visibility = VisibilityType.Private;
             Parameters = new ObservableCollection<ParameterViewModel>();
-        }
-        public bool IsStatic { get; set; } = false;
-        public string Name { get; set; } = "Method";
-        public VisibilityType Visibility { get; set; } = VisibilityType.Private;
-        public string Type { get; set; }
-        public ObservableCollection<ParameterViewModel> Parameters { get; set; }
+            Parameters.CollectionChanged += Parameters_CollectionChanged;
 
-        public string MethodString
+        }
+
+        private void Parameters_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(MethodString));
+            if (e.OldItems != null)
+            {
+                foreach (INotifyPropertyChanged item in e.OldItems)
+                    item.PropertyChanged -= Update;
+            }
+            if (e.NewItems != null)
+            {
+                foreach (INotifyPropertyChanged item in e.NewItems)
+                    item.PropertyChanged += Update;
+            }
+        }
+
+        private void Update(object? sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(MethodString));
+        }
+
+        public bool IsStatic
+        {
+            get => isStatic; set
+            {
+                isStatic = value;
+                OnPropertyChanged(nameof(IsStatic));
+                OnPropertyChanged(nameof(MethodString));
+            }
+        }
+        public string Name
+        {
+            get => name; set
+            {
+                name = value;
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(MethodString));
+            }
+        }
+        public VisibilityType Visibility
+        {
+            get => visibility; set
+            {
+                visibility = value;
+                OnPropertyChanged(nameof(Visibility));
+                OnPropertyChanged(nameof(MethodString));
+            }
+        }
+        public string Type
+        {
+            get => type; set
+            {
+                type = value;
+                OnPropertyChanged(nameof(Type));
+                OnPropertyChanged(nameof(MethodString));
+            }
+        }
+        public ObservableCollection<ParameterViewModel> Parameters
+        {
+            get => parameters; set
+            {
+                parameters = value;
+                OnPropertyChanged(nameof(Parameters));
+                OnPropertyChanged(nameof(MethodString));
+            }
+        }
+
+        public virtual string MethodString
         {
             get => this.ToString();
             set
             {
                 ParseFromString(value);
+                OnPropertyChanged(nameof(MethodString));
             }
         }
-
-        public void ParseFromString(string value)
+        public virtual void ParseFromString(string value)
         {
             var m = MatchMethodString(value);
             this.Name = m.Groups["Name"].Value;
@@ -40,17 +103,19 @@ namespace ClassDesigner.ViewModels
             this.Parameters = ParseParameters(m.Groups["Parameters"].Value);
         }
 
-        private ObservableCollection<ParameterViewModel> ParseParameters(string value)
+        protected virtual ObservableCollection<ParameterViewModel> ParseParameters(string value)
         {
             ObservableCollection<ParameterViewModel> parameters = new ObservableCollection<ParameterViewModel>();
             foreach (var item in value.Split(", "))
             {
-                parameters.Add(ParameterViewModel.ParseFromString(item));
+                var param = new ParameterViewModel();
+                param.ParseFromString(item);
+                parameters.Add(param);
             }
             return parameters;
         }
 
-        public static Match MatchMethodString(string value)
+        public virtual Match MatchMethodString(string value)
         {
             return Regex.Match(value, @"^(?<Visible>[-+#~])\s(?<Name>\w+)([(](?<Parameters>(\w+(\s:\s\w+){0,1}(,\s\w+(\s:\s\w+))*){0,1})[)])(\s:\s(?<Type>\w+)){0,1}$");
         }
@@ -67,9 +132,15 @@ namespace ClassDesigner.ViewModels
         });
 
         private Command removeParameterCommand;
+        private string name = "Method";
+        private VisibilityType visibility = VisibilityType.Private;
+        private string type;
+        private ObservableCollection<ParameterViewModel> parameters;
+        private bool isStatic = false;
+
         public Command RemoveParameterCommand => removeParameterCommand ??= new Command(obj =>
-        {
-            this.Parameters.Remove((ParameterViewModel)obj);
-        });
+                {
+                    this.Parameters.Remove((ParameterViewModel)obj);
+                });
     }
 }

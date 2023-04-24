@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:h="clr-namespace:ClassDesigner.Helping">
+    
     <ControlTemplate x:Key="PropertiesPanel" TargetType="ContentControl">
         <ContentControl x:Name="PropertiesPanel" Content="{TemplateBinding Content}">
             <ContentControl.ContentTemplateSelector>
@@ -36,7 +37,17 @@
                                 <Separator/>
 
                                 <TextBlock Text="Стереотипы"/>
-                                <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Stereotypes}" Content="..."/>
+
+                                <ItemsControl ItemsSource="{Binding Stereotypes}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsSelected}">
+                                                <TextBlock Text="{Binding Stereotype}"/>
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
                                 <TextBlock Text="Атрибуты"/>
                                 <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
                                 <TextBlock Text="Методы"/>

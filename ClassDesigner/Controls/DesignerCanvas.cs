@@ -1,11 +1,13 @@
 ﻿using ClassDesigner.Helping;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace ClassDesigner.Controls
 {
@@ -62,45 +64,18 @@ namespace ClassDesigner.Controls
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
-            //DragObject dragObject = e.Data.GetData(typeof(DragObject)) as DragObject;
-            //if (dragObject != null && !String.IsNullOrEmpty(dragObject.Xaml))
-            //{
-            //    DesignerItem newItem = null;
-            //    Object content = XamlReader.Load(XmlReader.Create(new StringReader(dragObject.Xaml)));
+            string dragObject = e.Data.GetData(typeof(string)) as string;
+            if (dragObject != null)
+            {
+                Point position = e.GetPosition(this);
+                using (StringReader sr = new StringReader(dragObject))
+                {
+                    PasteXml(XElement.Load(sr), position.X, position.Y);
+                }
 
-            //    if (content != null)
-            //    {
-            //        newItem = new DesignerItem();
-            //        newItem.Content = content;
 
-            //        Point position = e.GetPosition(this);
-
-            //        if (dragObject.DesiredSize.HasValue)
-            //        {
-            //            Size desiredSize = dragObject.DesiredSize.Value;
-            //            newItem.Width = desiredSize.Width;
-            //            newItem.Height = desiredSize.Height;
-
-            //            DesignerCanvas.SetLeft(newItem, Math.Max(0, position.X - newItem.Width / 2));
-            //            DesignerCanvas.SetTop(newItem, Math.Max(0, position.Y - newItem.Height / 2));
-            //        }
-            //        else
-            //        {
-            //            DesignerCanvas.SetLeft(newItem, Math.Max(0, position.X));
-            //            DesignerCanvas.SetTop(newItem, Math.Max(0, position.Y));
-            //        }
-
-            //        Canvas.SetZIndex(newItem, this.Children.Count);
-            //        this.Children.Add(newItem);
-            //        SetConnectorDecoratorTemplate(newItem);
-
-            //        //update selection
-            //        this.SelectionService.SelectItem(newItem);
-            //        newItem.Focus();
-            //    }
-
-            //    e.Handled = true;
-            //}
+                e.Handled = true;
+            }
         }
 
         protected override Size MeasureOverride(Size constraint)

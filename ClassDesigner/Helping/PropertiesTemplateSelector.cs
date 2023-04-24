@@ -25,7 +25,6 @@ namespace ClassDesigner.Helping
             if (item is AttributeViewModel) return AttributeTemplate;
             if (item is MethodViewModel) return MethodTemplate;
             else return DefaultTemplate;
-
         }
     }
 }

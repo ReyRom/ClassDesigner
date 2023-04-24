@@ -8,27 +8,44 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class ParameterViewModel: ViewModelBase
+    public class ParameterViewModel : ViewModelBase
     {
-        public string Name { get; set; } = "name";
-        public string Type { get; set; } = "Type";
+        private string name = "name";
+        private string type = "Type";
 
+        public string Name
+        {
+            get => name; set
+            {
+                name = value;
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(ParameterString));
+            }
+        }
+        public string Type
+        {
+            get => type; set
+            {
+                type = value;
+                OnPropertyChanged(nameof(Type));
+                OnPropertyChanged(nameof(ParameterString));
+            }
+        }
         public string ParameterString
         {
             get => this.ToString();
             set
             {
                 ParseFromString(value);
+                OnPropertyChanged(nameof(ParameterString));
             }
         }
 
-        public static ParameterViewModel ParseFromString(string value)
+        public void ParseFromString(string value)
         {
-            ParameterViewModel parameter = new ParameterViewModel();
             var m = MatchParameterString(value);
-            parameter.Name = m.Groups["Name"].Value;
-            parameter.Type = m.Groups["Type"].Value;
-            return parameter;
+            this.Name = m.Groups["Name"].Value;
+            this.Type = m.Groups["Type"].Value;
         }
 
         public static Match MatchParameterString(string value)

@@ -15,4 +15,13 @@
     <Resource Include="Resources\Fonts\IcoMoon-Free.ttf" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Templates\Class.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Interface.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
