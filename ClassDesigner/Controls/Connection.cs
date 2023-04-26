@@ -273,7 +273,12 @@ namespace ClassDesigner.Controls
             this.ID = Guid.NewGuid();
             this.Source = source;
             this.Sink = sink;
-            ConnectionViewModel = new ConnectionViewModel();
+            var relationType = SettingsService.Instance.RelationType;
+
+            ConnectionViewModel = new ConnectionViewModel(
+                (IEntry)source.ParentDesignerItem.Content,
+                (IEntry)sink.ParentDesignerItem.Content,
+                relationType);
 
             switch (connectionViewModel.RelationType)
             {
@@ -306,8 +311,11 @@ namespace ClassDesigner.Controls
             this.ID = Guid.NewGuid();
             this.Source = source;
             this.Sink = sink;
-            ConnectionViewModel = new ConnectionViewModel();
-            ConnectionViewModel.RelationType = relationType;
+
+            ConnectionViewModel = new ConnectionViewModel(
+                (IEntry)source.ParentDesignerItem.Content,
+                (IEntry)sink.ParentDesignerItem.Content,
+                relationType);
 
             switch (connectionViewModel.RelationType)
             {
@@ -330,7 +338,6 @@ namespace ClassDesigner.Controls
                     SinkArrowSymbol = ArrowSymbol.ClosedArrow;
                     break;
             }
-            DesignerCanvas designer = VisualTreeHelper.GetParent(this) as DesignerCanvas;
             base.Unloaded += new RoutedEventHandler(Connection_Unloaded);
         }
 
@@ -368,7 +375,10 @@ namespace ClassDesigner.Controls
                 }
 
                 //Focus();
+
+                PropertiesService.Instance.Selected = this.ConnectionViewModel;
             }
+            
             e.Handled = true;
         }
 

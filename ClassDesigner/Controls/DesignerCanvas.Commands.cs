@@ -250,7 +250,7 @@ namespace ClassDesigner.Controls
         private static ClassViewModel DeserializeClass(XElement itemXML)
         {
             ClassViewModel model = new ClassViewModel();
-            model.Header = itemXML.Element("Header").Value;
+            model.Name = itemXML.Element("Header").Value;
             model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
             model.IsStatic = bool.Parse(itemXML.Element("IsStatic").Value);
             model.IsAbstract = bool.Parse(itemXML.Element("IsAbstract").Value);
@@ -262,6 +262,18 @@ namespace ClassDesigner.Controls
                 attribute.IsStatic = bool.Parse(attrXML.Element("IsStatic").Value);
                 attribute.Type = attrXML.Element("Type").Value;
                 model.Attributes.Add(attribute);
+            }
+            foreach (var propXML in itemXML.Element("Attributes").Elements("Property"))
+            {
+                PropertyViewModel property = new PropertyViewModel();
+                property.Name = propXML.Element("Name").Value;
+                property.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), propXML.Element("Visibility").Value);
+                property.IsStatic = bool.Parse(propXML.Element("IsStatic").Value);
+                property.IsAbstract = bool.Parse(propXML.Element("IsAbstract").Value);
+                property.IsGet = bool.Parse(propXML.Element("IsGet").Value);
+                property.IsSet = bool.Parse(propXML.Element("IsSet").Value);
+                property.Type = propXML.Element("Type").Value;
+                model.Attributes.Add(property);
             }
             foreach (var methodXML in itemXML.Element("Methods").Elements("Method"))
             {
@@ -279,10 +291,10 @@ namespace ClassDesigner.Controls
                 }
                 model.Methods.Add(method);
             }
-            foreach (var stereotype in itemXML.Element("Stereotypes").Elements("Stereotype"))
-            {
-                model.Stereotypes.FirstOrDefault(x => x.Stereotype.ToString() == stereotype.Value).IsSelected = true;
-            }
+            //foreach (var stereotype in itemXML.Element("Stereotypes").Elements("Stereotype"))
+            ////{
+            ////    model.Stereotypes.FirstOrDefault(x => x.Stereotype.ToString() == stereotype.Value).IsSelected = true;
+            //}
             return model;
         }
         private Connector GetConnector(Guid itemID, String connectorName)
@@ -391,17 +403,27 @@ namespace ClassDesigner.Controls
         XElement SerializeClass(ClassViewModel model)
         {
             XElement serializedClass = new XElement("Class",
-                                                     new XElement("Header", model.Header),
+                                                     new XElement("Header", model.Name),
                                                      new XElement("Visibility", model.Visibility),
                                                      new XElement("IsStatic", model.IsStatic),
                                                      new XElement("IsAbstract", model.IsAbstract),
                                                      new XElement("Attributes",
-                                                        model.Attributes.Select(a =>
+                                                        model.Attributes.OfType<AttributeViewModel>().Select(a =>
                                                         new XElement("Attribute",
                                                             new XElement("Name", a.Name),
                                                             new XElement("Visibility", a.Visibility),
                                                             new XElement("Type", a.Type),
                                                             new XElement("IsStatic", a.IsStatic)
+                                                        )),
+                                                        model.Attributes.OfType<PropertyViewModel>().Select(p =>
+                                                        new XElement("Property",
+                                                            new XElement("Name", p.Name),
+                                                            new XElement("Visibility", p.Visibility),
+                                                            new XElement("Type", p.Type),
+                                                            new XElement("IsStatic", p.IsStatic),
+                                                            new XElement("IsAbstract", p.IsAbstract),
+                                                            new XElement("IsGet", p.IsGet),
+                                                            new XElement("IsSet", p.IsSet)
                                                         ))),
                                                      new XElement("Methods",
                                                         model.Methods.Select(m =>
@@ -416,11 +438,12 @@ namespace ClassDesigner.Controls
                                                                     new XElement("Name", p.Name),
                                                                     new XElement("Name", p.Type)
                                                                 ))
-                                                        )))),
-                                                     new XElement("Stereotypes",
-                                                         model.Stereotypes.Where(s=>s.IsSelected).Select(s =>
-                                                         new XElement("Stereotype", s.Stereotype))
-                                                     ));
+                                                        ))))
+                                                     //new XElement("Stereotypes",
+                                                     //    model.Stereotypes.Where(s=>s.IsSelected).Select(s =>
+                                                     //    new XElement("Stereotype", s.Stereotype))
+                                                     //)
+                                                     );
             return serializedClass;
         }
 

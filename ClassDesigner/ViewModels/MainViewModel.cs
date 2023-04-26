@@ -14,8 +14,8 @@ namespace ClassDesigner.ViewModels
     {
         public MainViewModel()
         {
-            //PropertiesWindow window = new PropertiesWindow();
-            //window.Show();
+            PropertiesWindow window = new PropertiesWindow();
+            window.Show();
 
             var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates"));
             foreach (var file in files)

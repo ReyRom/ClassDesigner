@@ -4,19 +4,20 @@
 
     <ContextMenu x:Key="ClassContextMenu">
         <MenuItem Header="Добавить атрибут" Command="{Binding AddAttributeCommand}"/>
+        <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
         <MenuItem Header="Добавить метод" Command="{Binding  AddMethodCommand}"/>
         <Separator/>
-        <MenuItem Header="Стереотип" x:Name="Stereotypes" ItemsSource="{Binding Stereotypes}">
+        <!--<MenuItem Header="Стереотип" x:Name="Stereotypes" ItemsSource="{Binding Stereotypes}">
             <MenuItem.ItemContainerStyle>
                 <Style TargetType="MenuItem">
                     <Setter Property="Header" Value="{Binding Stereotype, Converter={StaticResource enumConverter}}"/>
-                    <!--<Setter Property="Command" Value="{Binding AddStereotypeCommand}"/>
-                    <Setter Property="CommandParameter" Value="{Binding}"/>-->
+                    --><!--<Setter Property="Command" Value="{Binding AddStereotypeCommand}"/>
+                    <Setter Property="CommandParameter" Value="{Binding}"/>--><!--
                     <Setter Property="IsCheckable" Value="True"/>
                     <Setter Property="IsChecked" Value="{Binding IsSelected}"/>
                 </Style>
             </MenuItem.ItemContainerStyle>
-        </MenuItem>
+        </MenuItem>-->
         <MenuItem Header="Свойства">
             <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
             <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
@@ -26,7 +27,7 @@
     <DataTemplate DataType="{x:Type vm:ClassViewModel}">
         <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
             <StackPanel>
-                <ItemsControl ItemsSource="{Binding Stereotypes}">
+                <!--<ItemsControl ItemsSource="{Binding Stereotypes}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Stereotype, StringFormat=&lt;&lt;{0}&gt;&gt;}">
@@ -45,8 +46,8 @@
                             </TextBlock>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <TextBox Text="{Binding Header}" HorizontalAlignment="Center">
+                </ItemsControl>-->
+                <TextBox Text="{Binding Name}" HorizontalAlignment="Center">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
                             <Style.Triggers>
@@ -64,7 +65,7 @@
                 <ItemsControl ItemsSource="{Binding Attributes}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding AttributeString}">
+                            <TextBox Text="{Binding FieldString}">
                                 <TextBox.Style>
                                     <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
                                         <Style.Triggers>

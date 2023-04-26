@@ -11,16 +11,19 @@ using System.Windows.Input;
 
 namespace ClassDesigner.ViewModels
 {
-    public class ClassViewModel : ViewModelBase
+    public class ClassViewModel : ViewModelBase, IEntry, IHaveMethods
     {
-        public string Header
+        private string name = "Class";
+        public string Name
         {
-            get => header; set
+            get => name; set
             {
-                header = value;
-                OnPropertyChanged(nameof(Header));
+                name = value;
+                OnPropertyChanged(nameof(Name));
             }
         }
+
+        private VisibilityType visibility = VisibilityType.Public;
         public VisibilityType Visibility
         {
             get => visibility; set
@@ -29,6 +32,8 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(Visibility));
             }
         }
+        
+        private bool isStatic = false;
         public bool IsStatic
         {
             get => isStatic; set
@@ -37,6 +42,8 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(IsStatic));
             }
         }
+
+        private bool isAbstract = false;
         public bool IsAbstract
         {
             get => isAbstract; set
@@ -45,9 +52,9 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(IsAbstract));
             }
         }
-        public ObservableCollection<AttributeViewModel> Attributes { get; set; } = new ObservableCollection<AttributeViewModel>(); //{ new AttributeViewModel() };
+        public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>(); //{ new AttributeViewModel() };
         //public ObservableCollection<Stereotype> Stereotypes { get; set; } = new ObservableCollection<Stereotype>() ;
-        public ClassStereotypes Stereotypes { get; set; } = new ClassStereotypes();
+        //public ClassStereotypes Stereotypes { get; set; } = new ClassStereotypes();
         public ObservableCollection<MethodViewModel> Methods { get; set; } = new ObservableCollection<MethodViewModel>(); //{ new MethodViewModel() };
 
         Command addAttributeCommand;
@@ -59,6 +66,15 @@ namespace ClassDesigner.ViewModels
             }));
         }
 
+        Command addPropertyCommand;
+        public Command AddPropertyCommand
+        {
+            get => addPropertyCommand ??= new Command(obj =>
+            {
+                this.Attributes.Add(new PropertyViewModel());
+            });
+        }
+
         Command addMethodCommand;
         public Command AddMethodCommand
         {
@@ -67,12 +83,7 @@ namespace ClassDesigner.ViewModels
                 this.Methods.Add(new MethodViewModel());
             }));
         }
-
-        Command addStereotypeCommand;
-        private bool isAbstract = false;
-        private bool isStatic = false;
-        private string header = "Class";
-        private VisibilityType visibility = VisibilityType.Public;
+ 
 
         //public Command AddStereotypeCommand
         //{
