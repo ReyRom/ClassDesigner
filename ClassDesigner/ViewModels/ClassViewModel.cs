@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace ClassDesigner.ViewModels
 {
-    public class ClassViewModel : ViewModelBase, IEntry, IHaveMethods
+    public class ClassViewModel : ViewModelBase, IEntry, IHaveMethods, IHaveFields
     {
         private string name = "Class";
         public string Name

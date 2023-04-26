@@ -14,25 +14,40 @@ namespace ClassDesigner.ViewModels
         {
             Source = source;
             Target = target;
+            ValidateSource();
         }
         private MethodViewModel dependencedMethod;
         public MethodViewModel DependencedMethod
         {
             get => dependencedMethod; set
             {
+                if (dependencedMethod is not null)
+                {
+                    dependencedMethod.PropertyChanged -= DependencedMethod_PropertyChanged;
+                }
                 dependencedMethod = value;
                 if (!dependencedMethod.Parameters.Any(x=>x.Type == Target.Name))
                 {
                     dependencedMethod.Parameters.Add(new ParameterViewModel() { Name = Target.Name.ToLower(), Type = Target.Name });
                 }
+                dependencedMethod.PropertyChanged += DependencedMethod_PropertyChanged;
                 OnPropertyChanged(nameof(DependencedMethod));
             }
         }
+
+        private void DependencedMethod_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Validate();
+        }
+
         public IEntry Source { get; }
         public IEntry Target { get; }
 
         private bool isValid = true;
-        public bool IsValid => isValid;
+        public bool IsValid => isValid && isValidSource;
+
+        private bool isValidSource = true;
+        public bool IsValidSource => isValidSource;
 
         Command addDependencedMethod;
         public Command AddDependencedMethod => addDependencedMethod ??= new Command(obj =>
@@ -42,15 +57,19 @@ namespace ClassDesigner.ViewModels
             paramether.Type = Target.Name;
             method.Parameters.Add(paramether);
             (Source as IHaveMethods).Methods.Add(method);
-
             DependencedMethod = method;
-
         });
+
+        public void ValidateSource()
+        {
+            isValidSource = Source is IHaveMethods;
+            OnPropertyChanged(nameof(IsValidSource));
+            OnPropertyChanged(nameof(IsValid));
+        }
 
         public void Validate()
         {
-            isValid = true;
-
+            isValid = dependencedMethod is not null && dependencedMethod.Parameters.Any(x => x.Type == Target.Name);
         }
     }
 }

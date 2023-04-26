@@ -114,37 +114,37 @@
                 <h:RelationTemplateSelector>
                     <h:RelationTemplateSelector.AssociationTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{StaticResource Assotiation}"/>
+                            <ContentControl Content="{StaticResource Assotiation}" ToolTip="Ассоциация"/>
                         </DataTemplate>
                     </h:RelationTemplateSelector.AssociationTemplate>
 
                     <h:RelationTemplateSelector.AggregationTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{StaticResource Aggregation}"/>
+                            <ContentControl Content="{StaticResource Aggregation}" ToolTip="Аггрегация"/>
                         </DataTemplate>
                     </h:RelationTemplateSelector.AggregationTemplate>
 
                     <h:RelationTemplateSelector.CompositionTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{StaticResource Composition}"/>
+                            <ContentControl Content="{StaticResource Composition}" ToolTip="Композиция"/>
                         </DataTemplate>
                     </h:RelationTemplateSelector.CompositionTemplate>
 
                     <h:RelationTemplateSelector.DependencyTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{StaticResource Dependency}"/>
+                            <ContentControl Content="{StaticResource Dependency}" ToolTip="Зависимость"/>
                         </DataTemplate>
                     </h:RelationTemplateSelector.DependencyTemplate>
 
                     <h:RelationTemplateSelector.GeneralizationTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{StaticResource Generalization}"/>
+                            <ContentControl Content="{StaticResource Generalization}" ToolTip="Обобщение"/>
                         </DataTemplate>
                     </h:RelationTemplateSelector.GeneralizationTemplate>
 
                     <h:RelationTemplateSelector.RealizationTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{StaticResource Realization}"/>
+                            <ContentControl Content="{StaticResource Realization}" ToolTip="Реализация"/>
                         </DataTemplate>
                     </h:RelationTemplateSelector.RealizationTemplate>
 

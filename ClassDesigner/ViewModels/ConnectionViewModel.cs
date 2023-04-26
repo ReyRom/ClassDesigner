@@ -48,7 +48,7 @@ namespace ClassDesigner.ViewModels
         public AttributeViewModel AggregatedAttribute { get; set; }
         public MethodViewModel AggregatedMethod { get; set; }
 
-        public AttributeViewModel ComposedAttribute { get; set; }
+       
 
         
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    class InterfaceViewModel:ViewModelBase, IEntry, IHaveMethods
+    class InterfaceViewModel:ViewModelBase, IEntry, IHaveMethods, IHaveProperties
     {
         private string name = "Interface";
         public string Name
