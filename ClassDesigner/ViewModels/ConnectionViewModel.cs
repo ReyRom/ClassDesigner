@@ -19,14 +19,19 @@ namespace ClassDesigner.ViewModels
             switch (RelationType)
             {
                 case RelationType.Association:
+                    ConnectionData = new AssotiationDataViewModel(sourceEntry, targetEntry);
                     break;
                 case RelationType.Aggregation:
+                    ConnectionData = new AggregationDataViewModel(sourceEntry, targetEntry);
                     break;
                 case RelationType.Composition:
+                    ConnectionData = new CompositionDataViewModel(sourceEntry, targetEntry);
                     break;
                 case RelationType.Generalization:
+                    ConnectionData = new GeneralizationDataViewModel(sourceEntry, targetEntry);
                     break;
                 case RelationType.Realization:
+                    ConnectionData = new RealizationDataViewModel(sourceEntry, targetEntry);
                     break;
                 case RelationType.Dependency:
                     ConnectionData = new DependencyDataViewModel(sourceEntry, targetEntry);

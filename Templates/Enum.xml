@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root TemplateName="Enum">
+  <DesignerItems>
+    <DesignerItem>
+      <Left>0</Left>
+      <Top>0</Top>
+      <Width>74</Width>
+      <Heigth>48</Heigth>
+      <ID>7806e9d6-1170-4032-9a94-64c5ab323efd</ID>
+      <ZIndex>0</ZIndex>
+      <Content>
+        <Enum>
+          <Name>Enum</Name>
+          <Visibility>Public</Visibility>
+          <EnumChildren />
+        </Enum>
+      </Content>
+    </DesignerItem>
+  </DesignerItems>
+  <Connections />
+</Root>

@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.Helping
 {
-    public interface IHaveProperties
+    public interface IHaveProperties: IHaveAttributes
     {
-        ObservableCollection<PropertyViewModel> Properties { get; set; }
         Command AddPropertyCommand { get; }
     }
 }

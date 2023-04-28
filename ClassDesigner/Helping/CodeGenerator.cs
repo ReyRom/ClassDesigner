@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassDesigner.Models
+namespace ClassDesigner.Helping
 {
-    public class ClassConverter
+    class CodeGenerator
     {
+        CodeGenerator() 
+        {
+            
+        } 
     }
 }

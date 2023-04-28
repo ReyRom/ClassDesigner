@@ -1,5 +1,4 @@
-﻿using ClassDesigner.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.Helping
 {
-    public interface IHaveMethods
+    public interface IHaveAttributes
     {
-        ObservableCollection<IMethod> Methods { get; set; }
-        Command AddMethodCommand { get; }
+        ObservableCollection<IField> Attributes { get; set; }
     }
 }

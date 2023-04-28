@@ -5,20 +5,20 @@
       <Left>0</Left>
       <Top>0</Top>
       <Width>70</Width>
-      <Heigth>35</Heigth>
-      <ID>1095c17e-0a32-45b4-8dc3-23c80c1cae06</ID>
+      <Heigth>40</Heigth>
+      <ID>726f1dbe-af92-4052-ad31-248e59cc0761</ID>
       <ZIndex>0</ZIndex>
       <Content>
         <Class>
-          <Header>Class</Header>
+          <Name>Class</Name>
           <Visibility>Public</Visibility>
           <IsStatic>false</IsStatic>
           <IsAbstract>false</IsAbstract>
           <Attributes />
           <Methods />
-          <Stereotypes />
         </Class>
       </Content>
     </DesignerItem>
   </DesignerItems>
+  <Connections />
 </Root>

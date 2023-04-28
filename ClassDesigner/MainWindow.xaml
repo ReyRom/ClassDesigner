@@ -69,31 +69,18 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Expander IsExpanded="True">
-                <ItemsControl ItemsSource="{Binding Templates}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <c:DragItem DragContent="{Binding Content}">
-                                <TextBlock Width="50" Height="20" Background="LightGray" Margin="2" Text="{Binding Name}"/>
-                            </c:DragItem>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                
-                
-            </Expander>
+            <ItemsControl ItemsSource="{Binding PropertiesService.Entries}" Template="{StaticResource VisualTreePanel}"/>
 
             <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <c:DesignerCanvas Margin="15" x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
+                    
                 </c:DesignerCanvas>
             </ScrollViewer>
+
+            <ContentControl Grid.Column="2" Content="{Binding Item}" Template="{StaticResource PropertiesPanel}"/>
         </Grid>
     </Grid>
 </Window>

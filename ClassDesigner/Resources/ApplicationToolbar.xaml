@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:h="clr-namespace:ClassDesigner.Helping">
+                    xmlns:h="clr-namespace:ClassDesigner.Helping"
+                    xmlns:c="clr-namespace:ClassDesigner.Controls">
 
 
     <ToolBar x:Key="ApplicationToolbar">
@@ -156,6 +157,21 @@
                 </h:RelationTemplateSelector>
             </ListView.ItemTemplateSelector>
         </ListView>
+        
+        <ItemsControl ItemsSource="{Binding Templates}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <c:DragItem DragContent="{Binding Content}">
+                        <TextBlock Width="50" Height="20" Background="LightGray" Margin="2" Text="{Binding Name}"/>
+                    </c:DragItem>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </ToolBar>
 
 </ResourceDictionary>

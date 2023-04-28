@@ -1,6 +1,7 @@
 ﻿using ClassDesigner.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,6 +15,7 @@ namespace ClassDesigner.Helping
         private static PropertiesService instance;
         private object selected;
         private object selectedCollection;
+        private IEnumerable<IEntry> entries;
 
         public static PropertiesService Instance { get => instance ??= new PropertiesService(); }
 
@@ -35,6 +37,14 @@ namespace ClassDesigner.Helping
                 OnPropertyChanged(nameof(SelectedCollection));
             }
         }
+        
+        public void UpdateEntries(IEnumerable<IEntry> entries)
+        {
+            this.entries = entries;
+            OnPropertyChanged(nameof(Entries));
+        }
+
+        public IEnumerable<IEntry> Entries{ get => entries; }
 
 
 

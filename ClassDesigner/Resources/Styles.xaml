@@ -5,4 +5,77 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
+
+    <Style TargetType="TreeViewItem">
+        <Style.Resources>
+            <!-- Resources omitted for clarity… -->
+        </Style.Resources>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TreeViewItem">
+                    <Grid Margin="1">
+                        <Grid.RowDefinitions>
+                            <!--The top row contains the item's content.-->
+                            <RowDefinition Height="Auto" />
+                            <!--The bottom row contains the item's children.-->
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!-- This Border and ContentPresenter displays the
+               content of the TreeViewItem. -->
+                        <Border Name="Bd"
+                                Background="White"
+                                BorderBrush="Black"
+                                BorderThickness="0.6"
+                                Padding="2"
+                                >
+                            <ContentPresenter Name="PART_Header"                 
+                                              ContentSource="Header"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        
+                        
+                        
+                        <!-- The ItemsPresenter displays the item's children. -->
+                        <ItemsPresenter Grid.Row="1"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <!--When the item is selected in the TreeView, use the
+              "selected" colors and give it a drop shadow. -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter
+                                  TargetName="Bd"
+                                  Property="Panel.Background"                    
+                                  Value="Aqua" />
+                            <Setter
+                                  TargetName="Bd"
+                                  Property="Border.BorderBrush"                    
+                                  Value="Black" />
+                            <Setter
+                                  TargetName="Bd"
+                                  Property="TextElement.Foreground"                  
+                                  Value="{DynamicResource
+                                    {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Make each TreeViewItem show it's children
+       in a horizontal StackPanel. -->
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel
+                          HorizontalAlignment="Center"
+                          IsItemsHost="True"
+                          Margin="1"
+                          Orientation="Vertical"  />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

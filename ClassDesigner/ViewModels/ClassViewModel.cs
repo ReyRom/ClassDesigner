@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace ClassDesigner.ViewModels
 {
-    public class ClassViewModel : ViewModelBase, IEntry, IHaveMethods, IHaveFields
+    public class ClassViewModel : ViewModelBase, IEntry, IHaveMethods, IHaveFields, IHaveProperties
     {
         private string name = "Class";
         public string Name
@@ -52,10 +52,8 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(IsAbstract));
             }
         }
-        public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>(); //{ new AttributeViewModel() };
-        //public ObservableCollection<Stereotype> Stereotypes { get; set; } = new ObservableCollection<Stereotype>() ;
-        //public ClassStereotypes Stereotypes { get; set; } = new ClassStereotypes();
-        public ObservableCollection<MethodViewModel> Methods { get; set; } = new ObservableCollection<MethodViewModel>(); //{ new MethodViewModel() };
+        public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>();
+        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>(); 
 
         Command addAttributeCommand;
         public Command AddAttributeCommand
@@ -83,22 +81,6 @@ namespace ClassDesigner.ViewModels
                 this.Methods.Add(new MethodViewModel());
             }));
         }
- 
-
-        //public Command AddStereotypeCommand
-        //{
-        //    get => addStereotypeCommand ?? (addStereotypeCommand = new Command(obj =>
-        //    {
-        //        if (this.Stereotypes.Contains((Stereotype)obj))
-        //        {
-        //            this.Stereotypes.Remove((Stereotype)obj);
-        //        }
-        //        else
-        //        {
-        //            this.Stereotypes.Add((Stereotype)obj);
-        //        }
-        //    }));
-        //}
 
         Command openPropertiesCommand;
         public Command OpenPropertiesCommand

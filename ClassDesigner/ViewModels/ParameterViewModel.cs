@@ -31,6 +31,19 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(ParameterString));
             }
         }
+
+        private string defaultValue = string.Empty;
+        public string DefaultValue
+        {
+            get => defaultValue; set
+            {
+                defaultValue = value;
+                OnPropertyChanged(nameof(DefaultValue));
+
+                OnPropertyChanged(nameof(ParameterString));
+            }
+        }
+
         public string ParameterString
         {
             get => this.ToString();

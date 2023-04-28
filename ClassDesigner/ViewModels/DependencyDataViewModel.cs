@@ -16,8 +16,8 @@ namespace ClassDesigner.ViewModels
             Target = target;
             ValidateSource();
         }
-        private MethodViewModel dependencedMethod;
-        public MethodViewModel DependencedMethod
+        private IMethod dependencedMethod;
+        public IMethod DependencedMethod
         {
             get => dependencedMethod; set
             {

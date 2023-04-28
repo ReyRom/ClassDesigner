@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    class InterfaceViewModel:ViewModelBase, IEntry, IHaveMethods, IHaveProperties
+    public class StructViewModel : ViewModelBase, IEntry, IHaveMethods, IHaveFields, IHaveProperties
     {
-        private string name = "Interface";
+        private string name = "Struct";
         public string Name
         {
             get => name; set
@@ -30,18 +30,25 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(Visibility));
             }
         }
-       
-        public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>(); 
-        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>(); 
+        public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>();
+        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>();
 
+        Command addAttributeCommand;
+        public Command AddAttributeCommand
+        {
+            get => addAttributeCommand ?? (addAttributeCommand = new Command(obj =>
+            {
+                this.Attributes.Add(new AttributeViewModel());
+            }));
+        }
 
         Command addPropertyCommand;
         public Command AddPropertyCommand
         {
-            get => addPropertyCommand ?? (addPropertyCommand = new Command(obj =>
+            get => addPropertyCommand ??= new Command(obj =>
             {
                 this.Attributes.Add(new PropertyViewModel());
-            }));
+            });
         }
 
         Command addMethodCommand;
@@ -52,11 +59,6 @@ namespace ClassDesigner.ViewModels
                 this.Methods.Add(new MethodViewModel());
             }));
         }
-
-        
-        
-
-
 
         //Command openPropertiesCommand;
         //public Command OpenPropertiesCommand

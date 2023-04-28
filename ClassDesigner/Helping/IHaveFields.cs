@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.Helping
 {
-    public interface IHaveFields
+    public interface IHaveFields:IHaveAttributes
     {
-        ObservableCollection<IField> Attributes { get; set; }
-        Command AddPropertyCommand { get; }
+        Command AddAttributeCommand { get; }
     }
 }

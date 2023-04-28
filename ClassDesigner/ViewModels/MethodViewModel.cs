@@ -139,8 +139,18 @@ namespace ClassDesigner.ViewModels
         private bool isStatic = false;
 
         public Command RemoveParameterCommand => removeParameterCommand ??= new Command(obj =>
-                {
-                    this.Parameters.Remove((ParameterViewModel)obj);
-                });
+        {
+            this.Parameters.Remove((ParameterViewModel)obj);
+        });
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null) return false;
+            if (obj == this) return true;
+            if (obj.GetType() != this.GetType()) return false;
+
+            var m = obj as MethodViewModel;
+            return m.MethodString == this.MethodString && m.IsStatic == this.IsStatic;
+        }
     }
 }

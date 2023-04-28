@@ -73,7 +73,7 @@ namespace ClassDesigner.Controls
                     PasteXml(XElement.Load(sr), position.X, position.Y);
                 }
 
-
+                PropertiesService.Instance.UpdateEntries(this.Children.OfType<DesignerItem>().Select(x=>x.Content).OfType<IEntry>());
                 e.Handled = true;
             }
         }

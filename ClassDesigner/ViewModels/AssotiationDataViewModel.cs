@@ -7,35 +7,35 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    class CompositionDataViewModel:ViewModelBase, IConnectionData
+    public class AssotiationDataViewModel:ViewModelBase, IConnectionData
     {
-        public CompositionDataViewModel(IEntry source, IEntry target)
+        public AssotiationDataViewModel(IEntry source, IEntry target)
         {
             Source = source;
             Target = target;
             ValidateSource();
         }
 
-        IField composedAttribute;
-        public IField ComposedAttribute
+        IField assotiatedAttribute;
+        public IField AssotiatedAttribute
         {
-            get => composedAttribute; set
+            get => assotiatedAttribute; set
             {
-                if (composedAttribute is not null)
+                if (assotiatedAttribute is not null)
                 {
-                    composedAttribute.PropertyChanged -= ComposedAttribute_PropertyChanged;
+                    assotiatedAttribute.PropertyChanged -= AssotiatedAttribute_PropertyChanged;
                 }
-                composedAttribute = value;
-                if (composedAttribute.Type != Source.Name)
+                assotiatedAttribute = value;
+                if (assotiatedAttribute.Type != Source.Name)
                 {
-                    composedAttribute.Type = Source.Name;
+                    assotiatedAttribute.Type = Source.Name;
                 }
-                composedAttribute.PropertyChanged += ComposedAttribute_PropertyChanged;
-                OnPropertyChanged(nameof(ComposedAttribute));
+                assotiatedAttribute.PropertyChanged += AssotiatedAttribute_PropertyChanged;
+                OnPropertyChanged(nameof(AssotiatedAttribute));
             }
         }
 
-        private void ComposedAttribute_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void AssotiatedAttribute_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Validate();
         }
@@ -55,7 +55,7 @@ namespace ClassDesigner.ViewModels
             var attribute = new AttributeViewModel();
             attribute.Type = Source.Name;
             (Target as IHaveFields).Attributes.Add(attribute);
-            ComposedAttribute = attribute;
+            AssotiatedAttribute = attribute;
         });
 
 
@@ -65,7 +65,7 @@ namespace ClassDesigner.ViewModels
             var property = new PropertyViewModel();
             property.Type = Source.Name;
             (Target as IHaveProperties).Attributes.Add(property);
-            ComposedAttribute = property;
+            AssotiatedAttribute = property;
         });
 
         public void ValidateSource()
@@ -77,8 +77,7 @@ namespace ClassDesigner.ViewModels
 
         public void Validate()
         {
-            isValid = composedAttribute is not null && composedAttribute.Type == Source.Name;
+            isValid = assotiatedAttribute is not null && assotiatedAttribute.Type == Source.Name;
         }
-
     }
 }

@@ -7,17 +7,6 @@
         <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
         <MenuItem Header="Добавить метод" Command="{Binding  AddMethodCommand}"/>
         <Separator/>
-        <!--<MenuItem Header="Стереотип" x:Name="Stereotypes" ItemsSource="{Binding Stereotypes}">
-            <MenuItem.ItemContainerStyle>
-                <Style TargetType="MenuItem">
-                    <Setter Property="Header" Value="{Binding Stereotype, Converter={StaticResource enumConverter}}"/>
-                    --><!--<Setter Property="Command" Value="{Binding AddStereotypeCommand}"/>
-                    <Setter Property="CommandParameter" Value="{Binding}"/>--><!--
-                    <Setter Property="IsCheckable" Value="True"/>
-                    <Setter Property="IsChecked" Value="{Binding IsSelected}"/>
-                </Style>
-            </MenuItem.ItemContainerStyle>
-        </MenuItem>-->
         <MenuItem Header="Свойства">
             <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
             <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
@@ -101,5 +90,156 @@
             <Border BorderThickness="1"  BorderBrush="Black"/>
         </Grid>
     </DataTemplate>
+
     
+
+    <DataTemplate DataType="{x:Type vm:InterfaceViewModel}">
+        <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
+            <StackPanel>
+                <TextBlock Text="&lt;&lt;Interface&gt;&gt;"/>
+                <TextBox Text="{Binding Name}" HorizontalAlignment="Center">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                    <Setter Property="TextDecorations" Value="Underline"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Separator />
+                <ItemsControl ItemsSource="{Binding Attributes}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding FieldString}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                                <Setter Property="TextDecorations" Value="Underline"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Separator />
+                <ItemsControl ItemsSource="{Binding Methods}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding MethodString}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                                <Setter Property="TextDecorations" Value="Underline"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <Border BorderThickness="1"  BorderBrush="Black"/>
+        </Grid>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type vm:StructViewModel}">
+        <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
+            <StackPanel>
+                <TextBlock Text="&lt;&lt;Struct&gt;&gt;"/>
+                <TextBox Text="{Binding Name}" HorizontalAlignment="Center">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                    <Setter Property="TextDecorations" Value="Underline"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Separator />
+                <ItemsControl ItemsSource="{Binding Attributes}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding FieldString}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                                <Setter Property="TextDecorations" Value="Underline"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Separator />
+                <ItemsControl ItemsSource="{Binding Methods}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding MethodString}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                                <Setter Property="TextDecorations" Value="Underline"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <Border BorderThickness="1"  BorderBrush="Black"/>
+        </Grid>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type vm:EnumViewModel}">
+        <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
+            <StackPanel>
+                <TextBlock Text="&lt;&lt;Enum&gt;&gt;"/>
+                <TextBox Text="{Binding Name}" HorizontalAlignment="Center">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                            
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Separator />
+                <ItemsControl ItemsSource="{Binding EnumChildren}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding EnumString}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                                        
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <Border BorderThickness="1"  BorderBrush="Black"/>
+        </Grid>
+    </DataTemplate>
 </ResourceDictionary>

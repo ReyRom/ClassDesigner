@@ -38,16 +38,6 @@
 
                                 <TextBlock Text="Стереотипы"/>
 
-                                <!--<ItemsControl ItemsSource="{Binding Stereotypes}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <CheckBox IsChecked="{Binding IsSelected}">
-                                                <TextBlock Text="{Binding Stereotype}"/>
-                                            </CheckBox>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>-->
-
                                 <TextBlock Text="Атрибуты"/>
                                 <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
                                 <TextBlock Text="Методы"/>
@@ -153,12 +143,131 @@
                                                         <ComboBox ItemsSource="{Binding SourceEntry.Methods}" 
                                                                   SelectedItem="{Binding ConnectionData.DependencedMethod}">
                                                         </ComboBox>
-                                                        <Button Grid.Column="1"  Command="{Binding ConnectionData.AddDependencedMethod}" CommandParameter="{Binding ConnectionData.IsValid}">
+                                                        <Button Grid.Column="1"  Command="{Binding ConnectionData.AddDependencedMethod}">
                                                             <TextBlock Style="{StaticResource AddIcon}"/>
                                                         </Button>
                                                     </Grid>
                                                 </DataTemplate>
                                             </h:RelationTemplateSelector.DependencyTemplate>
+
+                                            <h:RelationTemplateSelector.CompositionTemplate>
+                                                <DataTemplate>
+                                                    <Grid DataContext="{Binding Source={x:Reference Name=ConnectionPanel}, Path=DataContext}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <ComboBox ItemsSource="{Binding TargetEntry.Attributes}" 
+                                                                  SelectedItem="{Binding ConnectionData.ComposedAttribute}">
+                                                        </ComboBox>
+                                                        <Menu Grid.Column="1">
+                                                            <MenuItem>
+                                                                <MenuItem.Header>
+                                                                    <TextBlock Style="{StaticResource AddIcon}"/>
+                                                                </MenuItem.Header>
+                                                                <MenuItem Header="Добавить поле" Command="{Binding ConnectionData.AddComposedAttribute}"/>
+                                                                <MenuItem Header="Добавить свойство" Command="{Binding ConnectionData.AddComposedProperty}"/>
+                                                            </MenuItem>
+                                                        </Menu>
+                                                        
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </h:RelationTemplateSelector.CompositionTemplate>
+
+                                            <h:RelationTemplateSelector.AggregationTemplate>
+                                                <DataTemplate>
+                                                    <Grid DataContext="{Binding Source={x:Reference Name=ConnectionPanel}, Path=DataContext}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
+                                                        </Grid.RowDefinitions>
+                                                        <ComboBox ItemsSource="{Binding TargetEntry.Attributes}" 
+                                                                  SelectedItem="{Binding ConnectionData.AggregatedAttribute}">
+                                                        </ComboBox>
+                                                        <Menu Grid.Column="1">
+                                                            <MenuItem>
+                                                                <MenuItem.Header>
+                                                                    <TextBlock Style="{StaticResource AddIcon}"/>
+                                                                </MenuItem.Header>
+                                                                <MenuItem Header="Добавить поле" Command="{Binding ConnectionData.AddAggregatedAttribute}"/>
+                                                                <MenuItem Header="Добавить свойство" Command="{Binding ConnectionData.AddAggregatedProperty}"/>
+                                                            </MenuItem>
+                                                        </Menu>
+
+                                                        <ComboBox Grid.Row="1" ItemsSource="{Binding TargetEntry.Methods}" 
+                                                                  SelectedItem="{Binding ConnectionData.AggregatedMethod}">
+                                                        </ComboBox>
+                                                        <Menu Grid.Row="1" Grid.Column="1">
+                                                            <MenuItem>
+                                                                <MenuItem.Header>
+                                                                    <TextBlock Style="{StaticResource AddIcon}"/>
+                                                                </MenuItem.Header>
+                                                                <MenuItem Header="Добавить метод" Command="{Binding ConnectionData.AddAggregatedMethod}"/>
+                                                                <MenuItem Header="Добавить конструктор" Command="{Binding ConnectionData.AddAggregatedConstructor}"/>
+                                                            </MenuItem>
+                                                        </Menu>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </h:RelationTemplateSelector.AggregationTemplate>
+
+                                            <h:RelationTemplateSelector.GeneralizationTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel DataContext="{Binding Source={x:Reference Name=ConnectionPanel}, Path=DataContext}">
+                                                        <ItemsControl ItemsSource="{Binding ConnectionData.Fields}"/>
+                                                        <ItemsControl ItemsSource="{Binding ConnectionData.Methods}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </h:RelationTemplateSelector.GeneralizationTemplate>
+
+                                            <h:RelationTemplateSelector.RealizationTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel x:Name="RealizationPanel" DataContext="{Binding Source={x:Reference Name=ConnectionPanel}, Path=DataContext}">
+                                                        <ItemsControl ItemsSource="{Binding ConnectionData.Fields}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Grid>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition/>
+                                                                            <ColumnDefinition Width="Auto"/>
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <TextBlock Text="{Binding}"/>
+                                                                        <Button Grid.Column="1"
+                                                                            Command="{Binding ElementName=RealizationPanel,Path=DataContext.ConnectionData.RealizeFieldCommand}"
+                                                                            CommandParameter="{Binding}">
+                                                                            <TextBlock Style="{StaticResource AddIcon}"/>
+                                                                        </Button>
+
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                        <ItemsControl ItemsSource="{Binding ConnectionData.Methods}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Grid>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition/>
+                                                                            <ColumnDefinition Width="Auto"/>
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <TextBlock Text="{Binding}"/>
+                                                                        <Button Grid.Column="1"
+                                                                            Command="{Binding Source={x:Reference Name=RealizationPanel},Path=DataContext.ConnectionData.RealizeMethodCommand}"
+                                                                            CommandParameter="{Binding}">
+                                                                            <TextBlock Style="{StaticResource AddIcon}"/>
+                                                                        </Button>
+
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </h:RelationTemplateSelector.RealizationTemplate>
+
                                         </h:RelationTemplateSelector>
                                     </ContentControl.ContentTemplateSelector>
                                 </ContentControl>

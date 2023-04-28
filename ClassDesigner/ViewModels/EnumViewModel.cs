@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class EnumViewModel : ViewModelBase
+    public class EnumViewModel : ViewModelBase, IEntry
     {
         private string name = "Enum";
         public string Name

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -226,13 +227,45 @@ namespace ClassDesigner.Controls
                     connection.Nodes = n;
 
                     Canvas.SetZIndex(connection, Int32.Parse(connectionXML.Element("ZIndex").Value));
+
+                    switch ((RelationType)Enum.Parse(typeof(RelationType), connectionXML.Element("RelationType").Value))
+                    {
+                        case RelationType.Association:
+                            (connection.ConnectionViewModel.ConnectionData as AssotiationDataViewModel).AssotiatedAttribute
+                                = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
+                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AssotiatedAttribute").Value);
+                            break;
+                        case RelationType.Aggregation:
+                            (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedAttribute
+                                = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
+                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AggregatedAttribute").Value);
+                            (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedMethod
+                                = (connection.ConnectionViewModel.TargetEntry as IHaveMethods).Methods
+                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AggregatedMethod").Value);
+                            break;
+                        case RelationType.Composition:
+                            (connection.ConnectionViewModel.ConnectionData as CompositionDataViewModel).ComposedAttribute
+                                = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
+                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("ComposedAttribute").Value);
+                            break;
+                        case RelationType.Generalization:
+                            break;
+                        case RelationType.Realization:
+                            break;
+                        case RelationType.Dependency:
+                            (connection.ConnectionViewModel.ConnectionData as DependencyDataViewModel).DependencedMethod
+                                = (connection.ConnectionViewModel.SourceEntry as IHaveMethods).Methods
+                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("DependencedMethod").Value);
+                            break;
+                        default:
+                            break;
+                    }
                     this.Children.Add(connection);
                     connection.UpdateConnection();
                     SelectionService.AddSelection(connection);
                 }
             }
         }
-        
 
         private static DesignerItem DeserializeDesignerItem(XElement itemXML, Guid id, double offsetX = 0, double offsetY = 0)
         {
@@ -242,7 +275,23 @@ namespace ClassDesigner.Controls
             Canvas.SetLeft(item, Double.Parse(itemXML.Element("Left").Value, CultureInfo.InvariantCulture) + offsetX);
             Canvas.SetTop(item, Double.Parse(itemXML.Element("Top").Value, CultureInfo.InvariantCulture) + offsetY);
             Canvas.SetZIndex(item, Int32.Parse(itemXML.Element("ZIndex").Value));
-            Object content = DeserializeClass(itemXML.Element("Content").Element("Class"));
+            Object content = null;
+            if (itemXML.Element("Content").Element("Class") is not null)
+            {
+                content = DeserializeClass(itemXML.Element("Content").Element("Class"));
+            }
+            else if (itemXML.Element("Content").Element("Interface") is not null)
+            {
+                content = DeserializeInterface(itemXML.Element("Content").Element("Interface"));
+            }
+            else if (itemXML.Element("Content").Element("Struct") is not null)
+            {
+                content = DeserializeStruct(itemXML.Element("Content").Element("Struct"));
+            }
+            else if (itemXML.Element("Content").Element("Enum") is not null)
+            {
+                content = DeserializeEnum(itemXML.Element("Content").Element("Enum"));
+            }
             item.Content = content;
             return item;
         }
@@ -250,7 +299,7 @@ namespace ClassDesigner.Controls
         private static ClassViewModel DeserializeClass(XElement itemXML)
         {
             ClassViewModel model = new ClassViewModel();
-            model.Name = itemXML.Element("Header").Value;
+            model.Name = itemXML.Element("Name").Value;
             model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
             model.IsStatic = bool.Parse(itemXML.Element("IsStatic").Value);
             model.IsAbstract = bool.Parse(itemXML.Element("IsAbstract").Value);
@@ -261,6 +310,7 @@ namespace ClassDesigner.Controls
                 attribute.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), attrXML.Element("Visibility").Value);
                 attribute.IsStatic = bool.Parse(attrXML.Element("IsStatic").Value);
                 attribute.Type = attrXML.Element("Type").Value;
+                attribute.DefaultValue = attrXML.Element("DefaultValue").Value;
                 model.Attributes.Add(attribute);
             }
             foreach (var propXML in itemXML.Element("Attributes").Elements("Property"))
@@ -273,6 +323,7 @@ namespace ClassDesigner.Controls
                 property.IsGet = bool.Parse(propXML.Element("IsGet").Value);
                 property.IsSet = bool.Parse(propXML.Element("IsSet").Value);
                 property.Type = propXML.Element("Type").Value;
+                property.DefaultValue = propXML.Element("DefaultValue").Value;
                 model.Attributes.Add(property);
             }
             foreach (var methodXML in itemXML.Element("Methods").Elements("Method"))
@@ -287,16 +338,116 @@ namespace ClassDesigner.Controls
                     ParameterViewModel param = new ParameterViewModel();
                     param.Name = paramXML.Element("Name").Value;
                     param.Type = paramXML.Element("Type").Value;
+                    param.DefaultValue = paramXML.Element("DefaultValue").Value;
                     method.Parameters.Add(param);
                 }
                 model.Methods.Add(method);
             }
-            //foreach (var stereotype in itemXML.Element("Stereotypes").Elements("Stereotype"))
-            ////{
-            ////    model.Stereotypes.FirstOrDefault(x => x.Stereotype.ToString() == stereotype.Value).IsSelected = true;
-            //}
             return model;
         }
+
+        private static StructViewModel DeserializeStruct(XElement itemXML)
+        {
+            StructViewModel model = new StructViewModel();
+            model.Name = itemXML.Element("Name").Value;
+            model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
+            foreach (var attrXML in itemXML.Element("Attributes").Elements("Attribute"))
+            {
+                AttributeViewModel attribute = new AttributeViewModel();
+                attribute.Name = attrXML.Element("Name").Value;
+                attribute.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), attrXML.Element("Visibility").Value);
+                attribute.IsStatic = bool.Parse(attrXML.Element("IsStatic").Value);
+                attribute.Type = attrXML.Element("Type").Value;
+                attribute.DefaultValue = attrXML.Element("DefaultValue").Value;
+                model.Attributes.Add(attribute);
+            }
+            foreach (var propXML in itemXML.Element("Attributes").Elements("Property"))
+            {
+                PropertyViewModel property = new PropertyViewModel();
+                property.Name = propXML.Element("Name").Value;
+                property.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), propXML.Element("Visibility").Value);
+                property.IsStatic = bool.Parse(propXML.Element("IsStatic").Value);
+                property.IsAbstract = bool.Parse(propXML.Element("IsAbstract").Value);
+                property.IsGet = bool.Parse(propXML.Element("IsGet").Value);
+                property.IsSet = bool.Parse(propXML.Element("IsSet").Value);
+                property.Type = propXML.Element("Type").Value;
+                property.DefaultValue = propXML.Element("DefaultValue").Value;
+                model.Attributes.Add(property);
+            }
+            foreach (var methodXML in itemXML.Element("Methods").Elements("Method"))
+            {
+                MethodViewModel method = new MethodViewModel();
+                method.Name = methodXML.Element("Name").Value;
+                method.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), methodXML.Element("Visibility").Value);
+                method.IsStatic = bool.Parse(methodXML.Element("IsStatic").Value);
+                method.Type = methodXML.Element("Type").Value;
+                foreach (var paramXML in methodXML.Element("Parameters").Elements("Parameter"))
+                {
+                    ParameterViewModel param = new ParameterViewModel();
+                    param.Name = paramXML.Element("Name").Value;
+                    param.Type = paramXML.Element("Type").Value;
+                    param.DefaultValue = paramXML.Element("DefaultValue").Value;
+                    method.Parameters.Add(param);
+                }
+                model.Methods.Add(method);
+            }
+            return model;
+        }
+
+        private static InterfaceViewModel DeserializeInterface(XElement itemXML)
+        {
+            InterfaceViewModel model = new InterfaceViewModel();
+            model.Name = itemXML.Element("Name").Value;
+            model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
+            foreach (var propXML in itemXML.Element("Attributes").Elements("Property"))
+            {
+                PropertyViewModel property = new PropertyViewModel();
+                property.Name = propXML.Element("Name").Value;
+                property.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), propXML.Element("Visibility").Value);
+                property.IsStatic = bool.Parse(propXML.Element("IsStatic").Value);
+                property.IsAbstract = bool.Parse(propXML.Element("IsAbstract").Value);
+                property.IsGet = bool.Parse(propXML.Element("IsGet").Value);
+                property.IsSet = bool.Parse(propXML.Element("IsSet").Value);
+                property.Type = propXML.Element("Type").Value;
+                property.DefaultValue = propXML.Element("DefaultValue").Value;
+                model.Attributes.Add(property);
+            }
+            foreach (var methodXML in itemXML.Element("Methods").Elements("Method"))
+            {
+                MethodViewModel method = new MethodViewModel();
+                method.Name = methodXML.Element("Name").Value;
+                method.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), methodXML.Element("Visibility").Value);
+                method.IsStatic = bool.Parse(methodXML.Element("IsStatic").Value);
+                method.Type = methodXML.Element("Type").Value;
+                foreach (var paramXML in methodXML.Element("Parameters").Elements("Parameter"))
+                {
+                    ParameterViewModel param = new ParameterViewModel();
+                    param.Name = paramXML.Element("Name").Value;
+                    param.Type = paramXML.Element("Type").Value;
+                    param.DefaultValue = paramXML.Element("DefaultValue").Value;
+                    method.Parameters.Add(param);
+                }
+                model.Methods.Add(method);
+            }
+            return model;
+        }
+
+
+        private static EnumViewModel DeserializeEnum(XElement itemXML)
+        {
+            EnumViewModel model = new EnumViewModel();
+            model.Name = itemXML.Element("Name").Value;
+            model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
+            foreach (var childXML in itemXML.Element("EnumChildren").Elements("EnumChild"))
+            {
+                EnumChildViewModel child = new EnumChildViewModel();
+                child.Name = childXML.Element("Name").Value;
+                child.Value = childXML.Element("Value").Value;
+                model.EnumChildren.Add(child);
+            }
+            return model;
+        }
+
         private Connector GetConnector(Guid itemID, String connectorName)
         {
             DesignerItem designerItem = this.Children.OfType<DesignerItem>().FirstOrDefault(x => x.ID == itemID);
@@ -394,16 +545,36 @@ namespace ClassDesigner.Controls
                                                         new XElement("ID", x.ID),
                                                         new XElement("ZIndex", Canvas.GetZIndex(x)),
                                                         new XElement("Content",
-                                                            SerializeClass(((ClassViewModel)x.Content))
+                                                            SerializeContent(x.Content)
                                                         ))));
             return serializedItems;
         }
 
+        XElement SerializeContent(object content)
+        {
+            if (content is ClassViewModel c)
+            {
+                return SerializeClass(c);
+            }
+            if (content is InterfaceViewModel i)
+            {
+                return SerializeInterface(i);
+            }
+            if (content is StructViewModel s)
+            {
+                return SerializeStruct(s);
+            }
+            if (content is EnumViewModel e)
+            {
+                return SerializeEnum(e);
+            }
+            return new XElement("NoContent");
+        }
 
         XElement SerializeClass(ClassViewModel model)
         {
             XElement serializedClass = new XElement("Class",
-                                                     new XElement("Header", model.Name),
+                                                     new XElement("Name", model.Name),
                                                      new XElement("Visibility", model.Visibility),
                                                      new XElement("IsStatic", model.IsStatic),
                                                      new XElement("IsAbstract", model.IsAbstract),
@@ -413,7 +584,8 @@ namespace ClassDesigner.Controls
                                                             new XElement("Name", a.Name),
                                                             new XElement("Visibility", a.Visibility),
                                                             new XElement("Type", a.Type),
-                                                            new XElement("IsStatic", a.IsStatic)
+                                                            new XElement("IsStatic", a.IsStatic),
+                                                            new XElement("DefaultValue", a.DefaultValue)
                                                         )),
                                                         model.Attributes.OfType<PropertyViewModel>().Select(p =>
                                                         new XElement("Property",
@@ -423,10 +595,11 @@ namespace ClassDesigner.Controls
                                                             new XElement("IsStatic", p.IsStatic),
                                                             new XElement("IsAbstract", p.IsAbstract),
                                                             new XElement("IsGet", p.IsGet),
-                                                            new XElement("IsSet", p.IsSet)
+                                                            new XElement("IsSet", p.IsSet),
+                                                            new XElement("DefaultValue", p.DefaultValue)
                                                         ))),
                                                      new XElement("Methods",
-                                                        model.Methods.Select(m =>
+                                                        model.Methods.OfType<MethodViewModel>().Select(m =>
                                                         new XElement("Method",
                                                             new XElement("Name", m.Name),
                                                             new XElement("Visibility", m.Visibility),
@@ -436,14 +609,123 @@ namespace ClassDesigner.Controls
                                                                 m.Parameters.Select(p =>
                                                                 new XElement("Parameter",
                                                                     new XElement("Name", p.Name),
-                                                                    new XElement("Name", p.Type)
-                                                                ))
-                                                        ))))
-                                                     //new XElement("Stereotypes",
-                                                     //    model.Stereotypes.Where(s=>s.IsSelected).Select(s =>
-                                                     //    new XElement("Stereotype", s.Stereotype))
-                                                     //)
-                                                     );
+                                                                    new XElement("Type", p.Type),
+                                                                    new XElement("DefaultValue", p.DefaultValue)
+                                                        )),
+                                                        model.Methods.OfType<ConstructorViewModel>().Select(m =>
+                                                        new XElement("Constructor",
+                                                            new XElement("Name", m.Name),
+                                                            new XElement("Visibility", m.Visibility),
+                                                            new XElement("Parameters",
+                                                                m.Parameters.Select(p =>
+                                                                new XElement("Parameter",
+                                                                    new XElement("Name", p.Name),
+                                                                    new XElement("Type", p.Type),
+                                                                    new XElement("DefaultValue", p.DefaultValue)
+                                                         )))
+                                                     )))))));
+            return serializedClass;
+        }
+
+        XElement SerializeInterface(InterfaceViewModel model)
+        {
+            XElement serializedClass = new XElement("Interface",
+                                                     new XElement("Name", model.Name),
+                                                     new XElement("Visibility", model.Visibility),
+                                                     new XElement("Attributes",
+                                                        model.Attributes.OfType<PropertyViewModel>().Select(p =>
+                                                        new XElement("Property",
+                                                            new XElement("Name", p.Name),
+                                                            new XElement("Visibility", p.Visibility),
+                                                            new XElement("Type", p.Type),
+                                                            new XElement("IsStatic", p.IsStatic),
+                                                            new XElement("IsAbstract", p.IsAbstract),
+                                                            new XElement("IsGet", p.IsGet),
+                                                            new XElement("IsSet", p.IsSet),
+                                                            new XElement("DefaultValue", p.DefaultValue)
+                                                        ))),
+                                                     new XElement("Methods",
+                                                        model.Methods.OfType<MethodViewModel>().Select(m =>
+                                                        new XElement("Method",
+                                                            new XElement("Name", m.Name),
+                                                            new XElement("Visibility", m.Visibility),
+                                                            new XElement("Type", m.Type),
+                                                            new XElement("IsStatic", m.IsStatic),
+                                                            new XElement("Parameters",
+                                                                m.Parameters.Select(p =>
+                                                                new XElement("Parameter",
+                                                                    new XElement("Name", p.Name),
+                                                                    new XElement("Type", p.Type),
+                                                                    new XElement("DefaultValue", p.DefaultValue)
+                                                        )))))));
+            return serializedClass;
+        }
+
+        XElement SerializeStruct(StructViewModel model)
+        {
+            XElement serializedClass = new XElement("Struct",
+                                                     new XElement("Name", model.Name),
+                                                     new XElement("Visibility", model.Visibility),
+                                                     new XElement("Attributes",
+                                                        model.Attributes.OfType<AttributeViewModel>().Select(a =>
+                                                        new XElement("Attribute",
+                                                            new XElement("Name", a.Name),
+                                                            new XElement("Visibility", a.Visibility),
+                                                            new XElement("Type", a.Type),
+                                                            new XElement("IsStatic", a.IsStatic),
+                                                            new XElement("DefaultValue", a.DefaultValue)
+                                                        )),
+                                                        model.Attributes.OfType<PropertyViewModel>().Select(p =>
+                                                        new XElement("Property",
+                                                            new XElement("Name", p.Name),
+                                                            new XElement("Visibility", p.Visibility),
+                                                            new XElement("Type", p.Type),
+                                                            new XElement("IsStatic", p.IsStatic),
+                                                            new XElement("IsAbstract", p.IsAbstract),
+                                                            new XElement("IsGet", p.IsGet),
+                                                            new XElement("IsSet", p.IsSet),
+                                                            new XElement("DefaultValue", p.DefaultValue)
+                                                        ))),
+                                                     new XElement("Methods",
+                                                        model.Methods.OfType<MethodViewModel>().Select(m =>
+                                                        new XElement("Method",
+                                                            new XElement("Name", m.Name),
+                                                            new XElement("Visibility", m.Visibility),
+                                                            new XElement("Type", m.Type),
+                                                            new XElement("IsStatic", m.IsStatic),
+                                                            new XElement("Parameters",
+                                                                m.Parameters.Select(p =>
+                                                                new XElement("Parameter",
+                                                                    new XElement("Name", p.Name),
+                                                                    new XElement("Type", p.Type),
+                                                                    new XElement("DefaultValue", p.DefaultValue)
+                                                        )),
+                                                        model.Methods.OfType<ConstructorViewModel>().Select(m =>
+                                                        new XElement("Constructor",
+                                                            new XElement("Name", m.Name),
+                                                            new XElement("Visibility", m.Visibility),
+                                                            new XElement("Parameters",
+                                                                m.Parameters.Select(p =>
+                                                                new XElement("Parameter",
+                                                                    new XElement("Name", p.Name),
+                                                                    new XElement("Type", p.Type),
+                                                                    new XElement("DefaultValue", p.DefaultValue)
+                                                         )))
+                                                     )))))));
+            return serializedClass;
+        }
+
+        XElement SerializeEnum(EnumViewModel model)
+        {
+            XElement serializedClass = new XElement("Enum",
+                                                     new XElement("Name", model.Name),
+                                                     new XElement("Visibility", model.Visibility),
+                                                     new XElement("EnumChildren",
+                                                        model.EnumChildren.Select(a =>
+                                                        new XElement("EnumChild",
+                                                            new XElement("Name", a.Name),
+                                                            new XElement("Value", a.Value)
+                                                        ))));
             return serializedClass;
         }
 
@@ -462,11 +744,41 @@ namespace ClassDesigner.Controls
                                         new XElement("Node",
                                             new XElement("X", n.Point.X),
                                             new XElement("Y", n.Point.Y)
-                                        )
-                                     ))
-                                  )));
+                                        ))),
+                                      SerializeConnectionData(c.ConnectionViewModel.ConnectionData))
+                                  ));
 
             return serializedConnections;
+        }
+
+        XElement SerializeConnectionData(IConnectionData connectionData)
+        {
+            if (connectionData is AggregationDataViewModel ag)
+            {
+                return new XElement("ConnectionData",
+                    new XElement("AggregatedAttribute", ag.AggregatedAttribute.ToString()),
+                    new XElement("AggregatedMethod", ag.AggregatedMethod.ToString())
+                    );
+            }
+            if (connectionData is CompositionDataViewModel c)
+            {
+                return new XElement("ConnectionData",
+                    new XElement("ComposedAttribute", c.ComposedAttribute.ToString())
+                    );
+            }
+            if (connectionData is AssotiationDataViewModel ass)
+            {
+                return new XElement("ConnectionData",
+                    new XElement("ComposedAttribute", ass.AssotiatedAttribute.ToString())
+                    );
+            }
+            if (connectionData is DependencyDataViewModel d)
+            {
+                return new XElement("ConnectionData",
+                    new XElement("DependencedMethod", d.DependencedMethod.ToString())
+                    );
+            }
+            return new XElement("ConnectionData");
         }
 
         void SaveFile(XElement xElement)
