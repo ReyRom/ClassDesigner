@@ -37,5 +37,12 @@ namespace ClassDesigner.ViewModels
             OnPropertyChanged(nameof(PropertiesService));
         }
         public object Item { get => PropertiesService.Instance.Selected; }
+        public double InterfaceScale
+        {
+            get
+            {
+                return Properties.Settings.Default.InterfaceScale;
+            }
+        }
     }
 }

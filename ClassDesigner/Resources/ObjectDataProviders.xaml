@@ -5,13 +5,6 @@
                     xmlns:h="clr-namespace:ClassDesigner.Helping">
     
     <!--Enum Data-->
-    <ObjectDataProvider x:Key="Stereotypes" MethodName="GetValues"
-                            ObjectType="{x:Type sys:Enum}">
-        <ObjectDataProvider.MethodParameters>
-            <x:Type TypeName="m:Stereotype"/>
-        </ObjectDataProvider.MethodParameters>
-    </ObjectDataProvider>
-
     <ObjectDataProvider x:Key="RelationTypes" MethodName="GetValues"
                             ObjectType="{x:Type sys:Enum}">
         <ObjectDataProvider.MethodParameters>

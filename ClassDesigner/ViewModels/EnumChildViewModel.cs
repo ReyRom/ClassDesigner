@@ -1,4 +1,5 @@
-﻿using ClassDesigner.Models;
+﻿using ClassDesigner.Helping;
+using ClassDesigner.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace ClassDesigner.ViewModels
             set => ParseFromString(value); 
         }
 
+        public IEntry Parent { get; set; }
+
         public static Match MatchEnumString(string value)
         {
             return Regex.Match(value, @"^(?<Name>\w+)(\s\=\s(?<Value>\w+)){0,1}$");
@@ -36,7 +39,7 @@ namespace ClassDesigner.ViewModels
 
         public override string ToString()
         {
-            return Name + (Value != String.Empty ? " = " + Value : "");
+            return Name + (!String.IsNullOrWhiteSpace(Value)? " = " + Value : "");
         }
     }
 }

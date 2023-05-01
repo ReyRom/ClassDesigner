@@ -16,15 +16,38 @@ namespace ClassDesigner.Helping
         public DataTemplate ConnectionTemplate { get; set; }
         public DataTemplate MethodTemplate { get; set; }
         public DataTemplate AttributeTemplate { get; set; }
+        public DataTemplate PropertyTemplate { get; set; }
+        public DataTemplate InterfaceTemplate { get; set; }
+        public DataTemplate StructTemplate { get; set; }
+        public DataTemplate EnumTemplate { get; set; }
+        public DataTemplate EnumChildTemplate { get; set; }
         public DataTemplate DefaultTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is ClassViewModel) return ClassTemplate;
-            if (item is ConnectionViewModel) return ConnectionTemplate;
-            if (item is AttributeViewModel) return AttributeTemplate;
-            if (item is MethodViewModel) return MethodTemplate;
-            else return DefaultTemplate;
+            switch (item)
+            {
+                case ClassViewModel:
+                    return ClassTemplate;
+                case ConnectionViewModel:
+                    return ConnectionTemplate;
+                case MethodViewModel:
+                    return MethodTemplate;
+                case AttributeViewModel:
+                    return AttributeTemplate;
+                case PropertyViewModel: 
+                    return PropertyTemplate;
+                case InterfaceViewModel: 
+                    return InterfaceTemplate;
+                case StructViewModel: 
+                    return StructTemplate;
+                case EnumViewModel: 
+                    return EnumTemplate;
+                case EnumChildViewModel: 
+                    return EnumChildTemplate;
+                default:
+                    return DefaultTemplate;
+            }
         }
     }
 }

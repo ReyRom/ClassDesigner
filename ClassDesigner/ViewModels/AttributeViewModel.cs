@@ -79,7 +79,7 @@ namespace ClassDesigner.ViewModels
             }
         }
 
-        
+        public IEntry Parent { get; set; }
 
         public static Match MatchAttributeString(string value)
         {

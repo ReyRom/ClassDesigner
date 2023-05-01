@@ -11,17 +11,21 @@
         xmlns:m="clr-namespace:ClassDesigner.Models"
         xmlns:h="clr-namespace:ClassDesigner.Helping"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Background="{StaticResource LightAccentBrush}">
     <Window.Resources>
         <vm:MainViewModel x:Key="viewModel"/>
     </Window.Resources>
-    
     <Grid DataContext="{StaticResource viewModel}">
+        <Grid.LayoutTransform>
+            <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding InterfaceScale}" ScaleY="{Binding InterfaceScale}"/>
+        </Grid.LayoutTransform>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <!--<ToolBar>
+            <!--<ToolBar>
             <ListBox ItemsSource="{Binding Source={StaticResource RelationTypes}}" SelectedItem="{Binding SettingsService.RelationType}" Width="144">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -63,24 +67,50 @@
                 <TextBlock Style="{StaticResource DownIcon}"/>
             </Button>
         </ToolBar>-->
-        <ContentControl Content="{StaticResource ApplicationToolbar}"/>
+            <ContentControl Content="{StaticResource ApplicationToolbar}" Margin="2"/>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
 
-            <ItemsControl ItemsSource="{Binding PropertiesService.Entries}" Template="{StaticResource VisualTreePanel}"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-                <c:DesignerCanvas Margin="15" x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
-                    
-                </c:DesignerCanvas>
-            </ScrollViewer>
+                <!--<ItemsControl ItemsSource="{Binding PropertiesService.Entries}" Template="{StaticResource VisualTreePanel}" Margin="2"/>-->
+                <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Margin="2" Background="{StaticResource LightShadesBrush}">
+                    <ItemsControl ItemsSource="{Binding Templates}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <c:DragItem DragContent="{Binding Content}" Width="100" Margin="2,2,2,0">
+                                    <Grid Background="{StaticResource DarkAccentBrush}" >
+                                        <TextBlock Margin="15" Text="{Binding Name}" TextWrapping="Wrap" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource LightShadesBrush}"/>
+                                    </Grid>
+                                </c:DragItem>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
 
-            <ContentControl Grid.Column="2" Content="{Binding Item}" Template="{StaticResource PropertiesPanel}"/>
+                <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="2" Background="{StaticResource LightShadesBrush}">
+                    <c:DesignerCanvas Margin="15,15,0,0" x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
+
+                    </c:DesignerCanvas>
+                </ScrollViewer>
+
+                <ContentControl Grid.Column="2" Content="{Binding Item}" Template="{StaticResource PropertiesPanel}" Margin="2"/>
+            </Grid>
+            <StatusBar Grid.Row="2" Margin="2">
+                <StatusBarItem>
+                    <!--<TextBlock Text="Ошибки:"/>-->
+                    <CheckBox/>
+                </StatusBarItem>
+            </StatusBar>
+        
         </Grid>
-    </Grid>
 </Window>

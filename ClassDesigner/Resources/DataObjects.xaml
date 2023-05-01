@@ -1,8 +1,22 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:vm="clr-namespace:ClassDesigner.ViewModels">
+                    xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
+                    xmlns:h="clr-namespace:ClassDesigner.Helping"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:c="clr-namespace:ClassDesigner.Controls">
 
     <ContextMenu x:Key="ClassContextMenu">
+        <MenuItem Header="Видимость">
+            <MenuItem>
+                <MenuItem.Template>
+                    <ControlTemplate>
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+
+                        </ComboBox>
+                    </ControlTemplate>
+                </MenuItem.Template>
+            </MenuItem>
+        </MenuItem>
         <MenuItem Header="Добавить атрибут" Command="{Binding AddAttributeCommand}"/>
         <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
         <MenuItem Header="Добавить метод" Command="{Binding  AddMethodCommand}"/>
@@ -13,30 +27,147 @@
         </MenuItem>
     </ContextMenu>
 
+    <ContextMenu x:Key="AttributeContextMenu">
+        <MenuItem Header="Видимость">
+            <MenuItem>
+                <MenuItem.Template>
+                    <ControlTemplate>
+                        <ComboBox 
+                            HorizontalAlignment="Stretch" 
+                            ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
+                            SelectedItem="{Binding Visibility}"/>
+                    </ControlTemplate>
+                </MenuItem.Template>
+            </MenuItem>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="Свойства">
+            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+
+        </MenuItem>
+        <MenuItem Header="Удалить" Command="{Binding Parent.RemoveAttributeCommand}" CommandParameter="{Binding}"/>
+    </ContextMenu>
+
+    <ContextMenu x:Key="PropertyContextMenu">
+        <MenuItem Header="Видимость">
+            <MenuItem>
+                <MenuItem.Template>
+                    <ControlTemplate>
+                        <ComboBox 
+                            HorizontalAlignment="Stretch" 
+                            ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
+                            SelectedItem="{Binding Visibility}"/>
+                    </ControlTemplate>
+                </MenuItem.Template>
+            </MenuItem>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="Свойства">
+            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+
+            <MenuItem Header="Get-метод" IsCheckable="True" IsChecked="{Binding IsGet}"/>
+            <MenuItem Header="Set-метод" IsCheckable="True" IsChecked="{Binding IsSet}"/>
+        </MenuItem>
+        <MenuItem Header="Удалить" Command="{Binding Parent.RemovePropertyCommand}" CommandParameter="{Binding}"/>
+    </ContextMenu>
+
+    <ContextMenu x:Key="MethodContextMenu">
+        <MenuItem Header="Видимость">
+            <MenuItem>
+                <MenuItem.Template>
+                    <ControlTemplate>
+                        <ComboBox 
+                            HorizontalAlignment="Stretch" 
+                            ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
+                            SelectedItem="{Binding Visibility}"/>
+                    </ControlTemplate>
+                </MenuItem.Template>
+            </MenuItem>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="Свойства">
+            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+        </MenuItem>
+        <MenuItem Header="Удалить" Command="{Binding Parent.RemoveMethodCommand}" CommandParameter="{Binding}"/>
+    </ContextMenu>
+
+    <DataTemplate x:Key="AttributeTemplate" DataType="{x:Type vm:AttributeViewModel}">
+        <Grid ContextMenu="{StaticResource AttributeContextMenu}">
+            <TextBox Text="{Binding FieldString}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                        <Setter Property="ContextMenu" Value="{StaticResource AttributeContextMenu}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                <Setter Property="TextDecorations" Value="Underline"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="PropertyTemplate" DataType="{x:Type vm:PropertyViewModel}">
+        <Grid ContextMenu="{StaticResource PropertyContextMenu}">
+            <TextBox Text="{Binding FieldString}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                        <Setter Property="ContextMenu" Value="{StaticResource PropertyContextMenu}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                <Setter Property="TextDecorations" Value="Underline"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                <Setter Property="FontStyle" Value="Italic"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="MethodTemplate" DataType="{x:Type vm:MethodViewModel}">
+        <Grid ContextMenu="{StaticResource MethodContextMenu}">
+            <TextBox Text="{Binding MethodString}" ContextMenu="{StaticResource MethodContextMenu}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                <Setter Property="TextDecorations" Value="Underline"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                <Setter Property="FontStyle" Value="Italic"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:ClassViewModel}">
         <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
             <StackPanel>
-                <!--<ItemsControl ItemsSource="{Binding Stereotypes}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Stereotype, StringFormat=&lt;&lt;{0}&gt;&gt;}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsSelected}" Value="False">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>-->
-                <TextBox Text="{Binding Name}" HorizontalAlignment="Center">
+                <TextBox Text="{Binding Name}" HorizontalAlignment="Stretch" TextAlignment="Center" ContextMenu="{StaticResource ClassContextMenu}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
                             <Style.Triggers>
@@ -49,163 +180,146 @@
                             </Style.Triggers>
                         </Style>
                     </TextBox.Style>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </TextBox>
+                
                 <Separator />
+                
                 <ItemsControl ItemsSource="{Binding Attributes}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding FieldString}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                                                <Setter Property="TextDecorations" Value="Underline"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemTemplateSelector>
+                        <h:FieldTemplateSelector 
+                            AttributeTemplate="{StaticResource AttributeTemplate}" 
+                            PropertyTemplate="{StaticResource PropertyTemplate}"/>
+                    </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
+                
                 <Separator />
-                <ItemsControl ItemsSource="{Binding Methods}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding MethodString}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                                                <Setter Property="TextDecorations" Value="Underline"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+
+                <ItemsControl ItemsSource="{Binding Methods}" ItemTemplate="{StaticResource MethodTemplate}">
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="1"  BorderBrush="Black"/>
         </Grid>
     </DataTemplate>
 
-    
+    <ContextMenu x:Key="InterfaceContextMenu">
+        <MenuItem Header="Видимость">
+            <MenuItem>
+                <MenuItem.Template>
+                    <ControlTemplate>
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+
+                        </ComboBox>
+                    </ControlTemplate>
+                </MenuItem.Template>
+            </MenuItem>
+        </MenuItem>
+        <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
+        <MenuItem Header="Добавить метод" Command="{Binding  AddMethodCommand}"/>
+        <!--<Separator/>
+        <MenuItem Header="Свойства">
+            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+        </MenuItem>-->
+    </ContextMenu>
 
     <DataTemplate DataType="{x:Type vm:InterfaceViewModel}">
-        <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
+        <Grid Background="White" ContextMenu="{StaticResource InterfaceContextMenu}">
             <StackPanel>
                 <TextBlock Text="&lt;&lt;Interface&gt;&gt;"/>
-                <TextBox Text="{Binding Name}" HorizontalAlignment="Center">
+                <TextBox Text="{Binding Name}" 
+                         HorizontalAlignment="Stretch" 
+                         TextAlignment="Center" 
+                         ContextMenu="{StaticResource InterfaceContextMenu}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsAbstract}" Value="True">
-                                    <Setter Property="FontStyle" Value="Italic"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                                    <Setter Property="TextDecorations" Value="Underline"/>
-                                </DataTrigger>
-                            </Style.Triggers>
                         </Style>
                     </TextBox.Style>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </TextBox>
+
                 <Separator />
+
                 <ItemsControl ItemsSource="{Binding Attributes}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding FieldString}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                                                <Setter Property="TextDecorations" Value="Underline"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemTemplateSelector>
+                        <h:FieldTemplateSelector 
+                            AttributeTemplate="{StaticResource AttributeTemplate}" 
+                            PropertyTemplate="{StaticResource PropertyTemplate}"/>
+                    </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
+
                 <Separator />
-                <ItemsControl ItemsSource="{Binding Methods}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding MethodString}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                                                <Setter Property="TextDecorations" Value="Underline"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+
+                <ItemsControl ItemsSource="{Binding Methods}" ItemTemplate="{StaticResource MethodTemplate}">
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="1"  BorderBrush="Black"/>
         </Grid>
     </DataTemplate>
+
+    <ContextMenu x:Key="StructContextMenu">
+        <MenuItem Header="Видимость">
+            <MenuItem>
+                <MenuItem.Template>
+                    <ControlTemplate>
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+
+                        </ComboBox>
+                    </ControlTemplate>
+                </MenuItem.Template>
+            </MenuItem>
+        </MenuItem>
+        <MenuItem Header="Добавить атрибут" Command="{Binding AddAttributeCommand}"/>
+        <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
+        <MenuItem Header="Добавить метод" Command="{Binding AddMethodCommand}"/>
+        <!--<Separator/>
+        <MenuItem Header="Свойства">
+            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+        </MenuItem>-->
+    </ContextMenu>
 
 
     <DataTemplate DataType="{x:Type vm:StructViewModel}">
-        <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
+        <Grid Background="White" ContextMenu="{StaticResource StructContextMenu}">
             <StackPanel>
                 <TextBlock Text="&lt;&lt;Struct&gt;&gt;"/>
-                <TextBox Text="{Binding Name}" HorizontalAlignment="Center">
+                <TextBox Text="{Binding Name}" 
+                         HorizontalAlignment="Stretch" 
+                         TextAlignment="Center" 
+                         ContextMenu="{StaticResource StructContextMenu}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsAbstract}" Value="True">
-                                    <Setter Property="FontStyle" Value="Italic"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                                    <Setter Property="TextDecorations" Value="Underline"/>
-                                </DataTrigger>
-                            </Style.Triggers>
                         </Style>
                     </TextBox.Style>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </TextBox>
+
                 <Separator />
+
                 <ItemsControl ItemsSource="{Binding Attributes}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding FieldString}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                                                <Setter Property="TextDecorations" Value="Underline"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemTemplateSelector>
+                        <h:FieldTemplateSelector 
+                            AttributeTemplate="{StaticResource AttributeTemplate}" 
+                            PropertyTemplate="{StaticResource PropertyTemplate}"/>
+                    </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
+
                 <Separator />
-                <ItemsControl ItemsSource="{Binding Methods}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding MethodString}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                                                <Setter Property="TextDecorations" Value="Underline"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+
+                <ItemsControl ItemsSource="{Binding Methods}" ItemTemplate="{StaticResource MethodTemplate}">
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="1"  BorderBrush="Black"/>
@@ -213,30 +327,62 @@
     </DataTemplate>
 
 
+    <ContextMenu x:Key="EnumContextMenu">
+        <MenuItem Header="Видимость">
+            <MenuItem>
+                <MenuItem.Template>
+                    <ControlTemplate>
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+
+                        </ComboBox>
+                    </ControlTemplate>
+                </MenuItem.Template>
+            </MenuItem>
+        </MenuItem>
+        <MenuItem Header="Добавить элемент" Command="{Binding AddEnumChildCommand}"/>
+        <!--<Separator/>
+        <MenuItem Header="Свойства">
+            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+        </MenuItem>-->
+    </ContextMenu>
+
+    <ContextMenu x:Key="EnumChildContextMenu">
+        <MenuItem Header="Удалить" Command="{Binding Parent.RemoveEnumChildCommand}" CommandParameter="{Binding}"/>
+    </ContextMenu>
+
+    <DataTemplate x:Key="EnumChildTemplate" DataType="{x:Type vm:EnumChildViewModel}">
+        <Grid ContextMenu="{StaticResource EnumChildContextMenu}">
+            <TextBox Text="{Binding EnumString}" ContextMenu="{StaticResource EnumChildContextMenu}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                    </Style>
+                </TextBox.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:EnumViewModel}">
-        <Grid Background="White" ContextMenu="{StaticResource ClassContextMenu}">
+        <Grid Background="White" ContextMenu="{StaticResource EnumContextMenu}">
             <StackPanel>
                 <TextBlock Text="&lt;&lt;Enum&gt;&gt;"/>
-                <TextBox Text="{Binding Name}" HorizontalAlignment="Center">
+                <TextBox Text="{Binding Name}" 
+                         HorizontalAlignment="Stretch" 
+                         TextAlignment="Center" 
+                         ContextMenu="{StaticResource EnumContextMenu}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                            
+
                         </Style>
                     </TextBox.Style>
                 </TextBox>
                 <Separator />
-                <ItemsControl ItemsSource="{Binding EnumChildren}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding EnumString}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                                        
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                <ItemsControl ItemsSource="{Binding EnumChildren}" ItemTemplate="{StaticResource EnumChildTemplate}">
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="1"  BorderBrush="Black"/>

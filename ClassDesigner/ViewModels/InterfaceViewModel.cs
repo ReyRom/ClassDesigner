@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    class InterfaceViewModel:ViewModelBase, IEntry, IHaveMethods, IHaveProperties
+    public class InterfaceViewModel:ViewModelBase, IEntry, IHaveMethods, IHaveProperties
     {
         private string name = "Interface";
         public string Name
@@ -32,29 +32,50 @@ namespace ClassDesigner.ViewModels
         }
        
         public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>(); 
-        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>(); 
+        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>();
 
+
+        private int propertyCounter = 0;
+        private int methodCounter = 0;
 
         Command addPropertyCommand;
         public Command AddPropertyCommand
         {
-            get => addPropertyCommand ?? (addPropertyCommand = new Command(obj =>
+            get => addPropertyCommand ??= new Command(obj =>
             {
-                this.Attributes.Add(new PropertyViewModel());
-            }));
+                this.Attributes.Add(new PropertyViewModel() { Name = "Attribute" + ++propertyCounter, Parent = this });
+            });
         }
+
+
+        Command removePropertyCommand;
+        public Command RemovePropertyCommand
+        {
+            get => removePropertyCommand ??= new Command(obj =>
+            {
+                this.Attributes.Remove(obj as PropertyViewModel);
+            });
+        }
+
 
         Command addMethodCommand;
         public Command AddMethodCommand
         {
             get => addMethodCommand ?? (addMethodCommand = new Command(obj =>
             {
-                this.Methods.Add(new MethodViewModel());
+                this.Methods.Add(new MethodViewModel() { Name = "Method" + ++methodCounter, Parent = this });
             }));
         }
 
-        
-        
+        Command removeMethodCommand;
+        public Command RemoveMethodCommand
+        {
+            get => removeMethodCommand ??= new Command(obj =>
+            {
+                this.Methods.Remove(obj as MethodViewModel);
+            });
+        }
+
 
 
 

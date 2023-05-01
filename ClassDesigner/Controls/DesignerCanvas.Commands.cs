@@ -26,6 +26,9 @@ namespace ClassDesigner.Controls
         public static RoutedCommand SendBackward = new RoutedCommand();
         public static RoutedCommand SendToBack = new RoutedCommand();
         public static RoutedCommand SelectAll = new RoutedCommand();
+        public static RoutedCommand GenerateCode = new RoutedCommand();
+        public static RoutedCommand FocusProperty = new RoutedCommand();
+        public static RoutedCommand OpenSettings = new RoutedCommand();
 
         public DesignerCanvas()
         {
@@ -42,9 +45,43 @@ namespace ClassDesigner.Controls
             this.CommandBindings.Add(new CommandBinding(DesignerCanvas.SendBackward, SendBackward_Executed, Order_Enabled));
             this.CommandBindings.Add(new CommandBinding(DesignerCanvas.SendToBack, SendToBack_Executed, Order_Enabled));
             this.CommandBindings.Add(new CommandBinding(DesignerCanvas.SelectAll, SelectAll_Executed));
+            this.CommandBindings.Add(new CommandBinding(DesignerCanvas.FocusProperty, FocusProperty_Executed));
+            this.CommandBindings.Add(new CommandBinding(DesignerCanvas.OpenSettings, OpenSettings_Executed));
+            this.CommandBindings.Add(new CommandBinding(DesignerCanvas.GenerateCode, GenerateCode_Executed, GenerateCode_Enabled));
             SelectAll.InputGestures.Add(new KeyGesture(Key.A, ModifierKeys.Control));
             this.AllowDrop = true;
             Clipboard.Clear();
+        }
+
+        private void OpenSettings_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            AppSettingsWindow appSettingsWindow = new AppSettingsWindow();
+            appSettingsWindow.ShowDialog();
+        }
+
+        private void FocusProperty_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PropertiesService.Instance.Selected = e.Parameter;
+        }
+
+        private void GenerateCode_Enabled(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void GenerateCode_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClassDesignerOutputs");
+
+            if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
+
+            var entries = this.Children.OfType<DesignerItem>().Select(x=>x.Content).OfType<IEntry>().ToList();
+
+            foreach (var item in entries)
+            {
+                File.WriteAllText(Path.Combine(path, $"{item.Name}.cs"), CSharpSerializer.SerializeEntry(item));
+            }
+
         }
 
         private void SelectAll_Executed(object sender, ExecutedRoutedEventArgs e)

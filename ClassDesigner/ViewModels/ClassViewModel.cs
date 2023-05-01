@@ -1,13 +1,7 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
 using ClassDesigner.Views;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ClassDesigner.ViewModels
 {
@@ -32,7 +26,7 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(Visibility));
             }
         }
-        
+
         private bool isStatic = false;
         public bool IsStatic
         {
@@ -52,16 +46,30 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(IsAbstract));
             }
         }
+
         public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>();
-        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>(); 
+        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>();
+
+        private int attributeCounter = 0;
+        private int propertyCounter = 0;
+        private int methodCounter = 0;
 
         Command addAttributeCommand;
         public Command AddAttributeCommand
         {
-            get => addAttributeCommand ?? (addAttributeCommand = new Command(obj =>
+            get => addAttributeCommand ??= new Command(obj =>
             {
-                this.Attributes.Add(new AttributeViewModel());
-            }));
+                this.Attributes.Add(new AttributeViewModel() { Name = "attribute" + ++attributeCounter, Parent = this });
+            });
+        }
+
+        Command removeAttributeCommand;
+        public Command RemoveAttributeCommand
+        {
+            get => removeAttributeCommand ??= new Command(obj =>
+            {
+                this.Attributes.Remove(obj as AttributeViewModel);
+            });
         }
 
         Command addPropertyCommand;
@@ -69,17 +77,37 @@ namespace ClassDesigner.ViewModels
         {
             get => addPropertyCommand ??= new Command(obj =>
             {
-                this.Attributes.Add(new PropertyViewModel());
+                this.Attributes.Add(new PropertyViewModel() { Name = "Attribute" + ++propertyCounter, Parent = this });
             });
         }
+
+
+        Command removePropertyCommand;
+        public Command RemovePropertyCommand
+        {
+            get => removePropertyCommand ??= new Command(obj =>
+            {
+                this.Attributes.Remove(obj as PropertyViewModel);
+            });
+        }
+
 
         Command addMethodCommand;
         public Command AddMethodCommand
         {
             get => addMethodCommand ?? (addMethodCommand = new Command(obj =>
             {
-                this.Methods.Add(new MethodViewModel());
+                this.Methods.Add(new MethodViewModel() { Name = "Method" + ++methodCounter, Parent = this });
             }));
+        }
+
+        Command removeMethodCommand;
+        public Command RemoveMethodCommand
+        {
+            get => removeMethodCommand ??= new Command(obj =>
+            {
+                this.Methods.Remove(obj as MethodViewModel);
+            });
         }
 
         Command openPropertiesCommand;

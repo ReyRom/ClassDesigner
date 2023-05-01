@@ -39,6 +39,7 @@ namespace ClassDesigner.ViewModels
             OnPropertyChanged(nameof(MethodString));
         }
 
+        private bool isStatic = false;
         public bool IsStatic
         {
             get => isStatic; set
@@ -48,6 +49,20 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(MethodString));
             }
         }
+
+        private bool isAbstract = false;
+        public bool IsAbstract
+        {
+            get => isAbstract; set
+            {
+                isAbstract = value;
+                OnPropertyChanged(nameof(IsAbstract));
+
+                OnPropertyChanged(nameof(MethodString));
+            }
+        }
+
+        private string name = "Method";
         public string Name
         {
             get => name; set
@@ -57,6 +72,8 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(MethodString));
             }
         }
+
+        private VisibilityType visibility = VisibilityType.Private;
         public VisibilityType Visibility
         {
             get => visibility; set
@@ -66,6 +83,8 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(MethodString));
             }
         }
+        
+        private string type;
         public string Type
         {
             get => type; set
@@ -75,6 +94,8 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(MethodString));
             }
         }
+        
+        private ObservableCollection<ParameterViewModel> parameters;
         public ObservableCollection<ParameterViewModel> Parameters
         {
             get => parameters; set
@@ -84,7 +105,7 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(MethodString));
             }
         }
-
+        
         public virtual string MethodString
         {
             get => this.ToString();
@@ -94,6 +115,9 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(MethodString));
             }
         }
+
+        public IEntry Parent { get; set; }
+
         public virtual void ParseFromString(string value)
         {
             var m = MatchMethodString(value);
@@ -132,11 +156,7 @@ namespace ClassDesigner.ViewModels
         });
 
         private Command removeParameterCommand;
-        private string name = "Method";
-        private VisibilityType visibility = VisibilityType.Private;
-        private string type;
-        private ObservableCollection<ParameterViewModel> parameters;
-        private bool isStatic = false;
+        
 
         public Command RemoveParameterCommand => removeParameterCommand ??= new Command(obj =>
         {

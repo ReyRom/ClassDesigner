@@ -1,6 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:h="clr-namespace:ClassDesigner.Helping">
+
+    <Style x:Key="BorderStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource LightShadesBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource LightShadesBrush}"/>
+        <Setter Property="CornerRadius" Value="2"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="Width" Value="200"/>
+    </Style>
     
     <ControlTemplate x:Key="PropertiesPanel" TargetType="ContentControl">
         <ContentControl x:Name="PropertiesPanel" Content="{TemplateBinding Content}">
@@ -9,71 +17,163 @@
 
                     <h:PropertiesTemplateSelector.DefaultTemplate>
                         <DataTemplate>
-
+                            
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.DefaultTemplate>
 
                     <h:PropertiesTemplateSelector.ClassTemplate>
                         <DataTemplate>
-                            <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
-                                <TextBlock Text="Имя"/>
-                                <TextBox Text="{Binding Name}"/>
-                                <Separator/>
-                                <TextBlock Text="Видимость"/>
-                                <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
+                                    <TextBlock Text="Класс"/>
+                                    <Separator/>
+                                    <TextBlock Text="Имя"/>
+                                    <TextBox Text="{Binding Name}"/>
+                                    <Separator/>
+                                    <TextBlock Text="Видимость"/>
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
 
-                                <Separator/>
-                                <TextBlock Text="Статический"/>
-                                <CheckBox IsChecked="{Binding IsStatic}"/>
+                                    <Separator/>
+                                    <CheckBox IsChecked="{Binding IsStatic}">
+                                        <TextBlock Text="Статический"/>
+                                    </CheckBox>
+                                    <CheckBox IsChecked="{Binding IsAbstract}">
+                                        <TextBlock Text="Абстрактный"/>
+                                    </CheckBox>
+                                    <Separator/>
 
-                                <TextBlock Text="Абстрактный"/>
-                                <CheckBox IsChecked="{Binding IsAbstract}"/>
-                                <Separator/>
+                                    <TextBlock Text="Атрибуты"/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
+                                    <TextBlock Text="Методы"/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Methods}" Content="..."/>
 
-                                <TextBlock Text="Стереотипы"/>
-
-                                <TextBlock Text="Атрибуты"/>
-                                <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
-                                <TextBlock Text="Методы"/>
-                                <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Methods}" Content="..."/>
-
-                            </StackPanel>
+                                </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.ClassTemplate>
 
+                    <h:PropertiesTemplateSelector.InterfaceTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
+                                    <TextBlock Text="Интерфейс"/>
+                                    <Separator/>
+                                    <TextBlock Text="Имя"/>
+                                    <TextBox Text="{Binding Name}"/>
+                                    <Separator/>
+                                    <TextBlock Text="Видимость"/>
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+
+                                    <Separator/>
+                                    <TextBlock Text="Свойства"/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
+                                    <TextBlock Text="Методы"/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Methods}" Content="..."/>
+
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </h:PropertiesTemplateSelector.InterfaceTemplate>
+
+                    <h:PropertiesTemplateSelector.StructTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
+                                    <TextBlock Text="Структура"/>
+                                    <Separator/>
+                                    <TextBlock Text="Имя"/>
+                                    <TextBox Text="{Binding Name}"/>
+                                    <Separator/>
+                                    <TextBlock Text="Видимость"/>
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+
+                                    <Separator/>
+
+                                    <TextBlock Text="Атрибуты"/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
+                                    <TextBlock Text="Методы"/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Methods}" Content="..."/>
+
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </h:PropertiesTemplateSelector.StructTemplate>
+
+                    <h:PropertiesTemplateSelector.EnumTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
+                                    <TextBlock Text="Перечисление"/>
+                                    <Separator/>
+                                    <TextBlock Text="Имя"/>
+                                    <TextBox Text="{Binding Name}"/>
+                                    <Separator/>
+                                    <TextBlock Text="Видимость"/>
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+
+                                    <Separator/>
+                                    
+
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </h:PropertiesTemplateSelector.EnumTemplate>
+
                     <h:PropertiesTemplateSelector.AttributeTemplate>
                         <DataTemplate>
-                            <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
-                                <TextBlock Text="Имя"/>
-                                <TextBox Text="{Binding Name}"/>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
+                                    <TextBlock Text="Имя"/>
+                                    <TextBox Text="{Binding Name}"/>
 
-                                <TextBlock Text="Тип"/>
-                                <TextBox Text="{Binding Type}"/>
-                                <Separator/>
-                                <TextBlock Text="Видимость"/>
-                                <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                                    <TextBlock Text="Тип"/>
+                                    <TextBox Text="{Binding Type}"/>
+                                    <Separator/>
+                                    <TextBlock Text="Видимость"/>
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
 
-                                <Separator/>
-                                <TextBlock Text="Статический"/>
-                                <CheckBox IsChecked="{Binding IsStatic}"/>
-                            </StackPanel>
+                                    <Separator/>
+                                    <CheckBox IsChecked="{Binding IsStatic}">
+                                        <TextBlock Text="Статический"/>
+                                    </CheckBox>
+                                </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.AttributeTemplate>
 
-                    <h:PropertiesTemplateSelector.MethodTemplate>
+                    <h:PropertiesTemplateSelector.PropertyTemplate>
                         <DataTemplate>
+                            <Border Style="{StaticResource BorderStyle}">
                             <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
                                 <TextBlock Text="Имя"/>
                                 <TextBox Text="{Binding Name}"/>
@@ -91,9 +191,45 @@
                                 </ComboBox>
 
                                 <Separator/>
-                                <TextBlock Text="Статический"/>
-                                <CheckBox IsChecked="{Binding IsStatic}"/>
+
+                                    <CheckBox IsChecked="{Binding IsStatic}">
+                                        <TextBlock Text="Статический"/>
+                                    </CheckBox>
+                                    <CheckBox IsChecked="{Binding IsAbstract}">
+                                        <TextBlock Text="Абстрактный"/>
+                                    </CheckBox>
+                            </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </h:PropertiesTemplateSelector.PropertyTemplate>
+                    
+                    <h:PropertiesTemplateSelector.MethodTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource BorderStyle}">
+                            <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
+                                <TextBlock Text="Имя"/>
+                                <TextBox Text="{Binding Name}"/>
+
+                                <TextBlock Text="Тип"/>
+                                <TextBox Text="{Binding Type}"/>
                                 <Separator/>
+                                <TextBlock Text="Видимость"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <Separator/>
+                                    <CheckBox IsChecked="{Binding IsStatic}">
+                                        <TextBlock Text="Статический"/>
+                                    </CheckBox>
+                                    <CheckBox IsChecked="{Binding IsAbstract}">
+                                        <TextBlock Text="Абстрактный"/>
+                                    </CheckBox>
+                                    <Separator/>
                                 <TextBlock Text="Параметры"/>
                                 <ItemsControl ItemsSource="{Binding Parameters}">
                                     <ItemsControl.ItemTemplate>
@@ -115,11 +251,13 @@
                                     <TextBlock Style="{StaticResource AddIcon}"/>
                                 </Button>
                             </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.MethodTemplate>
                     
                     <h:PropertiesTemplateSelector.ConnectionTemplate>
                         <DataTemplate>
+                            <Border Style="{StaticResource BorderStyle}">
                             <StackPanel Name="ConnectionPanel" DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
                                 <TextBlock Text="Источник"/>
                                 <TextBlock Text="{Binding SourceEntry.Name}"/>
@@ -272,6 +410,7 @@
                                     </ContentControl.ContentTemplateSelector>
                                 </ContentControl>
                             </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.ConnectionTemplate>
                 </h:PropertiesTemplateSelector>

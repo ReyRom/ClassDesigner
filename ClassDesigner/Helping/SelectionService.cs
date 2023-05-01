@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ClassDesigner.Helping
 {
@@ -15,6 +17,25 @@ namespace ClassDesigner.Helping
         public SelectionService(DesignerCanvas designerCanvas)
         {
             this.designerCanvas = designerCanvas;
+            PropertyChanged += (s, e) => { SetProperties(); };
+        }
+
+        public void SetProperties()
+        {
+            if (Selection.LastOrDefault() is DesignerItem item)
+            {
+                PropertiesService.Instance.Selected = item.Content;
+            }
+
+            else if (Selection.LastOrDefault() is Connection connection)
+            {
+                PropertiesService.Instance.Selected = connection.ConnectionViewModel;
+            }
+
+            else
+            {
+                PropertiesService.Instance.Selected = null;
+            }
         }
 
         public void SelectAll()

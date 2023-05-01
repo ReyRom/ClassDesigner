@@ -152,7 +152,6 @@ namespace ClassDesigner.Controls
                 }
                 //Focus();
             }
-            PropertiesService.Instance.Selected = this.Content;
             e.Handled = true;
         }
 

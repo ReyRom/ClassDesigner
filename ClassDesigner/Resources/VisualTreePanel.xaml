@@ -7,34 +7,25 @@
                 <h:EntryTemplateSelector>
                     <h:EntryTemplateSelector.ClassTemplate>
                         <DataTemplate>
-                            <TreeViewItem Header="{Binding Name}">
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TreeViewItem Header="{Binding Name}">
+                                    <TreeViewItem Header="Атрибуты" ItemsSource="{Binding Attributes}">
+                                        <TreeViewItem.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding FieldString}"/>
+                                            </DataTemplate>
+                                        </TreeViewItem.ItemTemplate>
+                                    </TreeViewItem>
 
-                                <TreeViewItem Header="Атрибуты" ItemsSource="{Binding Attributes}">
-                                    <TreeViewItem.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Name}"/>
-                                        </DataTemplate>
-                                    </TreeViewItem.ItemTemplate>
+                                    <TreeViewItem Header="Методы" ItemsSource="{Binding Methods}">
+                                        <TreeViewItem.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding MethodString}"/>
+                                            </DataTemplate>
+                                        </TreeViewItem.ItemTemplate>
+                                    </TreeViewItem>
                                 </TreeViewItem>
-
-                                <TreeViewItem Header="Методы" ItemsSource="{Binding Methods}">
-                                    <TreeViewItem.ItemTemplate>
-                                        <DataTemplate>
-                                            <TreeViewItem Header="{Binding Name}">
-                                                <TreeViewItem Header="Параметры" ItemsSource="{Binding Parameters}">
-                                                    <TreeViewItem.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding Name}"/>
-                                                        </DataTemplate>
-                                                    </TreeViewItem.ItemTemplate>
-                                                </TreeViewItem>
-                                               
-                                            </TreeViewItem>
-                                        </DataTemplate>
-                                    </TreeViewItem.ItemTemplate>
-                                </TreeViewItem>
-
-                            </TreeViewItem>
+                            </Border>
                         </DataTemplate>
                     </h:EntryTemplateSelector.ClassTemplate>
                 </h:EntryTemplateSelector>

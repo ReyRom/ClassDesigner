@@ -115,6 +115,8 @@ namespace ClassDesigner.ViewModels
             }
         }
 
+        public IEntry Parent { get; set; }
+
         public static Match MatchPropertyString(string value)
         {
             return Regex.Match(value, @"^(?<Visible>[-+#~])\s(?<Name>\w+)(\s:\s(?<Type>\w+)){0,1}\s\{\s(?<Get>get;\s){0,1}(?<Set>set;\s){0,1}\}(\s\=\s(?<DefV>\w+)){0,1}$");

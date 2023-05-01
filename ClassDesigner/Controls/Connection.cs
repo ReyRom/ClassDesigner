@@ -375,8 +375,6 @@ namespace ClassDesigner.Controls
                 }
 
                 //Focus();
-
-                PropertiesService.Instance.Selected = this.ConnectionViewModel;
             }
             
             e.Handled = true;

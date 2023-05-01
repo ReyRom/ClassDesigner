@@ -144,11 +144,13 @@
                                  Visibility="Collapsed"
                                  Template="{StaticResource ResizeDecoratorTemplate}"/>
                         <!-- PART_ContentPresenter -->
+                        
                         <ContentPresenter x:Name="PART_ContentPresenter"
                                           HorizontalAlignment="Stretch"
                                           VerticalAlignment="Stretch"
                                           Content="{TemplateBinding ContentControl.Content}"
                                           Margin="{TemplateBinding ContentControl.Padding}"/>
+                        <Rectangle x:Name="PART_Block"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent"/>
                         <!-- PART_ConnectorDecorator -->
                         <Control x:Name="PART_ConnectorDecorator"
                                  Visibility="Hidden"
@@ -175,6 +177,9 @@
                         <!--<DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Self},Path=IsGroup}">
                             <Setter TargetName="PART_ConnectorDecorator" Property="Visibility" Value="Hidden"/>
                         </DataTrigger>-->
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">
+                            <Setter TargetName="PART_Block" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

@@ -24,7 +24,5 @@ namespace ClassDesigner.ViewModels
         }
 
         public object Item { get => PropertiesService.Instance.Selected; }
-
-
     }
 }

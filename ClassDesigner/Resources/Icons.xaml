@@ -67,6 +67,10 @@
         <Setter Property="Text" Value="&#xea56;"/>
     </Style>
 
+
+    <Style x:Key="CodeIcon" TargetType="TextBlock" BasedOn="{StaticResource IconBaseStyle}">
+        <Setter Property="Text" Value="&#xea80;"/>
+    </Style>
     
     
     <Path x:Key="Assotiation" Stroke="Black" StrokeThickness="2">

@@ -1,11 +1,6 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
@@ -33,15 +28,26 @@ namespace ClassDesigner.ViewModels
 
         private ObservableCollection<EnumChildViewModel> enumChildren = new ObservableCollection<EnumChildViewModel>();
         public ObservableCollection<EnumChildViewModel> EnumChildren { get => enumChildren; set => enumChildren = value; }
-        
+
+        private int childCounter = 0;
 
         Command addEnumChildCommand;
         public Command AddEnumChildCommand
         {
             get => addEnumChildCommand ?? (addEnumChildCommand = new Command(obj =>
             {
-                this.EnumChildren.Add(new EnumChildViewModel());
+                this.EnumChildren.Add(new EnumChildViewModel() {Name = "value"+ ++childCounter, Parent = this });
             }));
+        }
+
+
+        Command removeEnumChildCommand;
+        public Command RemoveEnumChildCommand
+        {
+            get => removeEnumChildCommand ??= new Command(obj =>
+            {
+                this.EnumChildren.Remove(obj as EnumChildViewModel);
+            });
         }
 
         //Command openPropertiesCommand;
