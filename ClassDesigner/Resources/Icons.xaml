@@ -71,8 +71,24 @@
     <Style x:Key="CodeIcon" TargetType="TextBlock" BasedOn="{StaticResource IconBaseStyle}">
         <Setter Property="Text" Value="&#xea80;"/>
     </Style>
-    
-    
+
+    <Style x:Key="CrossIcon" TargetType="TextBlock" BasedOn="{StaticResource IconBaseStyle}">
+        <Setter Property="Text" Value="&#xea0f;"/>
+    </Style>
+    <Style x:Key="ExpandIcon" TargetType="TextBlock" BasedOn="{StaticResource IconBaseStyle}">
+        <Setter Property="Text" Value="&#xe989;"/>
+    </Style>
+    <Style x:Key="DeexpandIcon" TargetType="TextBlock" BasedOn="{StaticResource IconBaseStyle}">
+        <Setter Property="Text" Value="&#xe98a;"/>
+    </Style>
+    <Style x:Key="CollapseIcon" TargetType="TextBlock" BasedOn="{StaticResource IconBaseStyle}">
+        <Setter Property="Text" Value="&#xea0b;"/>
+    </Style>
+
+    <Style x:Key="WarningIcon" TargetType="TextBlock" BasedOn="{StaticResource IconBaseStyle}">
+        <Setter Property="Text" Value="&#xea07;"/>
+    </Style>
+
     <Path x:Key="Assotiation" Stroke="Black" StrokeThickness="2">
         <Path.Data>
             <PathGeometry>

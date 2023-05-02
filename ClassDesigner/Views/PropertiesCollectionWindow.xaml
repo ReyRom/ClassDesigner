@@ -40,11 +40,11 @@
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.MethodTemplate>
 
-                    <h:PropertiesTemplateSelector.AttributeTemplate>
+                    <h:PropertiesTemplateSelector.FieldTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding AttributeString}"/>
                         </DataTemplate>
-                    </h:PropertiesTemplateSelector.AttributeTemplate>
+                    </h:PropertiesTemplateSelector.FieldTemplate>
                 </h:PropertiesTemplateSelector>
             </ListView.ItemTemplateSelector>
         </ListView>

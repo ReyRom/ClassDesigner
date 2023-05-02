@@ -26,6 +26,35 @@ namespace ClassDesigner
         public MainWindow()
         {
             InitializeComponent();
+            CommandBindings.Add(new CommandBinding(SystemCommands.CloseWindowCommand, CloseWindow_Executed));
+            CommandBindings.Add(new CommandBinding(SystemCommands.MaximizeWindowCommand, MaximizeWindow_Executed));
+            CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand, MinimizeWindow_Executed));
+            CommandBindings.Add(new CommandBinding(SystemCommands.RestoreWindowCommand, RestoreWindow_Executed));
+        }
+
+        private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.RestoreWindow(this);
+        }
+
+        private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.MinimizeWindow(this);
+        }
+
+        private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.MaximizeWindow(this);
+        }
+
+        private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.CloseWindow(this);
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

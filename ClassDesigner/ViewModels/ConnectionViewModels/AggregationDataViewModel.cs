@@ -12,8 +12,8 @@ namespace ClassDesigner.ViewModels
             ValidateSource();
         }
 
-        private IMethod aggregatedMethod;
-        public IMethod AggregatedMethod
+        private IAction aggregatedMethod;
+        public IAction AggregatedMethod
         {
             get => aggregatedMethod; set
             {
@@ -36,8 +36,8 @@ namespace ClassDesigner.ViewModels
             throw new System.NotImplementedException();
         }
 
-        public IField aggregatedAttribute;
-        public IField AggregatedAttribute
+        public IAttribute aggregatedAttribute;
+        public IAttribute AggregatedAttribute
         {
             get => aggregatedAttribute; set
             {
@@ -72,7 +72,7 @@ namespace ClassDesigner.ViewModels
         Command addAggregatedAttribute;
         public Command AddAggregatedAttribute => addAggregatedAttribute ??= new Command(obj =>
         {
-            var attribute = new AttributeViewModel();
+            var attribute = new FieldViewModel(Target);
             attribute.Type = Source.Name;
             (Target as IHaveFields).Attributes.Add(attribute);
             AggregatedAttribute = attribute;
@@ -83,7 +83,7 @@ namespace ClassDesigner.ViewModels
 
         public Command AddAggregatedProperty => addAggregatedProperty ??= new Command(obj =>
         {
-            var property = new PropertyViewModel();
+            var property = new PropertyViewModel(Target);
             property.Type = Source.Name;
             (Target as IHaveProperties).Attributes.Add(property);
             AggregatedAttribute = property;
@@ -92,28 +92,28 @@ namespace ClassDesigner.ViewModels
         Command addAggregatedConstructor;
         public Command AddAggregatedConstructor => addAggregatedConstructor ??= new Command(obj =>
         {
-            var method = new ConstructorViewModel();
+            var method = new ConstructorViewModel(Target);
             var paramether = new ParameterViewModel();
             paramether.Type = Source.Name;
             method.Parameters.Add(paramether);
-            (Target as IHaveMethods).Methods.Add(method);
+            (Target as IHaveActions).Actions.Add(method);
             AggregatedMethod = method;
         });
 
         Command addAggregatedMethod;
         public Command AddAggregatedMethod => addAggregatedMethod ??= new Command(obj =>
         {
-            var method = new MethodViewModel();
+            var method = new MethodViewModel(Target);
             var paramether = new ParameterViewModel();
             paramether.Type = Source.Name;
             method.Parameters.Add(paramether);
-            (Target as IHaveMethods).Methods.Add(method);
+            (Target as IHaveActions).Actions.Add(method);
             AggregatedMethod = method;
         });
 
         public void ValidateSource()
         {
-            isValidSource = (Target is IHaveFields || Target is IHaveProperties) && Target is IHaveMethods;
+            isValidSource = (Target is IHaveFields || Target is IHaveProperties) && Target is IHaveActions;
             OnPropertyChanged(nameof(IsValidSource));
             OnPropertyChanged(nameof(IsValid));
         }

@@ -10,107 +10,136 @@
         xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
         xmlns:m="clr-namespace:ClassDesigner.Models"
         xmlns:h="clr-namespace:ClassDesigner.Helping"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Background="{StaticResource LightAccentBrush}">
+        MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
+        MaxWidth="{x:Static SystemParameters.MaximizedPrimaryScreenWidth}"
+        Background="{StaticResource LightAccentBrush}" WindowState="Normal" WindowStyle="None" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <vm:MainViewModel x:Key="viewModel"/>
     </Window.Resources>
-    <Grid DataContext="{StaticResource viewModel}">
+    <WindowChrome.WindowChrome>
+        <WindowChrome     
+            CaptionHeight="1"
+            CornerRadius="0"
+            ResizeBorderThickness="4"         
+            GlassFrameThickness="0">
+        </WindowChrome>
+    </WindowChrome.WindowChrome>
+    <Grid DataContext="{StaticResource viewModel}" Margin="8">
         <Grid.LayoutTransform>
-            <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding InterfaceScale}" ScaleY="{Binding InterfaceScale}"/>
+            <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding SettingsService.InterfaceScale}" ScaleY="{Binding SettingsService.InterfaceScale}"/>
         </Grid.LayoutTransform>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-            <!--<ToolBar>
-            <ListBox ItemsSource="{Binding Source={StaticResource RelationTypes}}" SelectedItem="{Binding SettingsService.RelationType}" Width="144">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <Button Command="{x:Static ApplicationCommands.New}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource NewIcon}"/>
-            </Button>
-            <Button Command="{x:Static ApplicationCommands.Open}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource OpenIcon}"/>
-            </Button>
-            <Button Command="{x:Static ApplicationCommands.Save}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource SaveIcon}"/>
-            </Button>
-            <Button Command="{x:Static ApplicationCommands.Print}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource PrintIcon}"/>
-            </Button>
-            <Button Command="{x:Static ApplicationCommands.Copy}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource CopyIcon}"/>
-            </Button>
-            <Button Command="{x:Static ApplicationCommands.Cut}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource CutIcon}"/>
-            </Button>
-            <Button Command="{x:Static ApplicationCommands.Paste}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource PasteIcon}"/>
-            </Button>
 
-            <Button Command="{x:Static c:DesignerCanvas.BringForward}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource UpIcon}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Command="{x:Static SystemCommands.MinimizeWindowCommand}">
+                <TextBlock Style="{StaticResource CollapseIcon}"/>
             </Button>
-            <Button Command="{x:Static c:DesignerCanvas.SendBackward}" CommandTarget="{Binding ElementName=Designer}">
-                <TextBlock Style="{StaticResource DownIcon}"/>
+            <Button Command="{x:Static SystemCommands.RestoreWindowCommand}">
+                <TextBlock Style="{StaticResource DeexpandIcon}"/>
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                        <Style.Triggers>
+                            <DataTrigger  Binding="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=WindowState}" Value="Normal">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>
-        </ToolBar>-->
-            <ContentControl Content="{StaticResource ApplicationToolbar}" Margin="2"/>
+            <Button Command="{x:Static SystemCommands.MaximizeWindowCommand}">
+                <TextBlock Style="{StaticResource ExpandIcon}"/>
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                        <Style.Triggers>
+                            <DataTrigger  Binding="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=WindowState}" Value="Maximized">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Command="{x:Static SystemCommands.CloseWindowCommand}">
+                <TextBlock Style="{StaticResource CrossIcon}"/>
+            </Button>
+        </StackPanel>
+
+        <ContentControl Grid.Row="1" Content="{StaticResource ApplicationToolbar}" Margin="2"/>
 
 
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
 
-                <!--<ItemsControl ItemsSource="{Binding PropertiesService.Entries}" Template="{StaticResource VisualTreePanel}" Margin="2"/>-->
-                <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Margin="2" Background="{StaticResource LightShadesBrush}">
-                    <ItemsControl ItemsSource="{Binding Templates}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <c:DragItem DragContent="{Binding Content}" Width="100" Margin="2,2,2,0">
-                                    <Grid Background="{StaticResource DarkAccentBrush}" >
-                                        <TextBlock Margin="15" Text="{Binding Name}" TextWrapping="Wrap" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource LightShadesBrush}"/>
-                                    </Grid>
-                                </c:DragItem>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
+            <!--<ItemsControl ItemsSource="{Binding PropertiesService.Entries}" Template="{StaticResource VisualTreePanel}" Margin="2"/>-->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Margin="2" Background="{StaticResource LightShadesBrush}">
+                <ItemsControl ItemsSource="{Binding Templates}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <c:DragItem DragContent="{Binding Content}" Width="100" Margin="2,2,2,0">
+                                <Grid Background="{StaticResource DarkAccentBrush}" >
+                                    <TextBlock Margin="15" Text="{Binding Name}" TextWrapping="Wrap" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource LightShadesBrush}"/>
+                                </Grid>
+                            </c:DragItem>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
 
-                <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="2" Background="{StaticResource LightShadesBrush}">
-                    <c:DesignerCanvas Margin="15,15,0,0" x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
+            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="2" Background="{StaticResource LightShadesBrush}">
+                <c:DesignerCanvas Margin="15,15,0,0" x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
 
-                    </c:DesignerCanvas>
-                </ScrollViewer>
-
-                <ContentControl Grid.Column="2" Content="{Binding Item}" Template="{StaticResource PropertiesPanel}" Margin="2"/>
-            </Grid>
-            <StatusBar Grid.Row="2" Margin="2">
-                <StatusBarItem>
-                    <!--<TextBlock Text="Ошибки:"/>-->
-                    <CheckBox/>
-                </StatusBarItem>
-            </StatusBar>
-        
+                </c:DesignerCanvas>
+            </ScrollViewer>
+            <GridSplitter Grid.Column="2" Width="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="{StaticResource LightAccentBrush}"/>
+            <ContentControl Grid.Column="3" Content="{Binding Item}" Template="{StaticResource PropertiesPanel}" Margin="2"/>
         </Grid>
+
+        <Grid Grid.Row="3" Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Ошибки:" VerticalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <TextBlock Style="{StaticResource WarningIcon}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding ErrorService.ErrorsCount}" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+
+            <ScrollViewer Height="50" Grid.Column="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Hidden">
+                <ItemsControl ItemsSource="{Binding ErrorService.Errors}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource WarningIcon}" VerticalAlignment="Center" FontSize="14"/>
+                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" FontSize="14"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+        </Grid>
+    </Grid>
 </Window>

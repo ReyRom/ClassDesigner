@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class InterfaceViewModel:ViewModelBase, IEntry, IHaveMethods, IHaveProperties
+    public class InterfaceViewModel:ViewModelBase, IEntry, IHaveActions, IHaveProperties
     {
         private string name = "Interface";
         public string Name
@@ -31,8 +31,8 @@ namespace ClassDesigner.ViewModels
             }
         }
        
-        public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>(); 
-        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>();
+        public ObservableCollection<IAttribute> Attributes { get; set; } = new ObservableCollection<IAttribute>(); 
+        public ObservableCollection<IAction> Actions { get; set; } = new ObservableCollection<IAction>();
 
 
         private int propertyCounter = 0;
@@ -43,7 +43,7 @@ namespace ClassDesigner.ViewModels
         {
             get => addPropertyCommand ??= new Command(obj =>
             {
-                this.Attributes.Add(new PropertyViewModel() { Name = "Attribute" + ++propertyCounter, Parent = this });
+                this.Attributes.Add(new PropertyViewModel(this) { Name = "Attribute" + ++propertyCounter });
             });
         }
 
@@ -63,7 +63,7 @@ namespace ClassDesigner.ViewModels
         {
             get => addMethodCommand ?? (addMethodCommand = new Command(obj =>
             {
-                this.Methods.Add(new MethodViewModel() { Name = "Method" + ++methodCounter, Parent = this });
+                this.Actions.Add(new MethodViewModel(this) { Name = "Method" + ++methodCounter});
             }));
         }
 
@@ -72,7 +72,7 @@ namespace ClassDesigner.ViewModels
         {
             get => removeMethodCommand ??= new Command(obj =>
             {
-                this.Methods.Remove(obj as MethodViewModel);
+                this.Actions.Remove(obj as MethodViewModel);
             });
         }
 

@@ -7,35 +7,35 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class AssotiationDataViewModel:ViewModelBase, IConnectionData
+    class CompositionDataViewModel:ViewModelBase, IConnectionData
     {
-        public AssotiationDataViewModel(IEntry source, IEntry target)
+        public CompositionDataViewModel(IEntry source, IEntry target)
         {
             Source = source;
             Target = target;
             ValidateSource();
         }
 
-        IField assotiatedAttribute;
-        public IField AssotiatedAttribute
+        IAttribute composedAttribute;
+        public IAttribute ComposedAttribute
         {
-            get => assotiatedAttribute; set
+            get => composedAttribute; set
             {
-                if (assotiatedAttribute is not null)
+                if (composedAttribute is not null)
                 {
-                    assotiatedAttribute.PropertyChanged -= AssotiatedAttribute_PropertyChanged;
+                    composedAttribute.PropertyChanged -= ComposedAttribute_PropertyChanged;
                 }
-                assotiatedAttribute = value;
-                if (assotiatedAttribute.Type != Source.Name)
+                composedAttribute = value;
+                if (composedAttribute.Type != Source.Name)
                 {
-                    assotiatedAttribute.Type = Source.Name;
+                    composedAttribute.Type = Source.Name;
                 }
-                assotiatedAttribute.PropertyChanged += AssotiatedAttribute_PropertyChanged;
-                OnPropertyChanged(nameof(AssotiatedAttribute));
+                composedAttribute.PropertyChanged += ComposedAttribute_PropertyChanged;
+                OnPropertyChanged(nameof(ComposedAttribute));
             }
         }
 
-        private void AssotiatedAttribute_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ComposedAttribute_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Validate();
         }
@@ -52,20 +52,20 @@ namespace ClassDesigner.ViewModels
         Command addComposedAttribute;
         public Command AddComposedAttribute => addComposedAttribute ??= new Command(obj =>
         {
-            var attribute = new AttributeViewModel();
+            var attribute = new FieldViewModel(Target);
             attribute.Type = Source.Name;
             (Target as IHaveFields).Attributes.Add(attribute);
-            AssotiatedAttribute = attribute;
+            ComposedAttribute = attribute;
         });
 
 
         Command addComposedProperty;
         public Command AddComposedProperty => addComposedProperty ??= new Command(obj =>
         {
-            var property = new PropertyViewModel();
+            var property = new PropertyViewModel(Target);
             property.Type = Source.Name;
             (Target as IHaveProperties).Attributes.Add(property);
-            AssotiatedAttribute = property;
+            ComposedAttribute = property;
         });
 
         public void ValidateSource()
@@ -77,7 +77,8 @@ namespace ClassDesigner.ViewModels
 
         public void Validate()
         {
-            isValid = assotiatedAttribute is not null && assotiatedAttribute.Type == Source.Name;
+            isValid = composedAttribute is not null && composedAttribute.Type == Source.Name;
         }
+
     }
 }

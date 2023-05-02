@@ -1,4 +1,5 @@
 ﻿using ClassDesigner.Helping;
+using ClassDesigner.Helping.Services;
 using ClassDesigner.Views;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace ClassDesigner.ViewModels
         public SettingsService SettingsService { get => SettingsService.Instance; }
 
         public PropertiesService PropertiesService { get => PropertiesService.Instance; }
+
+        public ErrorService ErrorService { get => ErrorService.Instance; }
 
         public ObservableCollection<TemplateViewModel> Templates { get; set; } = new ObservableCollection<TemplateViewModel>();
 

@@ -17,8 +17,8 @@ namespace ClassDesigner.ViewModels
             ValidateSource();
         }
 
-        public IEnumerable<IField> Fields => ((IHaveAttributes)Target).Attributes.Where(x => x.Visibility != Models.VisibilityType.Private);
-        public IEnumerable<IMethod> Methods => ((IHaveMethods)Target).Methods.Where(x => x.Visibility != Models.VisibilityType.Private);
+        public IEnumerable<IAttribute> Fields => ((IHaveAttributes)Target).Attributes.Where(x => x.Visibility != Models.VisibilityType.Private);
+        public IEnumerable<IAction> Methods => ((IHaveActions)Target).Actions.Where(x => x.Visibility != Models.VisibilityType.Private);
 
         public IEntry Source { get; }
         public IEntry Target { get; }

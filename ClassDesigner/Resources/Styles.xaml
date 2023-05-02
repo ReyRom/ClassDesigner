@@ -97,24 +97,20 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
-    
-    <Style TargetType="Button">
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                        </Grid>
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding Content}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="Foreground" Value="{StaticResource DarkShadesBrush}"/>
         <Setter Property="Background" Value="{StaticResource LightShadesBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderThickness" Value="0.1"/>
         <Setter Property="BorderBrush" Value="{StaticResource LightShadesBrush}"/>
         <Setter Property="BitmapEffect">
             <Setter.Value>
@@ -144,8 +140,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}"/>
 
-    
 
     <SolidColorBrush x:Key="Item.MouseOver.Background" Color="{StaticResource LightShades}"/>
     <SolidColorBrush x:Key="Item.MouseOver.Border" Color="{StaticResource Gray}"/>

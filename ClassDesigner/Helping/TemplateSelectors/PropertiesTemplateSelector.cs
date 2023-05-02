@@ -15,7 +15,7 @@ namespace ClassDesigner.Helping
         public DataTemplate ClassTemplate { get; set; }
         public DataTemplate ConnectionTemplate { get; set; }
         public DataTemplate MethodTemplate { get; set; }
-        public DataTemplate AttributeTemplate { get; set; }
+        public DataTemplate FieldTemplate { get; set; }
         public DataTemplate PropertyTemplate { get; set; }
         public DataTemplate InterfaceTemplate { get; set; }
         public DataTemplate StructTemplate { get; set; }
@@ -33,8 +33,8 @@ namespace ClassDesigner.Helping
                     return ConnectionTemplate;
                 case MethodViewModel:
                     return MethodTemplate;
-                case AttributeViewModel:
-                    return AttributeTemplate;
+                case FieldViewModel:
+                    return FieldTemplate;
                 case PropertyViewModel: 
                     return PropertyTemplate;
                 case InterfaceViewModel: 

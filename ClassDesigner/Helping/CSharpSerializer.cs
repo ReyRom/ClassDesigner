@@ -57,7 +57,7 @@ namespace ClassDesigner.Helping
             sb.Append('{');
             sb.AppendLine();
 
-            foreach (var attr in classView.Attributes.OfType<AttributeViewModel>())
+            foreach (var attr in classView.Attributes.OfType<FieldViewModel>())
             {
                 sb.AppendLine(SerializeAttribute(attr, tabLevel + 1));
             }
@@ -67,7 +67,7 @@ namespace ClassDesigner.Helping
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
             }
 
-            foreach (var attr in classView.Methods.OfType<MethodViewModel>())
+            foreach (var attr in classView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
             }
@@ -100,7 +100,7 @@ namespace ClassDesigner.Helping
             sb.Append('{');
             sb.AppendLine();
 
-            foreach (var attr in structView.Attributes.OfType<AttributeViewModel>())
+            foreach (var attr in structView.Attributes.OfType<FieldViewModel>())
             {
                 sb.AppendLine(SerializeAttribute(attr, tabLevel + 1));
             }
@@ -110,7 +110,7 @@ namespace ClassDesigner.Helping
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
             }
 
-            foreach (var attr in structView.Methods.OfType<MethodViewModel>())
+            foreach (var attr in structView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
             }
@@ -147,7 +147,7 @@ namespace ClassDesigner.Helping
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
             }
 
-            foreach (var attr in interfaceView.Methods.OfType<MethodViewModel>())
+            foreach (var attr in interfaceView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
             }
@@ -192,7 +192,7 @@ namespace ClassDesigner.Helping
             return sb.ToString();
         }
 
-        public static string SerializeAttribute(AttributeViewModel attribute, int tabLevel = 0)
+        public static string SerializeAttribute(FieldViewModel attribute, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             sb.Tab(tabLevel);

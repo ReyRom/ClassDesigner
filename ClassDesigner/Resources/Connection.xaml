@@ -100,11 +100,15 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type c:Connection}">
-                    <Canvas DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                    <Canvas x:Name="ConnectionCanvas" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                             ContextMenu="{StaticResource ConnectionContextMenu}">
+                        <Path Name="PART_ConnectionPathBackground"
+                              Data="{Binding PathGeometry}" Stroke="Transparent" StrokeThickness="4">
+                        </Path>
                         <Path Name="PART_ConnectionPath"
                               Data="{Binding PathGeometry}">
                         </Path>
+                        
                         <Path Name="PART_HeaderSinkConnectionPath"
                               Data="{Binding HeaderSinkPathGeometry}">
                         </Path>
@@ -139,10 +143,11 @@
                             </TextBlock.RenderTransform>
                         </TextBlock>-->
 
-                        <Canvas.BitmapEffect>
+                        <!--<Canvas.BitmapEffect>
                             <DropShadowBitmapEffect Color="Gray" Direction="315" ShadowDepth="10" Softness="0" Opacity="0.1"/>
-                        </Canvas.BitmapEffect>
+                        </Canvas.BitmapEffect>-->
                     </Canvas>
+
                     <ControlTemplate.Triggers>
                         <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Self},Path=ConnectionViewModel.RelationType}" Value="Dependency">
                             <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource DashedLine}"/>

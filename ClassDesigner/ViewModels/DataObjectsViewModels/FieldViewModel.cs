@@ -1,15 +1,11 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class AttributeViewModel : ViewModelBase, IField
+    public class FieldViewModel : ViewModelBase, IAttribute
     {
         private string name = "attribute";
         public string Name
@@ -19,7 +15,7 @@ namespace ClassDesigner.ViewModels
                 name = value;
                 OnPropertyChanged(nameof(Name));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
@@ -31,7 +27,7 @@ namespace ClassDesigner.ViewModels
                 visibility = value;
                 OnPropertyChanged(nameof(Visibility));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
         private string type = string.Empty;
@@ -42,7 +38,7 @@ namespace ClassDesigner.ViewModels
                 type = value;
                 OnPropertyChanged(nameof(Type));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
@@ -54,11 +50,26 @@ namespace ClassDesigner.ViewModels
                 defaultValue = value;
                 OnPropertyChanged(nameof(DefaultValue));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
         private bool isStatic = false;
+
+        public FieldViewModel(IEntry parent)
+        {
+            Parent = parent;
+        }
+
+        public FieldViewModel(IEntry parent, FieldViewModel model) : this(parent)
+        {
+            Name = model.Name;
+            Type = model.Type;
+            DefaultValue = model.DefaultValue;
+            Visibility = model.Visibility;
+            IsStatic = model.IsStatic;
+        }
+
         public bool IsStatic
         {
             get => isStatic; set
@@ -66,16 +77,16 @@ namespace ClassDesigner.ViewModels
                 isStatic = value;
                 OnPropertyChanged(nameof(IsStatic));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
-        public string FieldString
+        public string AttributeString
         {
             get => this.ToString();
             set
             {
                 ParseFromString(value);
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
@@ -100,6 +111,17 @@ namespace ClassDesigner.ViewModels
         public override string ToString()
         {
             return (char)Visibility + " " + Name + (Type != String.Empty ? " : " + Type : "") + (DefaultValue != String.Empty ? " = " + DefaultValue : "");
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is null) return false;
+            if (obj is not FieldViewModel) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            var other = obj as FieldViewModel;
+            return this.AttributeString == other.AttributeString
+                && this.IsStatic == other.IsStatic;
+
         }
     }
 }

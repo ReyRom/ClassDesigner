@@ -1,6 +1,7 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -8,15 +9,22 @@ using System.Text.RegularExpressions;
 
 namespace ClassDesigner.ViewModels
 {
-    public class MethodViewModel : ViewModelBase, IMethod
+    public class MethodViewModel : ViewModelBase, IAction
     {
-        public MethodViewModel()
+        public MethodViewModel(IEntry parent)
         {
-            Name = "Method";
-            Visibility = VisibilityType.Private;
-            Parameters = new ObservableCollection<ParameterViewModel>();
+            Parent = parent;
             Parameters.CollectionChanged += Parameters_CollectionChanged;
+        }
 
+        public MethodViewModel(IEntry parent, MethodViewModel model) : this(parent)
+        {
+            Name = model.Name;
+            Type = model.Type;
+            Visibility = model.Visibility;
+            IsStatic = model.IsStatic;
+            IsAbstract = model.IsAbstract;
+            Parameters = new ObservableCollection<ParameterViewModel>(model.Parameters);
         }
 
         private void Parameters_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -45,6 +53,8 @@ namespace ClassDesigner.ViewModels
             get => isStatic; set
             {
                 isStatic = value;
+
+                IsAbstract = isStatic ? false : isAbstract;
                 OnPropertyChanged(nameof(IsStatic));
                 OnPropertyChanged(nameof(MethodString));
             }
@@ -56,6 +66,8 @@ namespace ClassDesigner.ViewModels
             get => isAbstract; set
             {
                 isAbstract = value;
+
+                IsStatic = isAbstract ? false : isStatic;
                 OnPropertyChanged(nameof(IsAbstract));
 
                 OnPropertyChanged(nameof(MethodString));
@@ -95,7 +107,7 @@ namespace ClassDesigner.ViewModels
             }
         }
         
-        private ObservableCollection<ParameterViewModel> parameters;
+        private ObservableCollection<ParameterViewModel> parameters = new ObservableCollection<ParameterViewModel>();
         public ObservableCollection<ParameterViewModel> Parameters
         {
             get => parameters; set

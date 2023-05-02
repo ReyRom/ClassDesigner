@@ -1,16 +1,29 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class PropertyViewModel:ViewModelBase, IField
+    public class PropertyViewModel : ViewModelBase, IAttribute
     {
+        public PropertyViewModel(IEntry parent)
+        {
+            Parent = parent;
+        }
+
+        public PropertyViewModel(IEntry parent, PropertyViewModel model) : this(parent)
+        {
+            Name = model.Name;
+            Type = model.Type;
+            DefaultValue = model.DefaultValue;
+            Visibility = model.Visibility;
+            IsStatic = model.IsStatic;
+            IsAbstract = model.IsAbstract;
+            IsGet = model.IsGet;
+            IsSet = model.IsSet;
+        }
+
         private string name = "Attribute";
 
         public string Name
@@ -20,7 +33,7 @@ namespace ClassDesigner.ViewModels
                 name = value;
                 OnPropertyChanged(nameof(Name));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
         private VisibilityType visibility = VisibilityType.Public;
@@ -31,7 +44,7 @@ namespace ClassDesigner.ViewModels
                 visibility = value;
                 OnPropertyChanged(nameof(Visibility));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
         private string type = string.Empty;
@@ -42,7 +55,7 @@ namespace ClassDesigner.ViewModels
                 type = value;
                 OnPropertyChanged(nameof(Type));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
@@ -54,7 +67,7 @@ namespace ClassDesigner.ViewModels
                 defaultValue = value;
                 OnPropertyChanged(nameof(DefaultValue));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
@@ -64,9 +77,10 @@ namespace ClassDesigner.ViewModels
             get => isStatic; set
             {
                 isStatic = value;
+                IsAbstract = isStatic ? false : isAbstract;
                 OnPropertyChanged(nameof(IsStatic));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
@@ -76,9 +90,10 @@ namespace ClassDesigner.ViewModels
             get => isAbstract; set
             {
                 isAbstract = value;
+                IsStatic = isAbstract ? false : isStatic;
                 OnPropertyChanged(nameof(IsAbstract));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
@@ -90,7 +105,7 @@ namespace ClassDesigner.ViewModels
                 isGet = value;
                 OnPropertyChanged(nameof(IsGet));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
         private bool isSet = true;
@@ -101,17 +116,17 @@ namespace ClassDesigner.ViewModels
                 isSet = value;
                 OnPropertyChanged(nameof(IsSet));
 
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
-        public string FieldString
+        public string AttributeString
         {
             get => this.ToString();
             set
             {
                 ParseFromString(value);
-                OnPropertyChanged(nameof(FieldString));
+                OnPropertyChanged(nameof(AttributeString));
             }
         }
 
@@ -137,7 +152,18 @@ namespace ClassDesigner.ViewModels
 
         public override string ToString()
         {
-            return (char)Visibility + " " + Name + (Type != String.Empty ? " : " + Type : "") + " { "+ (IsGet?"get; ":"") + (IsSet?"set; ":"") + "}" + (DefaultValue != String.Empty ? " = " + DefaultValue : "");
+            return (char)Visibility + " " + Name + (Type != String.Empty ? " : " + Type : "") + " { " + (IsGet ? "get; " : "") + (IsSet ? "set; " : "") + "}" + (DefaultValue != String.Empty ? " = " + DefaultValue : "");
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is null) return false;
+            if (obj is not PropertyViewModel) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            var other = obj as PropertyViewModel;
+            return this.AttributeString == other.AttributeString
+                && this.IsStatic == other.IsStatic && this.IsAbstract == other.IsAbstract;
+
         }
     }
 }

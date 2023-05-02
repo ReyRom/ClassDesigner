@@ -24,6 +24,21 @@ namespace ClassDesigner.Helping
             }
         }
 
+        public double InterfaceScale
+        {
+            get
+            {
+                return Properties.Settings.Default.InterfaceScale;
+            }
+            set
+            {
+                Properties.Settings.Default.InterfaceScale = value;
+                Properties.Settings.Default.Save();
+                OnPropertyChanged(nameof(InterfaceScale));
+            }
+        }
+
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")

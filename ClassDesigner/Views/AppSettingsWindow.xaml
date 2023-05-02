@@ -14,9 +14,14 @@
     <Grid Background="White" DataContext="{StaticResource viewModel}">
         <StackPanel>
             <TextBlock Text="Масштаб интерфейса"/>
-            <Slider x:Name="Scale" Minimum="1" Maximum="3" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Value="{Binding InterfaceScale}">
+            <Slider x:Name="Scale" Minimum="1" 
+                    Maximum="2"
+                    TickPlacement="BottomRight" 
+                    TickFrequency="0.1" 
+                    IsSnapToTickEnabled="True" 
+                    Value="{Binding SettingsService.InterfaceScale}">
             </Slider>
-            <TextBlock Text="{Binding InterfaceScale, StringFormat=p0}"/>
+            <TextBlock Text="{Binding SettingsService.InterfaceScale, StringFormat=p0}"/>
         </StackPanel>
     </Grid>
 </Window>

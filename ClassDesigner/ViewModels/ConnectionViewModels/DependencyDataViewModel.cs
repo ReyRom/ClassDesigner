@@ -16,8 +16,8 @@ namespace ClassDesigner.ViewModels
             Target = target;
             ValidateSource();
         }
-        private IMethod dependencedMethod;
-        public IMethod DependencedMethod
+        private IAction dependencedMethod;
+        public IAction DependencedMethod
         {
             get => dependencedMethod; set
             {
@@ -52,17 +52,17 @@ namespace ClassDesigner.ViewModels
         Command addDependencedMethod;
         public Command AddDependencedMethod => addDependencedMethod ??= new Command(obj =>
         {
-            var method = new MethodViewModel();
+            var method = new MethodViewModel(Source);
             var paramether = new ParameterViewModel();
             paramether.Type = Target.Name;
             method.Parameters.Add(paramether);
-            (Source as IHaveMethods).Methods.Add(method);
+            (Source as IHaveActions).Actions.Add(method);
             DependencedMethod = method;
         });
 
         public void ValidateSource()
         {
-            isValidSource = Source is IHaveMethods;
+            isValidSource = Source is IHaveActions;
             OnPropertyChanged(nameof(IsValidSource));
             OnPropertyChanged(nameof(IsValid));
         }

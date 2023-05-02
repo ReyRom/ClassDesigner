@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml.Linq;
 
 namespace ClassDesigner.Controls
@@ -84,11 +85,21 @@ namespace ClassDesigner.Controls
 
             foreach (UIElement element in this.InternalChildren)
             {
+                
                 double left = Canvas.GetLeft(element);
                 double top = Canvas.GetTop(element);
+                
                 left = double.IsNaN(left) ? 0 : left;
                 top = double.IsNaN(top) ? 0 : top;
 
+                if (element is Connection connection)
+                {
+                    foreach (var item in connection.Nodes)
+                    {
+                        left = Math.Max(left, item.Point.X);
+                        top = Math.Max(top, item.Point.Y);
+                    }
+                }
                 //measure desired size for each child
                 element.Measure(constraint);
 

@@ -155,10 +155,12 @@ namespace ClassDesigner.Controls
             Point currentPosition = Mouse.GetPosition(this);
             //this.HitTesting(currentPosition);
 
+            Point point = new Point(currentPosition.X < 0 ? 0 : currentPosition.X,
+                                    currentPosition.Y < 0 ? 0 : currentPosition.Y);
 
-
-            this.pathGeometry = UpdatePathGeometry(currentPosition);
+            this.pathGeometry = UpdatePathGeometry(point);
             this.InvalidateVisual();
+            designerCanvas.InvalidateMeasure();
         }
 
         protected override void OnRender(DrawingContext dc)

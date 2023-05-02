@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassDesigner.Helping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,18 +9,6 @@ namespace ClassDesigner.ViewModels
 {
     public class AppSettingsViewModel:ViewModelBase
     {
-        public double InterfaceScale
-        {
-            get
-            {
-                return Properties.Settings.Default.InterfaceScale;
-            }
-            set
-            {
-                Properties.Settings.Default.InterfaceScale = value;
-                Properties.Settings.Default.Save();
-                OnPropertyChanged(nameof(InterfaceScale));
-            }
-        }
+        public SettingsService SettingsService { get => SettingsService.Instance; }
     }
 }

@@ -14,27 +14,18 @@ namespace ClassDesigner.Helping
         /// <summary>
         /// Convert value for binding from source object
         /// </summary>
-        public object Convert(object value, Type targetType,
-                object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // To get around the stupid WPF designer bug
             if (value != null)
             {
                 FieldInfo fi = value.GetType().GetField(value.ToString());
 
-                // To get around the stupid WPF designer bug
                 if (fi != null)
                 {
-                    var attributes =
-                        (DescriptionAttribute[])
-            fi.GetCustomAttributes(typeof
-            (DescriptionAttribute), false);
+                    var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-                    return ((attributes.Length > 0) &&
-                            (!String.IsNullOrEmpty(attributes[0].Description)))
-                               ?
-                                   attributes[0].Description
-                               : value.ToString();
+                    return ((attributes.Length > 0) 
+                        && (!String.IsNullOrEmpty(attributes[0].Description))) ? attributes[0].Description : value.ToString();
                 }
             }
 

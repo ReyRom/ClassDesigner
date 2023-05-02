@@ -82,6 +82,7 @@
                     <TextBlock Style="{StaticResource CopyIcon}" />
                 </StackPanel>
             </Button>
+            
             <Button Grid.Column="1" Grid.Row="1" 
                     HorizontalContentAlignment="Left"
                     Command="{x:Static ApplicationCommands.Cut}" 

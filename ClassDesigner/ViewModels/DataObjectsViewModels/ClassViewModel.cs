@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace ClassDesigner.ViewModels
 {
-    public class ClassViewModel : ViewModelBase, IEntry, IHaveMethods, IHaveFields, IHaveProperties
+    public class ClassViewModel : ViewModelBase, IEntry, IHaveActions, IHaveFields, IHaveProperties
     {
         private string name = "Class";
         public string Name
@@ -33,7 +33,9 @@ namespace ClassDesigner.ViewModels
             get => isStatic; set
             {
                 isStatic = value;
+                isAbstract = isStatic ? false : isAbstract;
                 OnPropertyChanged(nameof(IsStatic));
+                OnPropertyChanged(nameof(IsAbstract));
             }
         }
 
@@ -43,32 +45,34 @@ namespace ClassDesigner.ViewModels
             get => isAbstract; set
             {
                 isAbstract = value;
+                isStatic = isAbstract ? false : isStatic;
                 OnPropertyChanged(nameof(IsAbstract));
+                OnPropertyChanged(nameof(IsStatic));
             }
         }
 
-        public ObservableCollection<IField> Attributes { get; set; } = new ObservableCollection<IField>();
-        public ObservableCollection<IMethod> Methods { get; set; } = new ObservableCollection<IMethod>();
+        public ObservableCollection<IAttribute> Attributes { get; set; } = new ObservableCollection<IAttribute>();
+        public ObservableCollection<IAction> Actions { get; set; } = new ObservableCollection<IAction>();
 
         private int attributeCounter = 0;
         private int propertyCounter = 0;
         private int methodCounter = 0;
 
-        Command addAttributeCommand;
-        public Command AddAttributeCommand
+        Command addFieldCommand;
+        public Command AddFieldCommand
         {
-            get => addAttributeCommand ??= new Command(obj =>
+            get => addFieldCommand ??= new Command(obj =>
             {
-                this.Attributes.Add(new AttributeViewModel() { Name = "attribute" + ++attributeCounter, Parent = this });
+                this.Attributes.Add(new FieldViewModel(this) { Name = "attribute" + ++attributeCounter });
             });
         }
 
-        Command removeAttributeCommand;
+        Command removeFieldCommand;
         public Command RemoveAttributeCommand
         {
-            get => removeAttributeCommand ??= new Command(obj =>
+            get => removeFieldCommand ??= new Command(obj =>
             {
-                this.Attributes.Remove(obj as AttributeViewModel);
+                this.Attributes.Remove(obj as FieldViewModel);
             });
         }
 
@@ -77,7 +81,7 @@ namespace ClassDesigner.ViewModels
         {
             get => addPropertyCommand ??= new Command(obj =>
             {
-                this.Attributes.Add(new PropertyViewModel() { Name = "Attribute" + ++propertyCounter, Parent = this });
+                this.Attributes.Add(new PropertyViewModel(this) { Name = "Attribute" + ++propertyCounter });
             });
         }
 
@@ -97,7 +101,7 @@ namespace ClassDesigner.ViewModels
         {
             get => addMethodCommand ?? (addMethodCommand = new Command(obj =>
             {
-                this.Methods.Add(new MethodViewModel() { Name = "Method" + ++methodCounter, Parent = this });
+                this.Actions.Add(new MethodViewModel(this) { Name = "Method" + ++methodCounter });
             }));
         }
 
@@ -106,7 +110,7 @@ namespace ClassDesigner.ViewModels
         {
             get => removeMethodCommand ??= new Command(obj =>
             {
-                this.Methods.Remove(obj as MethodViewModel);
+                this.Actions.Remove(obj as MethodViewModel);
             });
         }
 

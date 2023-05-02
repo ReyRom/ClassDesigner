@@ -17,7 +17,7 @@
                 </MenuItem.Template>
             </MenuItem>
         </MenuItem>
-        <MenuItem Header="Добавить атрибут" Command="{Binding AddAttributeCommand}"/>
+        <MenuItem Header="Добавить поле" Command="{Binding AddFieldCommand}"/>
         <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
         <MenuItem Header="Добавить метод" Command="{Binding  AddMethodCommand}"/>
         <Separator/>
@@ -27,7 +27,7 @@
         </MenuItem>
     </ContextMenu>
 
-    <ContextMenu x:Key="AttributeContextMenu">
+    <ContextMenu x:Key="FieldContextMenu">
         <MenuItem Header="Видимость">
             <MenuItem>
                 <MenuItem.Template>
@@ -45,7 +45,7 @@
             <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
 
         </MenuItem>
-        <MenuItem Header="Удалить" Command="{Binding Parent.RemoveAttributeCommand}" CommandParameter="{Binding}"/>
+        <MenuItem Header="Удалить" Command="{Binding Parent.RemoveFieldCommand}" CommandParameter="{Binding}"/>
     </ContextMenu>
 
     <ContextMenu x:Key="PropertyContextMenu">
@@ -93,12 +93,12 @@
         <MenuItem Header="Удалить" Command="{Binding Parent.RemoveMethodCommand}" CommandParameter="{Binding}"/>
     </ContextMenu>
 
-    <DataTemplate x:Key="AttributeTemplate" DataType="{x:Type vm:AttributeViewModel}">
-        <Grid ContextMenu="{StaticResource AttributeContextMenu}">
-            <TextBox Text="{Binding FieldString}">
+    <DataTemplate x:Key="FieldTemplate" DataType="{x:Type vm:FieldViewModel}">
+        <Grid ContextMenu="{StaticResource FieldContextMenu}">
+            <TextBox Text="{Binding AttributeString}">
                 <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-                        <Setter Property="ContextMenu" Value="{StaticResource AttributeContextMenu}"/>
+                        <Setter Property="ContextMenu" Value="{StaticResource FieldContextMenu}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsStatic}" Value="True">
                                 <Setter Property="TextDecorations" Value="Underline"/>
@@ -117,7 +117,7 @@
     
     <DataTemplate x:Key="PropertyTemplate" DataType="{x:Type vm:PropertyViewModel}">
         <Grid ContextMenu="{StaticResource PropertyContextMenu}">
-            <TextBox Text="{Binding FieldString}">
+            <TextBox Text="{Binding AttributeString}">
                 <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
                         <Setter Property="ContextMenu" Value="{StaticResource PropertyContextMenu}"/>
@@ -191,15 +191,15 @@
                 
                 <ItemsControl ItemsSource="{Binding Attributes}">
                     <ItemsControl.ItemTemplateSelector>
-                        <h:FieldTemplateSelector 
-                            AttributeTemplate="{StaticResource AttributeTemplate}" 
+                        <h:AttributeTemplateSelector 
+                            FieldTemplate="{StaticResource FieldTemplate}" 
                             PropertyTemplate="{StaticResource PropertyTemplate}"/>
                     </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
                 
                 <Separator />
 
-                <ItemsControl ItemsSource="{Binding Methods}" ItemTemplate="{StaticResource MethodTemplate}">
+                <ItemsControl ItemsSource="{Binding Actions}" ItemTemplate="{StaticResource MethodTemplate}">
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="1"  BorderBrush="Black"/>
@@ -250,15 +250,15 @@
 
                 <ItemsControl ItemsSource="{Binding Attributes}">
                     <ItemsControl.ItemTemplateSelector>
-                        <h:FieldTemplateSelector 
-                            AttributeTemplate="{StaticResource AttributeTemplate}" 
+                        <h:AttributeTemplateSelector 
+                            FieldTemplate="{StaticResource FieldTemplate}" 
                             PropertyTemplate="{StaticResource PropertyTemplate}"/>
                     </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
 
                 <Separator />
 
-                <ItemsControl ItemsSource="{Binding Methods}" ItemTemplate="{StaticResource MethodTemplate}">
+                <ItemsControl ItemsSource="{Binding Actions}" ItemTemplate="{StaticResource MethodTemplate}">
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="1"  BorderBrush="Black"/>
@@ -277,7 +277,7 @@
                 </MenuItem.Template>
             </MenuItem>
         </MenuItem>
-        <MenuItem Header="Добавить атрибут" Command="{Binding AddAttributeCommand}"/>
+        <MenuItem Header="Добавить поле" Command="{Binding AddFieldCommand}"/>
         <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
         <MenuItem Header="Добавить метод" Command="{Binding AddMethodCommand}"/>
         <!--<Separator/>
@@ -311,15 +311,15 @@
 
                 <ItemsControl ItemsSource="{Binding Attributes}">
                     <ItemsControl.ItemTemplateSelector>
-                        <h:FieldTemplateSelector 
-                            AttributeTemplate="{StaticResource AttributeTemplate}" 
+                        <h:AttributeTemplateSelector 
+                            FieldTemplate="{StaticResource FieldTemplate}" 
                             PropertyTemplate="{StaticResource PropertyTemplate}"/>
                     </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
 
                 <Separator />
 
-                <ItemsControl ItemsSource="{Binding Methods}" ItemTemplate="{StaticResource MethodTemplate}">
+                <ItemsControl ItemsSource="{Binding Actions}" ItemTemplate="{StaticResource MethodTemplate}">
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="1"  BorderBrush="Black"/>
@@ -377,13 +377,18 @@
                          ContextMenu="{StaticResource EnumContextMenu}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
-
                         </Style>
                     </TextBox.Style>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </TextBox>
                 <Separator />
                 <ItemsControl ItemsSource="{Binding EnumChildren}" ItemTemplate="{StaticResource EnumChildTemplate}">
                 </ItemsControl>
+                
             </StackPanel>
             <Border BorderThickness="1"  BorderBrush="Black"/>
         </Grid>
