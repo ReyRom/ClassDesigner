@@ -4,7 +4,7 @@
                     xmlns:c="clr-namespace:ClassDesigner.Controls">
 
 
-    <ToolBar x:Key="ApplicationToolbar" Background="{StaticResource LightShadesLBrush}">
+    <ToolBar x:Key="ApplicationToolbar" Background="{DynamicResource AlternateBackgroundColor}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

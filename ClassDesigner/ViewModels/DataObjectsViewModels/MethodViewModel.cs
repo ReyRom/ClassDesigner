@@ -54,8 +54,9 @@ namespace ClassDesigner.ViewModels
             {
                 isStatic = value;
 
-                IsAbstract = isStatic ? false : isAbstract;
+                isAbstract = isStatic ? false : isAbstract;
                 OnPropertyChanged(nameof(IsStatic));
+                OnPropertyChanged(nameof(IsAbstract));
                 OnPropertyChanged(nameof(MethodString));
             }
         }
@@ -67,9 +68,9 @@ namespace ClassDesigner.ViewModels
             {
                 isAbstract = value;
 
-                IsStatic = isAbstract ? false : isStatic;
+                isStatic = isAbstract ? false : isStatic;
+                OnPropertyChanged(nameof(IsStatic));
                 OnPropertyChanged(nameof(IsAbstract));
-
                 OnPropertyChanged(nameof(MethodString));
             }
         }

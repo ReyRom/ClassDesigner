@@ -22,6 +22,10 @@
                     Value="{Binding SettingsService.InterfaceScale}">
             </Slider>
             <TextBlock Text="{Binding SettingsService.InterfaceScale, StringFormat=p0}"/>
+
+            <CheckBox IsChecked="{Binding SettingsService.IsDarkTheme}">
+                <TextBlock Text="Темная тема"/>
+            </CheckBox>
         </StackPanel>
     </Grid>
 </Window>

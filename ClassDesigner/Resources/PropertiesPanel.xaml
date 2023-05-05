@@ -3,8 +3,8 @@
                     xmlns:h="clr-namespace:ClassDesigner.Helping">
 
     <Style x:Key="BorderStyle" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource LightShadesBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource LightShadesBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor}"/>
         <Setter Property="CornerRadius" Value="2"/>
         <Setter Property="Padding" Value="8"/>
         <Setter Property="MinWidth" Value="100"/>
@@ -301,8 +301,8 @@
                                                                 <ColumnDefinition/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <ComboBox ItemsSource="{Binding SourceEntry.Methods}" 
-                                                                  SelectedItem="{Binding ConnectionData.DependencedMethod}">
+                                                            <ComboBox ItemsSource="{Binding SourceEntry.Actions}" 
+                                                                  SelectedItem="{Binding ConnectionData.DependencedAction}">
                                                             </ComboBox>
                                                             <Button Grid.Column="1"  Command="{Binding ConnectionData.AddDependencedMethod}">
                                                                 <TextBlock Style="{StaticResource AddIcon}"/>
@@ -378,13 +378,13 @@
                                                                     <MenuItem.Header>
                                                                         <TextBlock Style="{StaticResource AddIcon}"/>
                                                                     </MenuItem.Header>
-                                                                    <MenuItem Header="Добавить поле" Command="{Binding ConnectionData.AddAggregatedAttribute}"/>
+                                                                    <MenuItem Header="Добавить поле" Command="{Binding ConnectionData.AddAggregatedField}"/>
                                                                     <MenuItem Header="Добавить свойство" Command="{Binding ConnectionData.AddAggregatedProperty}"/>
                                                                 </MenuItem>
                                                             </Menu>
 
-                                                            <ComboBox Grid.Row="1" ItemsSource="{Binding TargetEntry.Methods}" 
-                                                                  SelectedItem="{Binding ConnectionData.AggregatedMethod}">
+                                                            <ComboBox Grid.Row="1" ItemsSource="{Binding TargetEntry.Actions}" 
+                                                                  SelectedItem="{Binding ConnectionData.AggregatedAction}">
                                                             </ComboBox>
                                                             <Menu Grid.Row="1" Grid.Column="1">
                                                                 <MenuItem>
@@ -403,7 +403,7 @@
                                                     <DataTemplate>
                                                         <StackPanel DataContext="{Binding Source={x:Reference Name=ConnectionPanel}, Path=DataContext}">
                                                             <ItemsControl ItemsSource="{Binding ConnectionData.Fields}"/>
-                                                            <ItemsControl ItemsSource="{Binding ConnectionData.Methods}"/>
+                                                            <ItemsControl ItemsSource="{Binding ConnectionData.Actions}"/>
                                                         </StackPanel>
                                                     </DataTemplate>
                                                 </h:RelationTemplateSelector.GeneralizationTemplate>
@@ -430,7 +430,7 @@
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
-                                                            <ItemsControl ItemsSource="{Binding ConnectionData.Methods}">
+                                                            <ItemsControl ItemsSource="{Binding ConnectionData.Actions}">
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Grid>

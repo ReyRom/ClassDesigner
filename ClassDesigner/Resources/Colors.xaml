@@ -1,17 +1,17 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Color x:Key="LightShades">#F6EFF2</Color>
-    <Color x:Key="LightShadesL">#EFEFF6</Color>
+    <Color x:Key="LightShadesSecondary">#ffffff</Color>
     
     <Color x:Key="LightAccent">#73BED9</Color>
     <Color x:Key="Main">#31AADF</Color>
-    <Color x:Key="DarkAccent">#4B8ECC</Color>
+    <Color x:Key="DarkAccent">#212942</Color>
     <Color x:Key="DarkShades">#2A3454</Color>
-
+    <Color x:Key="DarkShadesSecondary">#37446d</Color>
     <Color x:Key="Gray">#999999</Color>
 
     <SolidColorBrush x:Key="LightShadesBrush" Color="{StaticResource LightShades}"/>
-    <SolidColorBrush x:Key="LightShadesLBrush" Color="{StaticResource LightShadesL}"/>
+    <SolidColorBrush x:Key="LightShadesLBrush" Color="{StaticResource LightShades}"/>
     
     <SolidColorBrush x:Key="LightAccentBrush" Color="{StaticResource LightAccent}"/>
     <SolidColorBrush x:Key="MainBrush" Color="{StaticResource Main}"/>

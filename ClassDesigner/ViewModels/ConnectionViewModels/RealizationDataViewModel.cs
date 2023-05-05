@@ -27,6 +27,15 @@ namespace ClassDesigner.ViewModels
             Validate();
         }
 
+        public void ReleaseData()
+        {
+            if (realizationError != null)
+            {
+                ErrorService.Instance.ObservableErrors.Remove(realizationError);
+                realizationError = null;
+            }
+        }
+
         private void SourceTarget_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Validate();
@@ -40,10 +49,23 @@ namespace ClassDesigner.ViewModels
 
         public IErrorProvider ErrorSource { get; }
 
+        private bool isValidSource = true;
+        public bool IsValidSource
+        {
+            get
+            {
+                return isValidSource;
+            }
+            set
+            {
+                isValidSource = value;
+                OnPropertyChanged(nameof(IsValidSource));
+            }
+        }
 
         public bool ValidateSource()
         {
-            return Target is InterfaceViewModel && Source is ClassViewModel;
+            return IsValidSource = Target is InterfaceViewModel && Source is ClassViewModel;
         }
 
         private ErrorViewModel realizationError;

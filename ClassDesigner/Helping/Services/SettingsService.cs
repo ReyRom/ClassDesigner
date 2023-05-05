@@ -6,13 +6,59 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 
 namespace ClassDesigner.Helping
 {
-    public class SettingsService:INotifyPropertyChanged
+    public class SettingsService : INotifyPropertyChanged
     {
         private static SettingsService instance;
         private RelationType relationType = RelationType.Association;
+
+        ResourceDictionary LightTheme;
+        ResourceDictionary DarkTheme;
+        
+
+        public bool IsDarkTheme 
+        {
+            get
+            {
+                return Properties.Settings.Default.IsDarkTheme;
+            }
+            set
+            {
+                Properties.Settings.Default.IsDarkTheme = value;
+                Properties.Settings.Default.Save();
+                UpdateTheme();
+                OnPropertyChanged(nameof(IsDarkTheme));
+            }
+        }
+
+        public SettingsService()
+        {
+            var lightUri = new Uri("Resources/Themes/LightTheme.xaml", UriKind.Relative);
+            var darkUri = new Uri("Resources/Themes/DarkTheme.xaml", UriKind.Relative);
+
+            LightTheme = Application.LoadComponent(lightUri) as ResourceDictionary;
+            DarkTheme = Application.LoadComponent(darkUri) as ResourceDictionary;
+
+            UpdateTheme();
+        }
+
+        private void UpdateTheme()
+        {
+            if (IsDarkTheme) 
+            {
+                Application.Current.Resources.MergedDictionaries.Remove(LightTheme);
+                Application.Current.Resources.MergedDictionaries.Add(DarkTheme);
+            }
+            else
+            {
+                Application.Current.Resources.MergedDictionaries.Remove(DarkTheme);
+                Application.Current.Resources.MergedDictionaries.Add(LightTheme);
+            }
+        }
 
         public static SettingsService Instance { get => instance ??= new SettingsService(); }
         public RelationType RelationType

@@ -77,9 +77,9 @@ namespace ClassDesigner.ViewModels
             get => isStatic; set
             {
                 isStatic = value;
-                IsAbstract = isStatic ? false : isAbstract;
+                isAbstract = isStatic ? false : isAbstract;
                 OnPropertyChanged(nameof(IsStatic));
-
+                OnPropertyChanged(nameof(IsAbstract));
                 OnPropertyChanged(nameof(AttributeString));
             }
         }
@@ -90,9 +90,9 @@ namespace ClassDesigner.ViewModels
             get => isAbstract; set
             {
                 isAbstract = value;
-                IsStatic = isAbstract ? false : isStatic;
+                isStatic = isAbstract ? false : isStatic;
+                OnPropertyChanged(nameof(IsStatic));
                 OnPropertyChanged(nameof(IsAbstract));
-
                 OnPropertyChanged(nameof(AttributeString));
             }
         }

@@ -1,0 +1,41 @@
+﻿<Window x:Class="ClassDesigner.MessageBox.MessageBoxWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClassDesigner.MessageBox"
+        mc:Ignorable="d"
+        WindowStyle="None" 
+        AllowsTransparency="True"
+        Title="MessageBoxWindow" 
+        ResizeMode="CanMinimize" Width="500" 
+        Background="Transparent" SizeToContent="Height"
+        FontSize="20" MouseDown="Window_MouseDown">
+    <Border CornerRadius="3" Background="{DynamicResource BackgroundColor}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{Binding Header}" Grid.Row="0" TextWrapping="Wrap" Margin="5"/>
+            <TextBlock Text="{Binding Message}" Grid.Row="1" TextWrapping="Wrap" Margin="10"/>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Width="100" Click="OkButton_Click" Visibility="{Binding OkButton, Converter={StaticResource visibilityConverter}}">
+                    <TextBlock Text="ОК"/>
+                </Button>
+                <Button Width="100" Click="CancelButton_Click" Visibility="{Binding CancelButton, Converter={StaticResource visibilityConverter}}">
+                    <TextBlock Text="Отмена"/>
+                </Button>
+                <Button Width="100" Click="YesButton_Click" Visibility="{Binding YesButton, Converter={StaticResource visibilityConverter}}">
+                    <TextBlock Text="Да"/>
+                </Button>
+                <Button Width="100" Click="NoButton_Click" Visibility="{Binding NoButton, Converter={StaticResource visibilityConverter}}">
+                    <TextBlock Text="Нет"/>
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

@@ -20,5 +20,6 @@
     </ObjectDataProvider>
     
     <h:EnumConverter x:Key="enumConverter"/>
+    <h:VisibilityConverter x:Key="visibilityConverter"/>
     <h:IsInCollectionConverter x:Key="isInCollectionConverter"/>
 </ResourceDictionary>

@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -122,6 +123,7 @@ namespace ClassDesigner.Controls
         private void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             DeleteCurrentSelection();
+            GC.Collect();
         }
 
         private void Paste_Enabled(object sender, CanExecuteRoutedEventArgs e)
@@ -201,7 +203,7 @@ namespace ClassDesigner.Controls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.StackTrace, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.MessageBox.Show(ex.StackTrace, ex.Message, MessageBox.MessageBoxButtons.Ok);
                 }
             }
         }
@@ -276,7 +278,7 @@ namespace ClassDesigner.Controls
                             (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedAttribute
                                 = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
                                 .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AggregatedAttribute").Value);
-                            (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedMethod
+                            (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedAction
                                 = (connection.ConnectionViewModel.TargetEntry as IHaveActions).Actions
                                 .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AggregatedMethod").Value);
                             break;
@@ -290,7 +292,7 @@ namespace ClassDesigner.Controls
                         case RelationType.Realization:
                             break;
                         case RelationType.Dependency:
-                            (connection.ConnectionViewModel.ConnectionData as DependencyDataViewModel).DependencedMethod
+                            (connection.ConnectionViewModel.ConnectionData as DependencyDataViewModel).DependencedAction
                                 = (connection.ConnectionViewModel.SourceEntry as IHaveActions).Actions
                                 .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("DependencedMethod").Value);
                             break;
@@ -508,7 +510,7 @@ namespace ClassDesigner.Controls
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.StackTrace, e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.MessageBox.Show(e.StackTrace, e.Message, MessageBox.MessageBoxButtons.Ok);
                 }
             }
 
@@ -518,6 +520,7 @@ namespace ClassDesigner.Controls
         {
             foreach (Connection connection in SelectionService.Selection.OfType<Connection>())
             {
+                connection.Release();
                 this.Children.Remove(connection);
             }
 
@@ -794,7 +797,7 @@ namespace ClassDesigner.Controls
             {
                 return new XElement("ConnectionData",
                     new XElement("AggregatedAttribute", ag.AggregatedAttribute.ToString()),
-                    new XElement("AggregatedMethod", ag.AggregatedMethod.ToString())
+                    new XElement("AggregatedMethod", ag.AggregatedAction.ToString())
                     );
             }
             if (connectionData is CompositionDataViewModel c)
@@ -812,7 +815,7 @@ namespace ClassDesigner.Controls
             if (connectionData is DependencyDataViewModel d)
             {
                 return new XElement("ConnectionData",
-                    new XElement("DependencedMethod", d.DependencedMethod.ToString())
+                    new XElement("DependencedMethod", d.DependencedAction.ToString())
                     );
             }
             return new XElement("ConnectionData");
@@ -821,18 +824,41 @@ namespace ClassDesigner.Controls
         void SaveFile(XElement xElement)
         {
             SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Filter = "Files (*.xml)|*.xml|All Files (*.*)|*.*";
+            saveFile.Filter = "XML-файлы (*.xml)|*.xml|Изображения (*.png)|*.png";
             if (saveFile.ShowDialog() == true)
             {
                 try
                 {
-                    xElement.Save(saveFile.FileName);
+                    if (Path.GetExtension(saveFile.FileName) == ".png")
+                    {
+                        ToImageSource(this, saveFile.FileName);
+                    }
+                    else
+                    {
+                        xElement.Save(saveFile.FileName);
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.StackTrace, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.MessageBox.Show(ex.StackTrace, ex.Message, MessageBox.MessageBoxButtons.Ok);
                 }
             }
+        }
+
+        public static void ToImageSource(Canvas canvas, string filename)
+        {
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)canvas.DesiredSize.Width, (int)canvas.DesiredSize.Height, 96d, 96d, PixelFormats.Pbgra32);
+            canvas.Measure(new Size((int)canvas.DesiredSize.Width, (int)canvas.DesiredSize.Height));
+            canvas.Arrange(new Rect(new Size((int)canvas.DesiredSize.Width, (int)canvas.DesiredSize.Height)));
+            bmp.Render(canvas);
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bmp));
+            using (FileStream file = File.Create(filename))
+            {
+                encoder.Save(file);
+            }
+            MessageBox.MessageBox.Show("Fkt");
         }
 
         private void UpdateZIndex()

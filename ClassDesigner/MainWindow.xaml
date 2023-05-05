@@ -15,7 +15,9 @@
         Title="MainWindow" Height="450" Width="800"
         MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
         MaxWidth="{x:Static SystemParameters.MaximizedPrimaryScreenWidth}"
-        Background="{StaticResource LightAccentBrush}" WindowState="Normal" WindowStyle="None" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Background="{DynamicResource AppColor}" 
+        WindowState="Normal" WindowStyle="None"
+        AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <vm:MainViewModel x:Key="viewModel"/>
     </Window.Resources>
@@ -69,11 +71,12 @@
             <Button Command="{x:Static SystemCommands.CloseWindowCommand}">
                 <TextBlock Style="{StaticResource CrossIcon}"/>
             </Button>
+            
         </StackPanel>
 
         <ContentControl Grid.Row="1" Content="{StaticResource ApplicationToolbar}" Margin="2"/>
 
-
+        
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -83,7 +86,7 @@
             </Grid.ColumnDefinitions>
 
             <!--<ItemsControl ItemsSource="{Binding PropertiesService.Entries}" Template="{StaticResource VisualTreePanel}" Margin="2"/>-->
-            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Margin="2" Background="{StaticResource LightShadesBrush}">
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Margin="2" Background="{DynamicResource AlternateBackgroundColor}">
                 <ItemsControl ItemsSource="{Binding Templates}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -93,8 +96,14 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <c:DragItem DragContent="{Binding Content}" Width="100" Margin="2,2,2,0">
-                                <Grid Background="{StaticResource DarkAccentBrush}" >
-                                    <TextBlock Margin="15" Text="{Binding Name}" TextWrapping="Wrap" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource LightShadesBrush}"/>
+                                <Grid Background="{DynamicResource BackgroundColor}" >
+                                    <TextBlock Margin="15" 
+                                               Text="{Binding Name}" 
+                                               TextWrapping="Wrap" 
+                                               FontSize="18" 
+                                               VerticalAlignment="Center" 
+                                               HorizontalAlignment="Center" 
+                                               Foreground="{DynamicResource TextColor}"/>
                                 </Grid>
                             </c:DragItem>
                         </DataTemplate>
@@ -102,12 +111,20 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="2" Background="{StaticResource LightShadesBrush}">
-                <c:DesignerCanvas Margin="15,15,0,0" x:Name="Designer" Focusable="True" FocusVisualStyle="{x:Null}" Background="White">
+            <ScrollViewer Grid.Column="1" 
+                          HorizontalScrollBarVisibility="Visible" 
+                          VerticalScrollBarVisibility="Visible" 
+                          Margin="2" 
+                          Background="{DynamicResource AlternateBackgroundColor}">
+                <c:DesignerCanvas Margin="15,15,0,0" 
+                                  x:Name="Designer" 
+                                  Focusable="True" 
+                                  FocusVisualStyle="{x:Null}" 
+                                  Background="{DynamicResource BackgroundColor}">
 
                 </c:DesignerCanvas>
             </ScrollViewer>
-            <GridSplitter Grid.Column="2" Width="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="{StaticResource LightAccentBrush}"/>
+            <GridSplitter Grid.Column="2" Width="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="Transparent"/>
             <ContentControl Grid.Column="3" Content="{Binding Item}" Template="{StaticResource PropertiesPanel}" Margin="2"/>
         </Grid>
 
@@ -121,8 +138,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Ошибки:" VerticalAlignment="Center" />
-            <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <TextBlock Style="{StaticResource WarningIcon}" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+                <TextBlock Style="{StaticResource WarningIcon}" Foreground="Red"  VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding ErrorService.ErrorsCount}" VerticalAlignment="Center"/>
             </StackPanel>
             
@@ -132,7 +149,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource WarningIcon}" VerticalAlignment="Center" FontSize="14"/>
+                                <TextBlock Style="{StaticResource WarningIcon}" Foreground="Yellow" VerticalAlignment="Center" FontSize="14"/>
                                 <TextBlock Text="{Binding Text}" TextWrapping="Wrap" FontSize="14"/>
                             </StackPanel>
                         </DataTemplate>

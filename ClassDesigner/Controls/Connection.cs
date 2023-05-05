@@ -28,6 +28,11 @@ namespace ClassDesigner.Controls
             }
         }
 
+        public void Release()
+        {
+            ConnectionViewModel.Release();
+        }
+
         #region Properties
 
         public Guid ID { get; set; }

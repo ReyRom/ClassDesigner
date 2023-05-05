@@ -16,8 +16,6 @@ namespace ClassDesigner.ViewModels
     {
         public MainViewModel()
         {
-            //PropertiesWindow window = new PropertiesWindow();
-            //window.Show();
             PropertiesService.Instance.PropertyChanged += Instance_PropertyChanged;
             var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates"));
             foreach (var file in files)

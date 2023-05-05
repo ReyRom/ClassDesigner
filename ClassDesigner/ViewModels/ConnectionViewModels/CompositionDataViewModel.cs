@@ -1,4 +1,6 @@
-﻿using ClassDesigner.Helping;
+﻿using ClassDesigner.Controls;
+using ClassDesigner.Helping;
+using ClassDesigner.Helping.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,16 @@ namespace ClassDesigner.ViewModels
 {
     class CompositionDataViewModel:ViewModelBase, IConnectionData
     {
-        public CompositionDataViewModel(IEntry source, IEntry target)
+        public CompositionDataViewModel(ConnectionViewModel connection)
         {
-            Source = source;
-            Target = target;
-            ValidateSource();
+            Source = connection.SourceEntry;
+            Target = connection.TargetEntry;
+            ErrorSource = connection;
+
+            compositionError = new ErrorViewModel() { Source = ErrorSource };
+            ErrorService.Instance.ObservableErrors.Add(compositionError);
+
+            Validate();
         }
 
         IAttribute composedAttribute;
@@ -39,15 +46,25 @@ namespace ClassDesigner.ViewModels
         {
             Validate();
         }
+        private ErrorViewModel compositionError;
 
+        public IErrorProvider ErrorSource { get; }
         public IEntry Source { get; }
         public IEntry Target { get; }
 
-        private bool isValid = true;
-        public bool IsValid => isValid && isValidSource;
-
         private bool isValidSource = true;
-        public bool IsValidSource => isValidSource;
+        public bool IsValidSource
+        {
+            get
+            {
+                return isValidSource;
+            }
+            set
+            {
+                isValidSource = value;
+                OnPropertyChanged(nameof(IsValidSource));
+            }
+        }
 
         Command addComposedAttribute;
         public Command AddComposedAttribute => addComposedAttribute ??= new Command(obj =>
@@ -68,17 +85,40 @@ namespace ClassDesigner.ViewModels
             ComposedAttribute = property;
         });
 
-        public void ValidateSource()
+        public bool ValidateSource()
         {
-            isValidSource = Target is IHaveFields || Target is IHaveProperties;
-            OnPropertyChanged(nameof(IsValidSource));
-            OnPropertyChanged(nameof(IsValid));
+            return IsValidSource = Target is IHaveFields || Target is IHaveProperties;
         }
-
+        private bool ValidateAttribute()
+        {
+            var isValid = composedAttribute is not null
+                && composedAttribute.Type == Source.Name;
+            return isValid;
+        }
         public void Validate()
         {
-            isValid = composedAttribute is not null && composedAttribute.Type == Source.Name;
+            StringBuilder sb = new StringBuilder();
+            if (!ValidateSource())
+            {
+                sb.AppendLine("Источником реализации может быть только класс, а целью только интерфейс");
+            }
+            else
+            {
+                if (!ValidateAttribute())
+                {
+                    sb.AppendLine("Не указан атрибут ассоциации");
+                }
+            }
+            compositionError.Text = sb.ToString().TrimEnd();
         }
 
+        public void ReleaseData()
+        {
+            if (compositionError != null)
+            {
+                ErrorService.Instance.ObservableErrors.Remove(compositionError);
+                compositionError = null;
+            }
+        }
     }
 }

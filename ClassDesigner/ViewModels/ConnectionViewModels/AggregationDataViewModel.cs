@@ -1,39 +1,48 @@
 ﻿using ClassDesigner.Helping;
+using ClassDesigner.Helping.Services;
+using System;
 using System.Linq;
+using System.Text;
 
 namespace ClassDesigner.ViewModels
 {
     internal class AggregationDataViewModel : ViewModelBase, IConnectionData
     {
-        public AggregationDataViewModel(IEntry source, IEntry target)
+        public AggregationDataViewModel(ConnectionViewModel connection)
         {
-            Source = source;
-            Target = target;
-            ValidateSource();
+            Source = connection.SourceEntry;
+            Target = connection.TargetEntry;
+            ErrorSource = connection;
+
+            aggregationError = new ErrorViewModel() { Source = ErrorSource };
+            ErrorService.Instance.ObservableErrors.Add(aggregationError);
+
+            Validate();
         }
 
-        private IAction aggregatedMethod;
-        public IAction AggregatedMethod
+        private IAction aggregatedAction;
+        public IAction AggregatedAction
         {
-            get => aggregatedMethod; set
+            get => aggregatedAction; set
             {
-                if (aggregatedMethod is not null)
+                if (aggregatedAction is not null)
                 {
-                    aggregatedMethod.PropertyChanged -= AggregatedMethod_PropertyChanged;
+                    aggregatedAction.PropertyChanged -= AggregatedMethod_PropertyChanged;
                 }
-                aggregatedMethod = value;
-                if (!aggregatedMethod.Parameters.Any(x => x.Type == Source.Name))
+                aggregatedAction = value;
+                if (!aggregatedAction.Parameters.Any(x => x.Type == Source.Name))
                 {
-                    aggregatedMethod.Parameters.Add(new ParameterViewModel() { Name = Source.Name.ToLower(), Type = Source.Name });
+                    aggregatedAction.Parameters.Add(new ParameterViewModel() { Name = Source.Name.ToLower(), Type = Source.Name });
                 }
-                aggregatedMethod.PropertyChanged += AggregatedMethod_PropertyChanged;
-                OnPropertyChanged(nameof(AggregatedMethod));
+                aggregatedAction.PropertyChanged += AggregatedMethod_PropertyChanged;
+                OnPropertyChanged(nameof(AggregatedAction));
+                Validate();
             }
         }
 
         private void AggregatedMethod_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            Validate();
         }
 
         public IAttribute aggregatedAttribute;
@@ -52,6 +61,7 @@ namespace ClassDesigner.ViewModels
                 }
                 aggregatedAttribute.PropertyChanged += AggregatedAttribute_PropertyChanged;
                 OnPropertyChanged(nameof(AggregatedAttribute));
+                Validate();
             }
         }
 
@@ -60,17 +70,12 @@ namespace ClassDesigner.ViewModels
             Validate();
         }
 
+        public IErrorProvider ErrorSource { get; }
         public IEntry Source { get; }
         public IEntry Target { get; }
 
-        private bool isValid = true;
-        public bool IsValid => isValid && isValidSource;
-
-        private bool isValidSource = true;
-        public bool IsValidSource => isValidSource;
-
-        Command addAggregatedAttribute;
-        public Command AddAggregatedAttribute => addAggregatedAttribute ??= new Command(obj =>
+        Command addAggregatedField;
+        public Command AddAggregatedField => addAggregatedField ??= new Command(obj =>
         {
             var attribute = new FieldViewModel(Target);
             attribute.Type = Source.Name;
@@ -97,7 +102,7 @@ namespace ClassDesigner.ViewModels
             paramether.Type = Source.Name;
             method.Parameters.Add(paramether);
             (Target as IHaveActions).Actions.Add(method);
-            AggregatedMethod = method;
+            AggregatedAction = method;
         });
 
         Command addAggregatedMethod;
@@ -108,23 +113,72 @@ namespace ClassDesigner.ViewModels
             paramether.Type = Source.Name;
             method.Parameters.Add(paramether);
             (Target as IHaveActions).Actions.Add(method);
-            AggregatedMethod = method;
+            AggregatedAction = method;
         });
 
-        public void ValidateSource()
+        private bool isValidSource = true;
+        public bool IsValidSource
         {
-            isValidSource = (Target is IHaveFields || Target is IHaveProperties) && Target is IHaveActions;
-            OnPropertyChanged(nameof(IsValidSource));
-            OnPropertyChanged(nameof(IsValid));
+            get
+            {
+                return isValidSource;
+            }
+            set
+            {
+                isValidSource = value;
+                OnPropertyChanged(nameof(IsValidSource));
+            }
         }
+
+        public bool ValidateSource()
+        {
+            return IsValidSource = (Target is IHaveFields || Target is IHaveProperties) && Target is IHaveActions;
+        }
+
+        ErrorViewModel aggregationError;
 
         public void Validate()
         {
-            isValid = aggregatedAttribute is not null
-                        && aggregatedAttribute.Type == Source.Name
-                        && aggregatedMethod is not null
-                        && aggregatedMethod.Parameters.Any(x => x.Type == Target.Name);
+            StringBuilder sb = new StringBuilder();
+            if (!ValidateSource())
+            {
+                sb.AppendLine("Цель агрегации должна иметь действия и атрибуты");
+            }
+            else
+            {
+                if (!ValidateAttribute())
+                {
+                    sb.AppendLine("Не указан атрибут агрегации, или указан некорректный");
+                }
+                if (!ValidateAction())
+                {
+                    sb.AppendLine("Не указано действие агрегации, или указано некорректное");
+                }
+            }
+            aggregationError.Text = sb.ToString().TrimEnd();
         }
 
+        private bool ValidateAttribute()
+        {
+            var isValid = aggregatedAttribute is not null
+                        && aggregatedAttribute.Type == Source.Name;
+            return isValid;
+        }
+
+        private bool ValidateAction()
+        {
+            var isValid = aggregatedAction is not null
+                        && aggregatedAction.Parameters.Any(x => x.Type == Source.Name);
+            return isValid;
+        }
+
+        public void ReleaseData()
+        {
+            if (aggregationError != null)
+            {
+                ErrorService.Instance.ObservableErrors.Remove(aggregationError);
+                aggregationError = null;
+            }
+        }
     }
 }

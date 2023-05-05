@@ -13,22 +13,22 @@ namespace ClassDesigner.ViewModels
             switch (RelationType)
             {
                 case RelationType.Association:
-                    ConnectionData = new AssotiationDataViewModel(sourceEntry, targetEntry);
+                    ConnectionData = new AssotiationDataViewModel(this);
                     break;
                 case RelationType.Aggregation:
-                    ConnectionData = new AggregationDataViewModel(sourceEntry, targetEntry);
+                    ConnectionData = new AggregationDataViewModel(this);
                     break;
                 case RelationType.Composition:
-                    ConnectionData = new CompositionDataViewModel(sourceEntry, targetEntry);
+                    ConnectionData = new CompositionDataViewModel(this);
                     break;
                 case RelationType.Generalization:
-                    ConnectionData = new GeneralizationDataViewModel(sourceEntry, targetEntry);
+                    ConnectionData = new GeneralizationDataViewModel(this);
                     break;
                 case RelationType.Realization:
                     ConnectionData = new RealizationDataViewModel(this);
                     break;
                 case RelationType.Dependency:
-                    ConnectionData = new DependencyDataViewModel(sourceEntry, targetEntry);
+                    ConnectionData = new DependencyDataViewModel(this);
                     break;
                 default:
                     break;
@@ -40,5 +40,10 @@ namespace ClassDesigner.ViewModels
         public RelationType RelationType { get; set; }
 
         public IConnectionData ConnectionData { get; set; }
+
+        public void Release()
+        {
+            ConnectionData.ReleaseData();
+        }
     }
 }

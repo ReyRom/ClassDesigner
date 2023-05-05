@@ -3,10 +3,8 @@
                     xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
                     xmlns:c="clr-namespace:ClassDesigner.Controls">
     <ContextMenu x:Key="ConnectionContextMenu">
-        
-    </ContextMenu>
 
-    <SolidColorBrush x:Key="SolidBorderBrush" Color="Black"/>
+    </ContextMenu>
 
     <Style TargetType="{x:Type c:Connection}">
         <Style.Resources>
@@ -60,7 +58,7 @@
             </Style>-->
             <!-- base style for all arrow shapes -->
             <Style x:Key="ArrowSymbolBaseStyle" TargetType="Path">
-                <Setter Property="Stroke" Value="{StaticResource SolidBorderBrush}"/>
+                <Setter Property="Stroke" Value="{DynamicResource StrokeColor}"/>
                 <Setter Property="StrokeThickness" Value="2"/>
                 <Setter Property="StrokeStartLineCap" Value="Round"/>
                 <Setter Property="StrokeEndLineCap" Value="Round"/>
@@ -72,14 +70,14 @@
                 <Setter Property="Fill" Value="Transparent"/>
             </Style>
             <Style x:Key="FilledWhite" TargetType="Path" BasedOn="{StaticResource ArrowSymbolBaseStyle}">
-                <Setter Property="Fill" Value="White"/>
+                <Setter Property="Fill" Value="{DynamicResource BackgroundColor}"/>
             </Style>
             <Style x:Key="Filled" TargetType="Path" BasedOn="{StaticResource ArrowSymbolBaseStyle}">
-                <Setter Property="Fill" Value="Black"/>
+                <Setter Property="Fill" Value="{DynamicResource StrokeColor}"/>
             </Style>
 
             <Style x:Key="LineBaseStyle" TargetType="Path">
-                <Setter Property="Stroke" Value="{StaticResource SolidBorderBrush}"/>
+                <Setter Property="Stroke" Value="{DynamicResource StrokeColor}"/>
                 <Setter Property="StrokeThickness" Value="2"/>
                 <Setter Property="StrokeStartLineCap" Value="Round"/>
                 <Setter Property="StrokeEndLineCap" Value="Round"/>
@@ -171,7 +169,7 @@
                         </DataTrigger>
                         <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Self},Path=ConnectionViewModel.RelationType}" Value="Realization">
                             <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource DashedLine}"/>
-                            <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource Filled}"/>
+                            <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource FilledWhite}"/>
                         </DataTrigger>
                         <!--<DataTrigger Value="Diamond" Binding="{Binding RelativeSource={RelativeSource Self},Path=SourceArrowSymbol}">
                             <Setter TargetName="PART_SourceAnchorPath" Property="Style" Value="{StaticResource Diamond}"/>

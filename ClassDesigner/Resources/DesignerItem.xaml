@@ -11,20 +11,12 @@
 
     <Style TargetType="{x:Type Shape}" x:Key="ThumbCorner">
         <Setter Property="SnapsToDevicePixels" Value="true" />
-        <Setter Property="Stroke" Value="#FFC8C8C8" />
+        <Setter Property="Stroke" Value="{DynamicResource StrokeColor}" />
         <Setter Property="StrokeThickness" Value=".5" />
         <Setter Property="Width" Value="5" />
         <Setter Property="Height" Value="5" />
         <Setter Property="Margin" Value="-2" />
-        <Setter Property="Fill">
-            <Setter.Value>
-                Black
-                <!--<RadialGradientBrush Center="0.2, 0.2" GradientOrigin="0.2, 0.2" RadiusX="0.8" RadiusY="0.8">
-                    <GradientStop Color="White" Offset="0.0" />
-                    <GradientStop Color="Gray" Offset="0.8" />
-                </RadialGradientBrush>-->
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Fill" Value="{DynamicResource StrokeColor}"/>
     </Style>
 
 
@@ -64,7 +56,7 @@
                 <Rectangle SnapsToDevicePixels="True"
                              StrokeThickness="1"
                              Margin="1"
-                             Stroke="Black"/>
+                             Stroke="{DynamicResource StrokeColor}"/>
                 <Rectangle Style="{StaticResource ThumbCorner}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <Rectangle Style="{StaticResource ThumbCorner}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                 <Rectangle Style="{StaticResource ThumbCorner}" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
@@ -109,7 +101,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type c:DragThumb}">
-                    <Rectangle Fill="Black"/>
+                    <Rectangle Fill="{DynamicResource StrokeColor}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

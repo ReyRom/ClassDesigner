@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassDesigner.Helping
+namespace ClassDesigner.MessageBox
 {
-    public interface IConnectionData
+    public enum MessageBoxButtons
     {
-        void ReleaseData();
+        Ok,
+        OkCancel,
+        YesNo
     }
 }
