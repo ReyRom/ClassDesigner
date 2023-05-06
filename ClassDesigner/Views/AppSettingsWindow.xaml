@@ -6,26 +6,44 @@
       xmlns:local="clr-namespace:ClassDesigner.Views"
       xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="AppSettingsWindow">
+      Height="300" Width="400"
+      Title="AppSettingsWindow"
+      Background="{DynamicResource AppColor}" 
+      WindowState="Normal" WindowStyle="None"
+      AllowsTransparency="True" 
+      MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <vm:AppSettingsViewModel x:Key="viewModel"/>
     </Window.Resources>
-    <Grid Background="White" DataContext="{StaticResource viewModel}">
+    <Grid Background="{DynamicResource BackgroundColor}" DataContext="{StaticResource viewModel}" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock Text="Масштаб интерфейса"/>
-            <Slider x:Name="Scale" Minimum="1" 
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Масштаб интерфейса" />
+                <TextBlock Text="{Binding SettingsService.InterfaceScale, StringFormat=p0}" Grid.Column="1" HorizontalAlignment="Center"/>
+                <Slider x:Name="Scale" Minimum="1" 
                     Maximum="2"
                     TickPlacement="BottomRight" 
                     TickFrequency="0.1" 
                     IsSnapToTickEnabled="True" 
-                    Value="{Binding SettingsService.InterfaceScale}">
-            </Slider>
-            <TextBlock Text="{Binding SettingsService.InterfaceScale, StringFormat=p0}"/>
-
-            <CheckBox IsChecked="{Binding SettingsService.IsDarkTheme}">
+                    Value="{Binding SettingsService.InterfaceScale}" Grid.Column="2">
+                </Slider>
+            </Grid>
+            <CheckBox IsChecked="{Binding SettingsService.IsDarkTheme}" Margin="5">
                 <TextBlock Text="Темная тема"/>
             </CheckBox>
+            
         </StackPanel>
+        <Button Click="Button_Click" Grid.Row="1">
+            <TextBlock Text="Назад"/>
+        </Button>
     </Grid>
 </Window>

@@ -71,12 +71,10 @@
             <Button Command="{x:Static SystemCommands.CloseWindowCommand}">
                 <TextBlock Style="{StaticResource CrossIcon}"/>
             </Button>
-            
         </StackPanel>
 
         <ContentControl Grid.Row="1" Content="{StaticResource ApplicationToolbar}" Margin="2"/>
 
-        
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>

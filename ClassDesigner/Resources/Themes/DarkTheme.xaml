@@ -65,4 +65,9 @@
     <SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="{StaticResource DarkShadesSecondary}"/>
     <SolidColorBrush x:Key="MenuItem.Highlight.Disabled.Background" Color="{StaticResource DarkShades}"/>
     <SolidColorBrush x:Key="MenuItem.Highlight.Disabled.Border" Color="{StaticResource DarkShades}"/>
+
+    <SolidColorBrush x:Key="TextBox.Static.Background" Color="{StaticResource DarkShades}"/>
+    <SolidColorBrush x:Key="TextBox.Static.Border" Color="{StaticResource DarkShadesSecondary}"/>
+    <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{StaticResource DarkAccent}"/>
+    <SolidColorBrush x:Key="TextBox.Focus.Border" Color="{StaticResource DarkAccent}"/>
 </ResourceDictionary>
