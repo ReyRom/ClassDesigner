@@ -8,5 +8,17 @@
     <Setting Name="IsDarkTheme" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="Types" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;string&gt;int&lt;/string&gt;
+  &lt;string&gt;string&lt;/string&gt;
+  &lt;string&gt;char&lt;/string&gt;
+  &lt;string&gt;short&lt;/string&gt;
+  &lt;string&gt;long&lt;/string&gt;
+  &lt;string&gt;decimal&lt;/string&gt;
+  &lt;string&gt;float&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

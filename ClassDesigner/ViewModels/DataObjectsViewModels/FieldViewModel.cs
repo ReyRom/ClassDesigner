@@ -30,12 +30,13 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(AttributeString));
             }
         }
-        private string type = string.Empty;
+        private TypeViewModel type = new TypeViewModel();
+        public TypeViewModel TypeViewModel => type;
         public string Type
         {
-            get => type; set
+            get => type.Type; set
             {
-                type = value;
+                type.Type = value;
                 OnPropertyChanged(nameof(Type));
 
                 OnPropertyChanged(nameof(AttributeString));
@@ -59,6 +60,15 @@ namespace ClassDesigner.ViewModels
         public FieldViewModel(IEntry parent)
         {
             Parent = parent;
+
+            type.PropertyChanged += Type_PropertyChanged;
+        }
+
+        private void Type_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(Type));
+
+            OnPropertyChanged(nameof(AttributeString));
         }
 
         public FieldViewModel(IEntry parent, FieldViewModel model) : this(parent)
@@ -99,18 +109,19 @@ namespace ClassDesigner.ViewModels
 
         public void ParseFromString(string data)
         {
-            //валидация нужна
-
             var m = MatchAttributeString(data);
-            this.Name = m.Groups["Name"].Value;
-            this.Type = m.Groups["Type"].Value;
-            this.DefaultValue = m.Groups["DefV"].Value;
-            this.Visibility = (VisibilityType)(m.Groups["Visible"].Value[0]);
+            if (m.Success)
+            {
+                this.Name = m.Groups["Name"].Value;
+                this.Type = m.Groups["Type"].Value;
+                this.DefaultValue = m.Groups["DefV"].Value;
+                this.Visibility = (VisibilityType)(m.Groups["Visible"].Value[0]);
+            }
         }
 
         public override string ToString()
         {
-            return (char)Visibility + " " + Name + (Type != String.Empty ? " : " + Type : "") + (DefaultValue != String.Empty ? " = " + DefaultValue : "");
+            return (char)Visibility + " " + Name + (!string.IsNullOrWhiteSpace(Type) ? " : " + Type : "") + (DefaultValue != String.Empty ? " = " + DefaultValue : "");
         }
 
         public override bool Equals(object? obj)

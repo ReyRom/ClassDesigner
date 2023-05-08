@@ -139,15 +139,16 @@ namespace ClassDesigner.ViewModels
 
         public void ParseFromString(string data)
         {
-            //валидация нужна
-
             var m = MatchPropertyString(data);
-            this.Name = m.Groups["Name"].Value;
-            this.Type = m.Groups["Type"].Value;
-            this.IsGet = !string.IsNullOrWhiteSpace(m.Groups["Get"].Value);
-            this.IsSet = !string.IsNullOrWhiteSpace(m.Groups["Set"].Value);
-            this.DefaultValue = m.Groups["DefV"].Value;
-            this.Visibility = (VisibilityType)(m.Groups["Visible"].Value[0]);
+            if (m.Success)
+            {
+                this.Name = m.Groups["Name"].Value;
+                this.Type = m.Groups["Type"].Value;
+                this.IsGet = !string.IsNullOrWhiteSpace(m.Groups["Get"].Value);
+                this.IsSet = !string.IsNullOrWhiteSpace(m.Groups["Set"].Value);
+                this.DefaultValue = m.Groups["DefV"].Value;
+                this.Visibility = (VisibilityType)(m.Groups["Visible"].Value[0]);
+            }
         }
 
         public override string ToString()

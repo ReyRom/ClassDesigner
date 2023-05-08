@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace ClassDesigner.ViewModels
 {
-    public class ClassViewModel : ViewModelBase, IEntry, IHaveActions, IHaveFields, IHaveProperties
+    public class ClassViewModel : ViewModelBase, IEntry, IHaveActions, IHaveFields, IHaveProperties, IInheritable, IInheritor
     {
         private string name = "Class";
         public string Name
@@ -115,6 +115,8 @@ namespace ClassDesigner.ViewModels
         }
 
         Command openPropertiesCommand;
+        
+
         public Command OpenPropertiesCommand
         {
             get => openPropertiesCommand ??= new Command(obj =>
@@ -127,6 +129,16 @@ namespace ClassDesigner.ViewModels
 
                 PropertiesService.Instance.SelectedCollection = null;
             });
+        }
+
+        private ObservableCollection<IInheritable> parents = new ObservableCollection<IInheritable>();
+        public ObservableCollection<IInheritable> Parents
+        {
+            get => parents; set
+            {
+                parents = value;
+                OnPropertyChanged(nameof(Parents));
+            }
         }
     }
 }

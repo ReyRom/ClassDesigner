@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:ClassDesigner.Views"
       xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
       mc:Ignorable="d" 
-      Height="300" Width="400"
+      SizeToContent="WidthAndHeight"
       Title="AppSettingsWindow"
       Background="{DynamicResource AppColor}" 
       WindowState="Normal" WindowStyle="None"
@@ -15,13 +15,17 @@
     <Window.Resources>
         <vm:AppSettingsViewModel x:Key="viewModel"/>
     </Window.Resources>
-    <Grid Background="{DynamicResource BackgroundColor}" DataContext="{StaticResource viewModel}" Margin="10">
+    <Grid Background="{DynamicResource BackgroundColor}" DataContext="{StaticResource viewModel}" Margin="10" Height="300" Width="400">
+        <Grid.LayoutTransform>
+            <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding SettingsService.InterfaceScale, Mode=OneTime}" ScaleY="{Binding SettingsService.InterfaceScale, Mode=OneTime}"/>
+        </Grid.LayoutTransform>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <StackPanel>
-            <Grid Margin="5">
+        <Grid Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="50"/>
@@ -37,13 +41,56 @@
                     Value="{Binding SettingsService.InterfaceScale}" Grid.Column="2">
                 </Slider>
             </Grid>
-            <CheckBox IsChecked="{Binding SettingsService.IsDarkTheme}" Margin="5">
+            <CheckBox IsChecked="{Binding SettingsService.IsDarkTheme}" Margin="5" Grid.Row="1">
                 <TextBlock Text="Темная тема"/>
             </CheckBox>
-            
-        </StackPanel>
-        <Button Click="Button_Click" Grid.Row="1">
-            <TextBlock Text="Назад"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding NewType, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="1" Command="{Binding AddTypeCommand}" CommandParameter="{Binding NewType}">
+                        <TextBlock Style="{StaticResource AddIcon}"/>
+                    </Button>
+                </Grid>
+                <ScrollViewer Grid.Row="1">
+                    <ItemsControl ItemsSource="{Binding DataService.Types}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Background="{DynamicResource AlternateBackgroundColor}" Margin="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Command="{Binding Source={StaticResource viewModel}, Path=RemoveTypeCommand}" CommandParameter="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Style="{StaticResource RemoveIcon}" FontSize="14"/>
+                                    </Button>
+                                    <TextBlock Text="{Binding}" Margin="3" TextWrapping="Wrap" Grid.Column="1"/>
+                                </Grid>
+                                
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <ItemsControl ItemsSource="{Binding DataService.Entries}" Grid.Column="1">
+
+            </ItemsControl>
+        </Grid>
+        <Button Click="Button_Click" Grid.Row="3" Width="150">
+            <TextBlock Text="Назад" FontSize="18"/>
         </Button>
     </Grid>
 </Window>

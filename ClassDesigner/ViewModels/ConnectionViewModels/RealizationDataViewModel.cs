@@ -1,5 +1,4 @@
 ﻿using ClassDesigner.Helping;
-using ClassDesigner.Helping.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +21,8 @@ namespace ClassDesigner.ViewModels
                 ((IHaveActions)Target).Actions.CollectionChanged += SourceTarget_CollectionChanged;
                 ((IHaveAttributes)Source).Attributes.CollectionChanged += SourceTarget_CollectionChanged;
                 ((IHaveActions)Source).Actions.CollectionChanged += SourceTarget_CollectionChanged;
+
+                ((IInheritor)Source).Parents.Add((IInheritable)Target);
             }
             
             Validate();
@@ -32,6 +33,7 @@ namespace ClassDesigner.ViewModels
             if (realizationError != null)
             {
                 ErrorService.Instance.ObservableErrors.Remove(realizationError);
+                ((IInheritor)Source).Parents.Remove((IInheritable)Target);
                 realizationError = null;
             }
         }

@@ -1,5 +1,4 @@
 ﻿using ClassDesigner.Helping;
-using ClassDesigner.Helping.Services;
 using System;
 using System.Linq;
 using System.Text;
@@ -161,7 +160,7 @@ namespace ClassDesigner.ViewModels
         private bool ValidateAttribute()
         {
             var isValid = aggregatedAttribute is not null
-                        && aggregatedAttribute.Type == Source.Name;
+                  && aggregatedAttribute.Type == Source.Name;
             return isValid;
         }
 

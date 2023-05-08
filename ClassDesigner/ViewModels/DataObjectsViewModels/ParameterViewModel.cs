@@ -33,6 +33,8 @@ namespace ClassDesigner.ViewModels
         }
 
         private string defaultValue = string.Empty;
+        private bool isOut = false;
+
         public string DefaultValue
         {
             get => defaultValue; set
@@ -54,11 +56,15 @@ namespace ClassDesigner.ViewModels
             }
         }
 
+        public bool IsOut { get => isOut; set => isOut = value; }
         public void ParseFromString(string value)
         {
             var m = MatchParameterString(value);
-            this.Name = m.Groups["Name"].Value;
-            this.Type = m.Groups["Type"].Value;
+            if (m.Success) 
+            {
+                this.Name = m.Groups["Name"].Value;
+                this.Type = m.Groups["Type"].Value;
+            }
         }
 
         public static Match MatchParameterString(string value)

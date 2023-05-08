@@ -50,7 +50,24 @@ namespace ClassDesigner.Helping
 
             sb.Append(classView.Name);
 
-            //наследование
+            if (classView.Parents.Count>0)
+            {
+                sb.Space();
+                sb.Append(":");
+                foreach (var parent in classView.Parents.OfType<ClassViewModel>())
+                {
+                    sb.Space();
+                    sb.Append(parent.Name);
+                    sb.Append(",");
+                }
+                foreach (var parent in classView.Parents.OfType<InterfaceViewModel>())
+                {
+                    sb.Space();
+                    sb.Append(parent.Name);
+                    sb.Append(",");
+                }
+                sb.Remove(sb.Length-1,1);
+            }
 
             sb.AppendLine();
             sb.Tab(tabLevel);
@@ -93,7 +110,18 @@ namespace ClassDesigner.Helping
 
             sb.Append(structView.Name);
 
-            //наследование
+            if (structView.Parents.Count > 0)
+            {
+                sb.Space();
+                sb.Append(":");
+                foreach (var parent in structView.Parents)
+                {
+                    sb.Space();
+                    sb.Append(parent.Name);
+                    sb.Append(",");
+                }
+                sb.Remove(sb.Length - 1, 1);
+            }
 
             sb.AppendLine();
             sb.Tab(tabLevel);
@@ -136,7 +164,18 @@ namespace ClassDesigner.Helping
 
             sb.Append(interfaceView.Name);
 
-            //наследование
+            if (interfaceView.Parents.Count > 0)
+            {
+                sb.Space();
+                sb.Append(":");
+                foreach (var parent in interfaceView.Parents)
+                {
+                    sb.Space();
+                    sb.Append(parent.Name);
+                    sb.Append(",");
+                }
+                sb.Remove(sb.Length - 1, 1);
+            }
 
             sb.AppendLine();
             sb.Tab(tabLevel);
@@ -172,8 +211,6 @@ namespace ClassDesigner.Helping
             sb.Space();
 
             sb.Append(enumView.Name);
-
-            //наследование
 
             sb.AppendLine();
             sb.Tab(tabLevel);

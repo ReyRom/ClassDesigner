@@ -179,9 +179,12 @@ namespace ClassDesigner.ViewModels
         public void ParseFromString(string value)
         {
             var m = MatchMethodString(value);
-            this.Name = m.Groups["Name"].Value;
-            this.Visibility = (VisibilityType)(m.Groups["Visible"].Value[0]);
-            this.Parameters = ParseParameters(m.Groups["Parameters"].Value);
+            if (m.Success)
+            {
+                this.Name = m.Groups["Name"].Value;
+                this.Visibility = (VisibilityType)(m.Groups["Visible"].Value[0]);
+                this.Parameters = ParseParameters(m.Groups["Parameters"].Value);
+            }
         }
     }
 }

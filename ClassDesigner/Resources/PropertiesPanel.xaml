@@ -155,10 +155,11 @@
                                     <TextBlock Text="Поле"/>
                                     <Separator/>
                                     <TextBlock Text="Имя"/>
-                                    <TextBox Text="{Binding Name}"/>
+                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
                                     <TextBlock Text="Тип"/>
-                                    <TextBox Text="{Binding Type}"/>
+                                    <TextBox Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
+                                    
                                     <Separator/>
                                     <TextBlock Text="Видимость"/>
                                     <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">

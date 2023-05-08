@@ -1,16 +1,11 @@
-﻿using ClassDesigner.Controls;
-using ClassDesigner.Helping;
-using ClassDesigner.Helping.Services;
-using System;
+﻿using ClassDesigner.Helping;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class GeneralizationDataViewModel:ViewModelBase, IConnectionData
+    public class GeneralizationDataViewModel : ViewModelBase, IConnectionData
     {
         public GeneralizationDataViewModel(ConnectionViewModel connection)
         {
@@ -20,6 +15,11 @@ namespace ClassDesigner.ViewModels
 
             generalizationError = new ErrorViewModel() { Source = ErrorSource };
             ErrorService.Instance.ObservableErrors.Add(generalizationError);
+            if (ValidateSource())
+            {
+                ((IInheritor)Source).Parents.Add((IInheritable)Target);
+            }
+
 
             Validate();
         }
@@ -66,6 +66,7 @@ namespace ClassDesigner.ViewModels
             if (generalizationError != null)
             {
                 ErrorService.Instance.ObservableErrors.Remove(generalizationError);
+                ((IInheritor)Source).Parents.Remove((IInheritable)Target);
                 generalizationError = null;
             }
         }

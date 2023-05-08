@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+                    xmlns:h="clr-namespace:ClassDesigner.Helping">
     <Style x:Key="BorderlessTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -15,6 +16,11 @@
     <Style TargetType="ToolTip">
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource AlternateBackgroundColor}"/>
+        <Setter Property="LayoutTransform">
+            <Setter.Value>
+                <ScaleTransform CenterX="0" CenterY="0"  ScaleX="{Binding Source={x:Static h:SettingsService.Instance}, Path=InterfaceScale}" ScaleY="{Binding Source={x:Static h:SettingsService.Instance}, Path=InterfaceScale}"/>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="Separator">
@@ -70,6 +76,7 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="AllowDrop" Value="true"/>
         <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
@@ -154,6 +161,11 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="LayoutTransform">
+            <Setter.Value>
+                <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding Source={x:Static h:SettingsService.Instance}, Path=InterfaceScale}" ScaleY="{Binding Source={x:Static h:SettingsService.Instance}, Path=InterfaceScale}"/>
             </Setter.Value>
         </Setter>
     </Style>

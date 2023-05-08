@@ -46,5 +46,26 @@ namespace ClassDesigner.Properties {
                 this["IsDarkTheme"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+  <string>int</string>
+  <string>string</string>
+  <string>char</string>
+  <string>short</string>
+  <string>long</string>
+  <string>decimal</string>
+  <string>float</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection Types {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Types"]));
+            }
+            set {
+                this["Types"] = value;
+            }
+        }
     }
 }

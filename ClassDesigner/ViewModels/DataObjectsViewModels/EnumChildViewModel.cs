@@ -15,6 +15,7 @@ namespace ClassDesigner.ViewModels
         public string Name { get; set; } = "value";
         public string Value { get; set; }
 
+
         public string EnumString
         { 
             get => ToString(); 
@@ -30,11 +31,13 @@ namespace ClassDesigner.ViewModels
 
         public void ParseFromString(string data)
         {
-            //валидация нужна
-
             var m = MatchEnumString(data);
-            this.Name = m.Groups["Name"].Value;
-            this.Value = m.Groups["Value"].Value;
+            if (m.Success)
+            {
+                this.Name = m.Groups["Name"].Value;
+                this.Value = m.Groups["Value"].Value;
+            }
+            
         }
 
         public override string ToString()

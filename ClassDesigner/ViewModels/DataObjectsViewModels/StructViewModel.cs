@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class StructViewModel : ViewModelBase, IEntry, IHaveActions, IHaveFields, IHaveProperties
+    public class StructViewModel : ViewModelBase, IEntry, IHaveActions, IHaveFields, IHaveProperties, IInheritor
     {
         private string name = "Struct";
         public string Name
@@ -92,6 +92,17 @@ namespace ClassDesigner.ViewModels
                 this.Actions.Remove(obj as MethodViewModel);
             });
         }
+
+        private ObservableCollection<IInheritable> parents = new ObservableCollection<IInheritable>();
+        public ObservableCollection<IInheritable> Parents
+        {
+            get => parents; set
+            {
+                parents = value;
+                OnPropertyChanged(nameof(Parents));
+            }
+        }
+
         //Command openPropertiesCommand;
         //public Command OpenPropertiesCommand
         //{

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class InterfaceViewModel:ViewModelBase, IEntry, IHaveActions, IHaveProperties
+    public class InterfaceViewModel:ViewModelBase, IEntry, IHaveActions, IHaveProperties, IInheritable, IInheritor
     {
         private string name = "Interface";
         public string Name
@@ -74,6 +74,16 @@ namespace ClassDesigner.ViewModels
             {
                 this.Actions.Remove(obj as MethodViewModel);
             });
+        }
+
+        private ObservableCollection<IInheritable> parents = new ObservableCollection<IInheritable>();
+        public ObservableCollection<IInheritable> Parents
+        {
+            get => parents; set
+            {
+                parents = value;
+                OnPropertyChanged(nameof(Parents));
+            }
         }
 
 

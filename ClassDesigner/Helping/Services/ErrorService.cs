@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace ClassDesigner.Helping.Services
+namespace ClassDesigner.Helping
 {
     public class ErrorService : INotifyPropertyChanged
     {

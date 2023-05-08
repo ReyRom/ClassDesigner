@@ -1,6 +1,5 @@
 ﻿using ClassDesigner.Controls;
 using ClassDesigner.Helping;
-using ClassDesigner.Helping.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

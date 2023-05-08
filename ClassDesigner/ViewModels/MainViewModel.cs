@@ -1,5 +1,4 @@
 ﻿using ClassDesigner.Helping;
-using ClassDesigner.Helping.Services;
 using ClassDesigner.Views;
 using System;
 using System.Collections.Generic;
