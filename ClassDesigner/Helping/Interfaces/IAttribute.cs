@@ -15,5 +15,7 @@ namespace ClassDesigner.Helping
         string Type { get; set; }
 
         VisibilityType Visibility { get; set; }
+
+        string AttributeString { get; set; }
     }
 }

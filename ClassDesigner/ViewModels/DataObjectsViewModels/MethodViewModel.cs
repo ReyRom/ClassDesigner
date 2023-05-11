@@ -29,7 +29,7 @@ namespace ClassDesigner.ViewModels
 
         private void Parameters_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(MethodString));
+            OnPropertyChanged(nameof(ActionString));
             if (e.OldItems != null)
             {
                 foreach (INotifyPropertyChanged item in e.OldItems)
@@ -44,7 +44,7 @@ namespace ClassDesigner.ViewModels
 
         private void Update(object? sender, PropertyChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(MethodString));
+            OnPropertyChanged(nameof(ActionString));
         }
 
         private bool isStatic = false;
@@ -57,7 +57,7 @@ namespace ClassDesigner.ViewModels
                 isAbstract = isStatic ? false : isAbstract;
                 OnPropertyChanged(nameof(IsStatic));
                 OnPropertyChanged(nameof(IsAbstract));
-                OnPropertyChanged(nameof(MethodString));
+                OnPropertyChanged(nameof(ActionString));
             }
         }
 
@@ -71,7 +71,7 @@ namespace ClassDesigner.ViewModels
                 isStatic = isAbstract ? false : isStatic;
                 OnPropertyChanged(nameof(IsStatic));
                 OnPropertyChanged(nameof(IsAbstract));
-                OnPropertyChanged(nameof(MethodString));
+                OnPropertyChanged(nameof(ActionString));
             }
         }
 
@@ -82,18 +82,18 @@ namespace ClassDesigner.ViewModels
             {
                 name = value;
                 OnPropertyChanged(nameof(Name));
-                OnPropertyChanged(nameof(MethodString));
+                OnPropertyChanged(nameof(ActionString));
             }
         }
 
-        private VisibilityType visibility = VisibilityType.Private;
+        private VisibilityType visibility = VisibilityType.Public;
         public VisibilityType Visibility
         {
             get => visibility; set
             {
                 visibility = value;
                 OnPropertyChanged(nameof(Visibility));
-                OnPropertyChanged(nameof(MethodString));
+                OnPropertyChanged(nameof(ActionString));
             }
         }
         
@@ -104,7 +104,7 @@ namespace ClassDesigner.ViewModels
             {
                 type = value;
                 OnPropertyChanged(nameof(Type));
-                OnPropertyChanged(nameof(MethodString));
+                OnPropertyChanged(nameof(ActionString));
             }
         }
         
@@ -115,17 +115,17 @@ namespace ClassDesigner.ViewModels
             {
                 parameters = value;
                 OnPropertyChanged(nameof(Parameters));
-                OnPropertyChanged(nameof(MethodString));
+                OnPropertyChanged(nameof(ActionString));
             }
         }
         
-        public virtual string MethodString
+        public virtual string ActionString
         {
             get => this.ToString();
             set
             {
                 ParseFromString(value);
-                OnPropertyChanged(nameof(MethodString));
+                OnPropertyChanged(nameof(ActionString));
             }
         }
 
@@ -143,6 +143,7 @@ namespace ClassDesigner.ViewModels
         protected virtual ObservableCollection<ParameterViewModel> ParseParameters(string value)
         {
             ObservableCollection<ParameterViewModel> parameters = new ObservableCollection<ParameterViewModel>();
+            if (string.IsNullOrWhiteSpace(value)) return parameters;
             foreach (var item in value.Split(", "))
             {
                 var param = new ParameterViewModel();
@@ -183,7 +184,7 @@ namespace ClassDesigner.ViewModels
             if (obj.GetType() != this.GetType()) return false;
 
             var m = obj as MethodViewModel;
-            return m.MethodString == this.MethodString && m.IsStatic == this.IsStatic;
+            return m.ActionString == this.ActionString && m.IsStatic == this.IsStatic;
         }
     }
 }

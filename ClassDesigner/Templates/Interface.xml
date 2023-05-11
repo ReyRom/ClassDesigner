@@ -13,7 +13,7 @@
           <Name>Interface</Name>
           <Visibility>Public</Visibility>
           <Attributes />
-          <Methods />
+          <Actions />
         </Interface>
       </Content>
     </DesignerItem>

@@ -16,5 +16,7 @@ namespace ClassDesigner.Helping
         ObservableCollection<ParameterViewModel> Parameters { get; set; }
         VisibilityType Visibility { get; set; }
         string Type { get; set; }
+
+        string ActionString { get; set; }
     }
 }

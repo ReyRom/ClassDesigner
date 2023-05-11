@@ -15,7 +15,7 @@
           <IsStatic>false</IsStatic>
           <IsAbstract>false</IsAbstract>
           <Attributes />
-          <Methods />
+          <Actions />
         </Class>
       </Content>
     </DesignerItem>

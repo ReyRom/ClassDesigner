@@ -37,6 +37,7 @@ namespace ClassDesigner.ViewModels
             }
         }
 
+
         public ObservableCollection<string> Values => DataService.Instance.TypesNames;
     }
 }

@@ -1,0 +1,47 @@
+﻿<Window x:Class="ClassDesigner.Views.CodeGenerationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClassDesigner.Views"
+        xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
+        mc:Ignorable="d"
+        Title="CodeGenerationWindow" Height="300" Width="400"
+        Background="{DynamicResource AppColor}" 
+        WindowState="Normal" WindowStyle="None"
+        AllowsTransparency="True" 
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Window.Resources>
+        <vm:CodeGenerationViewModel x:Key="viewModel"/>
+    </Window.Resources>
+    
+    <Grid Margin="5" DataContext="{StaticResource viewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding Folder}"/>
+            <Button Grid.Column="1" Command="{Binding SelectFolderCommand}">
+                <TextBlock Text="Обзор"/>
+            </Button>
+        </Grid>
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding LanguagesList}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox IsChecked ="{Binding IsSelected}">
+                        <TextBlock Text="{Binding Name}"/>
+                    </CheckBox>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button Grid.Row="2" Command="{Binding GenerateCodeCommand}">
+            <TextBlock Text="Генерировать код"/>
+        </Button>
+    </Grid>
+</Window>

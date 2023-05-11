@@ -3,16 +3,16 @@ using ClassDesigner.ViewModels;
 using System.Linq;
 using System.Text;
 
-namespace ClassDesigner.Helping
+namespace ClassDesigner.Helping.Serializers
 {
-    public static class CSharpSerializer
+    public class JavaSerializer
     {
         public static string SerializeEntry(IEntry entry)
         {
             switch (entry)
             {
                 case ClassViewModel e:
-                    return SerializeClass(e); 
+                    return SerializeClass(e);
                 case InterfaceViewModel e:
                     return SerializeInterface(e);
                 case StructViewModel e:
@@ -50,23 +50,29 @@ namespace ClassDesigner.Helping
 
             sb.Append(classView.Name);
 
-            if (classView.Parents.Count>0)
+            if (classView.Parents.OfType<ClassViewModel>().Count() > 0)
             {
                 sb.Space();
-                sb.Append(":");
+                sb.Append("extends");
                 foreach (var parent in classView.Parents.OfType<ClassViewModel>())
                 {
                     sb.Space();
                     sb.Append(parent.Name);
                     sb.Append(",");
                 }
+                sb.Remove(sb.Length - 1, 1);
+            }
+            if (classView.Parents.OfType<InterfaceViewModel>().Count() > 0)
+            {
+                sb.Space();
+                sb.Append("implements");
                 foreach (var parent in classView.Parents.OfType<InterfaceViewModel>())
                 {
                     sb.Space();
                     sb.Append(parent.Name);
                     sb.Append(",");
                 }
-                sb.Remove(sb.Length-1,1);
+                sb.Remove(sb.Length - 1, 1);
             }
 
             sb.AppendLine();
@@ -104,17 +110,17 @@ namespace ClassDesigner.Helping
 
             sb.Space();
 
-            sb.Append("struct");
+            sb.Append("class");
 
             sb.Space();
 
             sb.Append(structView.Name);
 
-            if (structView.Parents.Count > 0)
+            if (structView.Parents.OfType<InterfaceViewModel>().Count() > 0)
             {
                 sb.Space();
-                sb.Append(":");
-                foreach (var parent in structView.Parents)
+                sb.Append("implements");
+                foreach (var parent in structView.Parents.OfType<InterfaceViewModel>())
                 {
                     sb.Space();
                     sb.Append(parent.Name);
@@ -164,11 +170,11 @@ namespace ClassDesigner.Helping
 
             sb.Append(interfaceView.Name);
 
-            if (interfaceView.Parents.Count > 0)
+            if (interfaceView.Parents.OfType<InterfaceViewModel>().Count() > 0)
             {
                 sb.Space();
-                sb.Append(":");
-                foreach (var parent in interfaceView.Parents)
+                sb.Append("extends");
+                foreach (var parent in interfaceView.Parents.OfType<InterfaceViewModel>())
                 {
                     sb.Space();
                     sb.Append(parent.Name);
@@ -216,13 +222,13 @@ namespace ClassDesigner.Helping
             sb.Tab(tabLevel);
             sb.Append('{');
             sb.AppendLine();
-            foreach (var enumChild in enumView.EnumChildren) 
+            foreach (var enumChild in enumView.EnumChildren)
             {
-                sb.Tab(tabLevel+1);
+                sb.Tab(tabLevel + 1);
                 sb.AppendLine(enumChild.EnumString);
                 sb.Append(',');
             }
-            sb.Remove(sb.Length-1, 1);
+            sb.Remove(sb.Length - 1, 1);
             sb.Tab(tabLevel);
             sb.Append('}');
 
@@ -244,7 +250,7 @@ namespace ClassDesigner.Helping
                 sb.Space();
             }
 
-            sb.Append(string.IsNullOrWhiteSpace(attribute.Type)? "object": attribute.Type);
+            sb.Append(string.IsNullOrWhiteSpace(attribute.Type) ? "int" : attribute.Type);
             sb.Space();
 
             sb.Append(attribute.Name);
@@ -262,33 +268,89 @@ namespace ClassDesigner.Helping
         public static string SerializeProperty(PropertyViewModel property, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Tab(tabLevel);
-
-            sb.Append(ConvertVisibility(property.Visibility));
-
-            sb.Space();
-
-            if (property.IsStatic)
+            if (property.IsGet)
             {
-                sb.Append("static");
+                sb.Tab(tabLevel);
+
+                sb.Append(ConvertVisibility(property.Visibility));
+
                 sb.Space();
+
+                if (property.IsAbstract)
+                {
+                    sb.Append("abstract");
+                    sb.Space();
+                }
+
+                if (property.IsStatic)
+                {
+                    sb.Append("static");
+                    sb.Space();
+                }
+
+                sb.Append(string.IsNullOrWhiteSpace(property.Type) ? "int" : property.Type);
+                sb.Space();
+
+                sb.Append("Get" + property.Name+"()");
+
+                sb.Space();
+
+                sb.AppendLine();
+                sb.Tab(tabLevel);
+                sb.Append('{');
+                sb.AppendLine();
+                sb.Tab(tabLevel+1);
+                if (!string.IsNullOrWhiteSpace(property.DefaultValue))
+                {
+                    sb.Append("return ");
+                    sb.Append(property.DefaultValue);
+                    sb.Append(";");
+                }
+                sb.AppendLine();
+                sb.Tab(tabLevel);
+                sb.Append('}');
+
+                
             }
 
-            sb.Append(string.IsNullOrWhiteSpace(property.Type) ? "object" : property.Type);
-            sb.Space();
-
-            sb.Append(property.Name);
-
-            sb.Space();
-
-            sb.Append($"{{ {(property.IsGet ? "get; " : "")}{(property.IsSet ? "set; " : "")}}}");
-
-            if (!string.IsNullOrWhiteSpace(property.DefaultValue))
+            if (property.IsSet)
             {
-                sb.Append(" = ");
-                sb.Append(property.DefaultValue);
-                sb.Append(";");
+                sb.Tab(tabLevel);
+
+                sb.Append(ConvertVisibility(property.Visibility));
+
+                sb.Space();
+
+                if (property.IsAbstract)
+                {
+                    sb.Append("abstract");
+                    sb.Space();
+                }
+
+                if (property.IsStatic)
+                {
+                    sb.Append("static");
+                    sb.Space();
+                }
+
+                sb.Append("void");
+                sb.Space();
+
+                sb.Append("Set" + property.Name);
+                sb.Append("("+(string.IsNullOrWhiteSpace(property.Type) ? "int" : property.Type)+" value)");
+
+                sb.Space();
+
+                sb.AppendLine();
+                sb.Tab(tabLevel);
+                sb.Append('{');
+                sb.AppendLine();
+                sb.Tab(tabLevel);
+                sb.Append('}');
             }
+
+
+
             return sb.ToString();
         }
 
@@ -302,6 +364,12 @@ namespace ClassDesigner.Helping
 
             sb.Space();
 
+            if (method.IsAbstract)
+            {
+                sb.Append("abstract");
+                sb.Space();
+            }
+
             if (method.IsStatic)
             {
                 sb.Append("static");
@@ -313,7 +381,7 @@ namespace ClassDesigner.Helping
 
             sb.Append(method.Name);
 
-            sb.Append($"({string.Join(", ",method.Parameters.Select(x=>SerializeParameter(x)))})");
+            sb.Append($"({string.Join(", ", method.Parameters.Select(x => SerializeParameter(x)))})");
 
             sb.AppendLine();
             sb.Tab(tabLevel);
@@ -329,7 +397,7 @@ namespace ClassDesigner.Helping
         public static string SerializeParameter(ParameterViewModel parameter)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(string.IsNullOrWhiteSpace(parameter.Type) ? "object" : parameter.Type);
+            sb.Append(string.IsNullOrWhiteSpace(parameter.Type) ? "int" : parameter.Type);
 
             sb.Space();
 
@@ -355,7 +423,7 @@ namespace ClassDesigner.Helping
                 VisibilityType.Public => "public",
                 VisibilityType.Private => "private",
                 VisibilityType.Protected => "protected",
-                VisibilityType.Internal => "internal",
+                VisibilityType.Internal => "",
                 _ => ""
             };
         }

@@ -25,43 +25,10 @@ namespace ClassDesigner.ViewModels
 
         private ErrorViewModel assotiationError;
 
-        IAttribute assotiatedAttribute;
-        public IAttribute AssotiatedAttribute
-        {
-            get => assotiatedAttribute; set
-            {
-                if (assotiatedAttribute is not null)
-                {
-                    assotiatedAttribute.PropertyChanged -= AssotiatedAttribute_PropertyChanged;
-                }
-                assotiatedAttribute = value;
-                if (assotiatedAttribute.Type != Source.Name)
-                {
-                    assotiatedAttribute.Type = Source.Name;
-                }
-                assotiatedAttribute.PropertyChanged += AssotiatedAttribute_PropertyChanged;
-                OnPropertyChanged(nameof(AssotiatedAttribute));
-                Validate();
-            }
-        }
-
-        private void AssotiatedAttribute_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            Validate();
-        }
-
         public IErrorProvider ErrorSource { get; }
         public IEntry Source { get; }
         public IEntry Target { get; }
 
-        Command addAssotiatedField;
-        public Command AddAssotiatedField => addAssotiatedField ??= new Command(obj =>
-        {
-            var attribute = new FieldViewModel(Target);
-            attribute.Type = Source.Name;
-            (Target as IHaveFields).Attributes.Add(attribute);
-            AssotiatedAttribute = attribute;
-        });
 
         private bool isValidSource = true;
         public bool IsValidSource
@@ -77,18 +44,10 @@ namespace ClassDesigner.ViewModels
             }
         }
 
-        Command addAssotiatedProperty;
-        public Command AddAssotiatedProperty => addAssotiatedProperty ??= new Command(obj =>
-        {
-            var property = new PropertyViewModel(Target);
-            property.Type = Source.Name;
-            (Target as IHaveProperties).Attributes.Add(property);
-            AssotiatedAttribute = property;
-        });
 
         public bool ValidateSource()
         {
-            return IsValidSource = Target is IHaveFields || Target is IHaveProperties;
+            return IsValidSource = true;
         }
 
         public void Validate()
@@ -96,23 +55,9 @@ namespace ClassDesigner.ViewModels
             StringBuilder sb = new StringBuilder();
             if (!ValidateSource())
             {
-                sb.AppendLine("Источником реализации может быть только класс, а целью только интерфейс");
-            }
-            else
-            {
-                if (!ValidateAttribute())
-                {
-                    sb.AppendLine("Не указан атрибут ассоциации");
-                }
+                sb.AppendLine("Тут не может быть ошибок");
             }
             assotiationError.Text = sb.ToString().TrimEnd();
-        }
-
-        private bool ValidateAttribute()
-        {
-            var isValid = assotiatedAttribute is not null 
-                && assotiatedAttribute.Type == Source.Name;
-            return isValid;
         }
 
         public void ReleaseData()

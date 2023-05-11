@@ -53,10 +53,10 @@
                                     </CheckBox>
                                     <Separator/>
 
-                                    <TextBlock Text="Атрибуты"/>
+                                    <!--<TextBlock Text="Атрибуты"/>
                                     <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
                                     <TextBlock Text="Методы"/>
-                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Actions}" Content="..."/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Actions}" Content="..."/>-->
 
                                 </StackPanel>
                             </Border>
@@ -81,11 +81,11 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
 
-                                    <Separator/>
+                                    <!--<Separator/>
                                     <TextBlock Text="Свойства"/>
                                     <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
                                     <TextBlock Text="Методы"/>
-                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Methods}" Content="..."/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Methods}" Content="..."/>-->
 
                                 </StackPanel>
                             </Border>
@@ -110,12 +110,12 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
 
-                                    <Separator/>
+                                    <!--<Separator/>
 
                                     <TextBlock Text="Атрибуты"/>
                                     <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Attributes}" Content="..."/>
                                     <TextBlock Text="Методы"/>
-                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Methods}" Content="..."/>
+                                    <Button Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding Methods}" Content="..."/>-->
 
                                 </StackPanel>
                             </Border>
@@ -252,22 +252,24 @@
                                     </CheckBox>
                                     <Separator/>
                                     <TextBlock Text="Параметры"/>
-                                    <ItemsControl ItemsSource="{Binding Parameters}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBox Text="{Binding ParameterString}"/>
-                                                    <Button Grid.Column="1" Command="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content.RemoveParameterCommand}" CommandParameter="{Binding}">
-                                                        <TextBlock Style="{StaticResource RemoveIcon}"/>
-                                                    </Button>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                    <ScrollViewer Height="100">
+                                        <ItemsControl ItemsSource="{Binding Parameters}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBox Text="{Binding ParameterString}"/>
+                                                        <Button Grid.Column="1" Command="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content.RemoveParameterCommand}" CommandParameter="{Binding}">
+                                                            <TextBlock Style="{StaticResource RemoveIcon}"/>
+                                                        </Button>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
                                     <Button Command="{Binding AddParameterCommand}">
                                         <TextBlock Style="{StaticResource AddIcon}"/>
                                     </Button>
@@ -276,6 +278,62 @@
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.MethodTemplate>
 
+                    <h:PropertiesTemplateSelector.ConstructorTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
+                                    <TextBlock Text="Метод"/>
+                                    <Separator/>
+                                    <TextBlock Text="Имя"/>
+                                    <TextBox Text="{Binding Name}"/>
+
+                                    <TextBlock Text="Тип"/>
+                                    <TextBox Text="{Binding Type}"/>
+                                    <Separator/>
+                                    <TextBlock Text="Видимость"/>
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+
+                                    <!--<Separator/>
+                                    <CheckBox IsChecked="{Binding IsStatic}">
+                                        <TextBlock Text="Статический"/>
+                                    </CheckBox>
+                                    <CheckBox IsChecked="{Binding IsAbstract}">
+                                        <TextBlock Text="Абстрактный"/>
+                                    </CheckBox>-->
+                                    <Separator/>
+                                    <TextBlock Text="Параметры"/>
+                                    <ScrollViewer Height="100">
+                                        <ItemsControl ItemsSource="{Binding Parameters}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBox Text="{Binding ParameterString}"/>
+                                                        <Button Grid.Column="1" Command="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content.RemoveParameterCommand}" CommandParameter="{Binding}">
+                                                            <TextBlock Style="{StaticResource RemoveIcon}"/>
+                                                        </Button>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                    <Button Command="{Binding AddParameterCommand}">
+                                        <TextBlock Style="{StaticResource AddIcon}"/>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </h:PropertiesTemplateSelector.ConstructorTemplate>
+                    
                     <h:PropertiesTemplateSelector.ConnectionTemplate>
                         <DataTemplate>
                             <Border Style="{StaticResource BorderStyle}">
@@ -314,7 +372,7 @@
 
                                                 <h:RelationTemplateSelector.AssociationTemplate>
                                                     <DataTemplate>
-                                                        <Grid DataContext="{Binding Source={x:Reference Name=ConnectionPanel}, Path=DataContext}">
+                                                        <!--<Grid DataContext="{Binding Source={x:Reference Name=ConnectionPanel}, Path=DataContext}">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition/>
                                                                 <ColumnDefinition Width="Auto"/>
@@ -332,7 +390,7 @@
                                                                 </MenuItem>
                                                             </Menu>
 
-                                                        </Grid>
+                                                        </Grid>-->
                                                     </DataTemplate>
                                                 </h:RelationTemplateSelector.AssociationTemplate>
 

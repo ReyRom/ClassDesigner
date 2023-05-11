@@ -157,17 +157,17 @@ namespace ClassDesigner.Controls
 
         void DesignerItem_Loaded(object sender, RoutedEventArgs e)
         {
-            if (base.Template != null)
+            if (base.Template is not null)
             {
                 ContentPresenter contentPresenter =
                     this.Template.FindName("PART_ContentPresenter", this) as ContentPresenter;
-                if (contentPresenter != null)
+                if (contentPresenter is not null)
                 {
                     UIElement contentVisual = VisualTreeHelper.GetChild(contentPresenter, 0) as UIElement;
-                    if (contentVisual != null)
+                    if (contentVisual is not null)
                     {
                         DragThumb thumb = this.Template.FindName("PART_DragThumb", this) as DragThumb;
-                        if (thumb != null)
+                        if (thumb is not null)
                         {
                             ControlTemplate template =
                                 DesignerItem.GetDragThumbTemplate(contentVisual) as ControlTemplate;

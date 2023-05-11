@@ -3,13 +3,14 @@ using ClassDesigner.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class InterfaceViewModel:ViewModelBase, IEntry, IHaveActions, IHaveProperties, IInheritable, IInheritor
+    public class InterfaceViewModel: ViewModelBase, IEntry, IHaveActions, IHaveProperties, IInheritable, IInheritor, IErrorProvider
     {
         private string name = "Interface";
         public string Name
@@ -86,6 +87,77 @@ namespace ClassDesigner.ViewModels
             }
         }
 
+        ErrorViewModel interfaceError;
+
+        public InterfaceViewModel()
+        {
+            interfaceError = new ErrorViewModel() { Source = this };
+            ErrorService.Instance.ObservableErrors.Add(interfaceError);
+
+            Attributes.CollectionChanged += CollectionChanged;
+            Actions.CollectionChanged += CollectionChanged;
+        }
+
+        private void CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.OldItems != null)
+            {
+                foreach (INotifyPropertyChanged item in e.OldItems)
+                {
+                    item.PropertyChanged -= Item_PropertyChanged;
+                }
+            }
+            if (e.NewItems != null)
+            {
+                foreach (INotifyPropertyChanged item in e.NewItems)
+                {
+                    item.PropertyChanged += Item_PropertyChanged;
+                }
+            }
+            Validate();
+        }
+
+        private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            Validate();
+        }
+
+        public void Validate()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (!ValidateAttribute())
+            {
+                sb.AppendLine("Интерфейс не может содержать двух одинаковых атрибутов");
+            }
+            if (!ValidateAction())
+            {
+                sb.AppendLine("Интерфейс не может содержать двух одинаковых методов");
+            }
+
+            interfaceError.Text = sb.ToString().TrimEnd();
+        }
+
+        private bool ValidateAttribute()
+        {
+            var isValid = !Attributes.GroupBy(x => x.AttributeString).Any(g => g.Count() > 1);
+            return isValid;
+        }
+
+        private bool ValidateAction()
+        {
+            var isValid = !Actions.GroupBy(x => x.ActionString).Any(g => g.Count() > 1);
+            return isValid;
+        }
+
+        public void ReleaseData()
+        {
+            if (interfaceError != null)
+            {
+                ErrorService.Instance.ObservableErrors.Remove(interfaceError);
+                interfaceError = null;
+            }
+        }
 
 
 

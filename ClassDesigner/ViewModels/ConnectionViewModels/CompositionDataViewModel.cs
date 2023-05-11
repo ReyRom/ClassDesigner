@@ -1,14 +1,10 @@
-﻿using ClassDesigner.Controls;
-using ClassDesigner.Helping;
-using System;
-using System.Collections.Generic;
+﻿using ClassDesigner.Helping;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    class CompositionDataViewModel:ViewModelBase, IConnectionData
+    class CompositionDataViewModel : ViewModelBase, IConnectionData
     {
         public CompositionDataViewModel(ConnectionViewModel connection)
         {
@@ -32,10 +28,10 @@ namespace ClassDesigner.ViewModels
                     composedAttribute.PropertyChanged -= ComposedAttribute_PropertyChanged;
                 }
                 composedAttribute = value;
-                if (composedAttribute.Type != Source.Name)
-                {
-                    composedAttribute.Type = Source.Name;
-                }
+                //if (composedAttribute.Type != Source.Name)
+                //{
+                //    composedAttribute.Type = Source.Name;
+                //}
                 composedAttribute.PropertyChanged += ComposedAttribute_PropertyChanged;
                 OnPropertyChanged(nameof(ComposedAttribute));
             }
@@ -90,8 +86,16 @@ namespace ClassDesigner.ViewModels
         }
         private bool ValidateAttribute()
         {
-            var isValid = composedAttribute is not null
-                && composedAttribute.Type == Source.Name;
+            var isValid = composedAttribute is not null;
+            if (isValid)
+            {
+                isValid = composedAttribute.Type == Source.Name || DataService.CheckModifiedType(Source.Name, composedAttribute.Type);
+                if (Source is IInheritor i)
+                {
+                    isValid = isValid || i.Parents.Any(x => x.Name == composedAttribute.Type);
+                }
+            }
+
             return isValid;
         }
         public void Validate()

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ClassDesigner.Helping
@@ -51,6 +52,26 @@ namespace ClassDesigner.Helping
             OnPropertyChanged(nameof(Types));
 
             OnPropertyChanged(nameof(TypesNames));
+        }
+
+        public static bool CheckModifiedType(string type, string modified)
+        {
+            Regex regex = new Regex(@"^\w+<"+type+">$");
+            if (regex.IsMatch(modified))
+            {
+                return true;
+            }
+            regex = new Regex(@"^" + type + @"\[\]$");
+            if (regex.IsMatch(modified))
+            {
+                return true;
+            }
+            regex = new Regex(@"^" + type + @"[*&]$");
+            if (regex.IsMatch(modified))
+            {
+                return true;
+            }
+            return false;
         }
         
         public ObservableCollection<String> Entries { get; set; } = new ObservableCollection<String>();

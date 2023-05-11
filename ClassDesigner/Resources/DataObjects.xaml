@@ -20,6 +20,7 @@
         <MenuItem Header="Добавить поле" Command="{Binding AddFieldCommand}"/>
         <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
         <MenuItem Header="Добавить метод" Command="{Binding  AddMethodCommand}"/>
+        <MenuItem Header="Добавить конструктор" Command="{Binding AddConstructorCommand}"/>
         <MenuItem Header="Свойства">
             <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
             <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
@@ -89,6 +90,26 @@
         <MenuItem Header="Удалить" Command="{Binding Parent.RemoveMethodCommand}" CommandParameter="{Binding}"/>
     </ContextMenu>
 
+    <ContextMenu x:Key="ConstructorContextMenu">
+        <MenuItem Header="Видимость">
+            <MenuItem>
+                <MenuItem.Template>
+                    <ControlTemplate>
+                        <ComboBox 
+                            HorizontalAlignment="Stretch" 
+                            ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
+                            SelectedItem="{Binding Visibility}"/>
+                    </ControlTemplate>
+                </MenuItem.Template>
+            </MenuItem>
+        </MenuItem>
+        <!--<MenuItem Header="Свойства">
+            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+        </MenuItem>-->
+        <MenuItem Header="Удалить" Command="{Binding Parent.RemoveConstructorCommand}" CommandParameter="{Binding}"/>
+    </ContextMenu>
+    
     <DataTemplate x:Key="FieldTemplate" DataType="{x:Type vm:FieldViewModel}">
         <Grid ContextMenu="{StaticResource FieldContextMenu}">
             <TextBox Text="{Binding AttributeString}">
@@ -138,7 +159,7 @@
 
     <DataTemplate x:Key="MethodTemplate" DataType="{x:Type vm:MethodViewModel}">
         <Grid ContextMenu="{StaticResource MethodContextMenu}">
-            <TextBox Text="{Binding MethodString}" ContextMenu="{StaticResource MethodContextMenu}">
+            <TextBox Text="{Binding ActionString}" ContextMenu="{StaticResource MethodContextMenu}">
                 <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
                         <Style.Triggers>
@@ -160,8 +181,32 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate x:Key="ConstructorTemplate" DataType="{x:Type vm:ConstructorViewModel}">
+        <Grid ContextMenu="{StaticResource ConstructorContextMenu}">
+            <TextBox Text="{Binding ActionString}" ContextMenu="{StaticResource ConstructorContextMenu}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource BorderlessTextBoxStyle}">
+                        <!--<Style.Triggers>
+                            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                                <Setter Property="TextDecorations" Value="Underline"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                <Setter Property="FontStyle" Value="Italic"/>
+                            </DataTrigger>
+                        </Style.Triggers>-->
+                    </Style>
+                </TextBox.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <i:InvokeCommandAction Command="{x:Static c:DesignerCanvas.FocusProperty}" CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:ClassViewModel}">
-        <Grid Background="Transparent" ContextMenu="{StaticResource ClassContextMenu}">
+        <Grid Background="{DynamicResource BackgroundColor}" ContextMenu="{StaticResource ClassContextMenu}">
             <StackPanel>
                 <TextBox Text="{Binding Name}" HorizontalAlignment="Stretch" TextAlignment="Center" ContextMenu="{StaticResource ClassContextMenu}">
                     <TextBox.Style>
@@ -224,7 +269,7 @@
     </ContextMenu>
 
     <DataTemplate DataType="{x:Type vm:InterfaceViewModel}">
-        <Grid Background="Transparent" ContextMenu="{StaticResource InterfaceContextMenu}" >
+        <Grid Background="{DynamicResource BackgroundColor}" ContextMenu="{StaticResource InterfaceContextMenu}" >
             <StackPanel>
                 <TextBlock Text="&lt;&lt;Interface&gt;&gt;" Foreground="{DynamicResource TextColor}"/>
                 <TextBox Text="{Binding Name}" 
@@ -276,6 +321,7 @@
         <MenuItem Header="Добавить поле" Command="{Binding AddFieldCommand}"/>
         <MenuItem Header="Добавить свойство" Command="{Binding AddPropertyCommand}"/>
         <MenuItem Header="Добавить метод" Command="{Binding AddMethodCommand}"/>
+        <MenuItem Header="Добавить конструктор" Command="{Binding AddConstructorCommand}"/>
         <!--<Separator/>
         <MenuItem Header="Свойства">
             <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
@@ -285,7 +331,7 @@
 
 
     <DataTemplate DataType="{x:Type vm:StructViewModel}">
-        <Grid Background="Transparent" ContextMenu="{StaticResource StructContextMenu}">
+        <Grid Background="{DynamicResource BackgroundColor}" ContextMenu="{StaticResource StructContextMenu}">
             <StackPanel>
                 <TextBlock Text="&lt;&lt;Struct&gt;&gt;" Foreground="{DynamicResource TextColor}"/>
                 <TextBox Text="{Binding Name}" 
@@ -364,7 +410,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:EnumViewModel}">
-        <Grid Background="Transparent" ContextMenu="{StaticResource EnumContextMenu}">
+        <Grid Background="{DynamicResource BackgroundColor}" ContextMenu="{StaticResource EnumContextMenu}">
             <StackPanel>
                 <TextBlock Text="&lt;&lt;Enum&gt;&gt;" Foreground="{DynamicResource TextColor}"/>
                 <TextBox Text="{Binding Name}" 

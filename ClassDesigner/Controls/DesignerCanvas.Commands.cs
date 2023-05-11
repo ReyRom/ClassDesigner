@@ -270,9 +270,6 @@ namespace ClassDesigner.Controls
                     switch ((RelationType)Enum.Parse(typeof(RelationType), connectionXML.Element("RelationType").Value))
                     {
                         case RelationType.Association:
-                            (connection.ConnectionViewModel.ConnectionData as AssotiationDataViewModel).AssotiatedAttribute
-                                = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
-                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AssotiatedAttribute").Value);
                             break;
                         case RelationType.Aggregation:
                             (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedAttribute
@@ -304,6 +301,7 @@ namespace ClassDesigner.Controls
                     SelectionService.AddSelection(connection);
                 }
             }
+            UpdateZIndex();
         }
 
         private static DesignerItem DeserializeDesignerItem(XElement itemXML, Guid id, double offsetX = 0, double offsetY = 0)
@@ -365,12 +363,13 @@ namespace ClassDesigner.Controls
                 property.DefaultValue = propXML.Element("DefaultValue").Value;
                 model.Attributes.Add(property);
             }
-            foreach (var methodXML in itemXML.Element("Methods").Elements("Method"))
+            foreach (var methodXML in itemXML.Element("Actions").Elements("Method"))
             {
                 MethodViewModel method = new MethodViewModel(model);
                 method.Name = methodXML.Element("Name").Value;
                 method.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), methodXML.Element("Visibility").Value);
                 method.IsStatic = bool.Parse(methodXML.Element("IsStatic").Value);
+                method.IsAbstract = bool.Parse(methodXML.Element("IsAbstract").Value);
                 method.Type = methodXML.Element("Type").Value;
                 foreach (var paramXML in methodXML.Element("Parameters").Elements("Parameter"))
                 {
@@ -381,6 +380,21 @@ namespace ClassDesigner.Controls
                     method.Parameters.Add(param);
                 }
                 model.Actions.Add(method);
+            }
+            foreach (var constructorXML in itemXML.Element("Actions").Elements("Constructor"))
+            {
+                ConstructorViewModel constructor = new ConstructorViewModel(model);
+                constructor.Name = constructorXML.Element("Name").Value;
+                constructor.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), constructorXML.Element("Visibility").Value);
+                foreach (var paramXML in constructorXML.Element("Parameters").Elements("Parameter"))
+                {
+                    ParameterViewModel param = new ParameterViewModel();
+                    param.Name = paramXML.Element("Name").Value;
+                    param.Type = paramXML.Element("Type").Value;
+                    param.DefaultValue = paramXML.Element("DefaultValue").Value;
+                    constructor.Parameters.Add(param);
+                }
+                model.Actions.Add(constructor);
             }
             return model;
         }
@@ -413,13 +427,28 @@ namespace ClassDesigner.Controls
                 property.DefaultValue = propXML.Element("DefaultValue").Value;
                 model.Attributes.Add(property);
             }
-            foreach (var methodXML in itemXML.Element("Methods").Elements("Method"))
+            foreach (var methodXML in itemXML.Element("Actions").Elements("Method"))
             {
                 MethodViewModel method = new MethodViewModel(model);
                 method.Name = methodXML.Element("Name").Value;
                 method.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), methodXML.Element("Visibility").Value);
                 method.IsStatic = bool.Parse(methodXML.Element("IsStatic").Value);
                 method.Type = methodXML.Element("Type").Value;
+                foreach (var paramXML in methodXML.Element("Parameters").Elements("Parameter"))
+                {
+                    ParameterViewModel param = new ParameterViewModel();
+                    param.Name = paramXML.Element("Name").Value;
+                    param.Type = paramXML.Element("Type").Value;
+                    param.DefaultValue = paramXML.Element("DefaultValue").Value;
+                    method.Parameters.Add(param);
+                }
+                model.Actions.Add(method);
+            }
+            foreach (var methodXML in itemXML.Element("Actions").Elements("Constructor"))
+            {
+                ConstructorViewModel method = new ConstructorViewModel(model);
+                method.Name = methodXML.Element("Name").Value;
+                method.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), methodXML.Element("Visibility").Value);
                 foreach (var paramXML in methodXML.Element("Parameters").Elements("Parameter"))
                 {
                     ParameterViewModel param = new ParameterViewModel();
@@ -451,7 +480,7 @@ namespace ClassDesigner.Controls
                 property.DefaultValue = propXML.Element("DefaultValue").Value;
                 model.Attributes.Add(property);
             }
-            foreach (var methodXML in itemXML.Element("Methods").Elements("Method"))
+            foreach (var methodXML in itemXML.Element("Actions").Elements("Method"))
             {
                 MethodViewModel method = new MethodViewModel(model);
                 method.Name = methodXML.Element("Name").Value;
@@ -538,6 +567,7 @@ namespace ClassDesigner.Controls
                         this.Children.Remove(con);
                     }
                 }
+                (item.Content as IEntry).ReleaseData();
                 this.Children.Remove(item);
             }
 
@@ -638,20 +668,21 @@ namespace ClassDesigner.Controls
                                                             new XElement("IsSet", p.IsSet),
                                                             new XElement("DefaultValue", p.DefaultValue)
                                                         ))),
-                                                     new XElement("Methods",
+                                                     new XElement("Actions",
                                                         model.Actions.OfType<MethodViewModel>().Select(m =>
                                                         new XElement("Method",
                                                             new XElement("Name", m.Name),
                                                             new XElement("Visibility", m.Visibility),
                                                             new XElement("Type", m.Type),
                                                             new XElement("IsStatic", m.IsStatic),
+                                                            new XElement("IsAbstract", m.IsAbstract),
                                                             new XElement("Parameters",
                                                                 m.Parameters.Select(p =>
                                                                 new XElement("Parameter",
                                                                     new XElement("Name", p.Name),
                                                                     new XElement("Type", p.Type),
                                                                     new XElement("DefaultValue", p.DefaultValue)
-                                                        )),
+                                                        ))))),
                                                         model.Actions.OfType<ConstructorViewModel>().Select(m =>
                                                         new XElement("Constructor",
                                                             new XElement("Name", m.Name),
@@ -663,7 +694,7 @@ namespace ClassDesigner.Controls
                                                                     new XElement("Type", p.Type),
                                                                     new XElement("DefaultValue", p.DefaultValue)
                                                          )))
-                                                     )))))));
+                                                     ))));
             return serializedClass;
         }
 
@@ -684,13 +715,14 @@ namespace ClassDesigner.Controls
                                                             new XElement("IsSet", p.IsSet),
                                                             new XElement("DefaultValue", p.DefaultValue)
                                                         ))),
-                                                     new XElement("Methods",
+                                                     new XElement("Actions",
                                                         model.Actions.OfType<MethodViewModel>().Select(m =>
                                                         new XElement("Method",
                                                             new XElement("Name", m.Name),
                                                             new XElement("Visibility", m.Visibility),
                                                             new XElement("Type", m.Type),
                                                             new XElement("IsStatic", m.IsStatic),
+                                                            new XElement("IsAbstract", m.IsAbstract),
                                                             new XElement("Parameters",
                                                                 m.Parameters.Select(p =>
                                                                 new XElement("Parameter",
@@ -726,20 +758,21 @@ namespace ClassDesigner.Controls
                                                             new XElement("IsSet", p.IsSet),
                                                             new XElement("DefaultValue", p.DefaultValue)
                                                         ))),
-                                                     new XElement("Methods",
+                                                     new XElement("Actions",
                                                         model.Actions.OfType<MethodViewModel>().Select(m =>
                                                         new XElement("Method",
                                                             new XElement("Name", m.Name),
                                                             new XElement("Visibility", m.Visibility),
                                                             new XElement("Type", m.Type),
                                                             new XElement("IsStatic", m.IsStatic),
+                                                            new XElement("IsAbstract", m.IsAbstract),
                                                             new XElement("Parameters",
                                                                 m.Parameters.Select(p =>
                                                                 new XElement("Parameter",
                                                                     new XElement("Name", p.Name),
                                                                     new XElement("Type", p.Type),
                                                                     new XElement("DefaultValue", p.DefaultValue)
-                                                        )),
+                                                        ))))),
                                                         model.Actions.OfType<ConstructorViewModel>().Select(m =>
                                                         new XElement("Constructor",
                                                             new XElement("Name", m.Name),
@@ -751,7 +784,7 @@ namespace ClassDesigner.Controls
                                                                     new XElement("Type", p.Type),
                                                                     new XElement("DefaultValue", p.DefaultValue)
                                                          )))
-                                                     )))))));
+                                                     ))));
             return serializedClass;
         }
 
@@ -806,12 +839,12 @@ namespace ClassDesigner.Controls
                     new XElement("ComposedAttribute", c.ComposedAttribute.ToString())
                     );
             }
-            if (connectionData is AssotiationDataViewModel ass)
-            {
-                return new XElement("ConnectionData",
-                    new XElement("ComposedAttribute", ass.AssotiatedAttribute.ToString())
-                    );
-            }
+            //if (connectionData is AssotiationDataViewModel ass)
+            //{
+            //    return new XElement("ConnectionData",
+            //        new XElement("ComposedAttribute", ass.AssotiatedAttribute.ToString())
+            //        );
+            //}
             if (connectionData is DependencyDataViewModel d)
             {
                 return new XElement("ConnectionData",
@@ -858,16 +891,22 @@ namespace ClassDesigner.Controls
             {
                 encoder.Save(file);
             }
-            MessageBox.MessageBox.Show("Fkt");
         }
+
 
         private void UpdateZIndex()
         {
-            List<UIElement> ordered = this.Children.OfType<UIElement>().OrderBy(x => Canvas.GetZIndex(x)).ToList();
+            List<Connection> connections = this.Children.OfType<Connection>().OrderBy(x => Canvas.GetZIndex(x)).ToList();
+            List<DesignerItem> designerItems = this.Children.OfType<DesignerItem>().OrderBy(x => Canvas.GetZIndex(x)).ToList();
 
-            for (int i = 0; i < ordered.Count; i++)
+            int i = 0;
+            for (i = 0; i < connections.Count; i++)
             {
-                Canvas.SetZIndex(ordered[i], i);
+                Canvas.SetZIndex(connections[i], i);
+            }
+            for (int j = i; j < designerItems.Count; j++)
+            {
+                Canvas.SetZIndex(designerItems[j], j);
             }
         }
 

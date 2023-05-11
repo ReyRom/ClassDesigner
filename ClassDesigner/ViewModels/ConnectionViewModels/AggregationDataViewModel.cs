@@ -29,10 +29,10 @@ namespace ClassDesigner.ViewModels
                     aggregatedAction.PropertyChanged -= AggregatedMethod_PropertyChanged;
                 }
                 aggregatedAction = value;
-                if (!aggregatedAction.Parameters.Any(x => x.Type == Source.Name))
-                {
-                    aggregatedAction.Parameters.Add(new ParameterViewModel() { Name = Source.Name.ToLower(), Type = Source.Name });
-                }
+                //if (!aggregatedAction.Parameters.Any(x => x.Type == Source.Name))
+                //{
+                //    aggregatedAction.Parameters.Add(new ParameterViewModel() { Name = Source.Name.ToLower(), Type = Source.Name });
+                //}
                 aggregatedAction.PropertyChanged += AggregatedMethod_PropertyChanged;
                 OnPropertyChanged(nameof(AggregatedAction));
                 Validate();
@@ -54,10 +54,10 @@ namespace ClassDesigner.ViewModels
                     aggregatedAttribute.PropertyChanged -= AggregatedAttribute_PropertyChanged;
                 }
                 aggregatedAttribute = value;
-                if (aggregatedAttribute.Type != Source.Name)
-                {
-                    aggregatedAttribute.Type = Source.Name;
-                }
+                //if (aggregatedAttribute.Type != Source.Name)
+                //{
+                //    aggregatedAttribute.Type = Source.Name;
+                //}
                 aggregatedAttribute.PropertyChanged += AggregatedAttribute_PropertyChanged;
                 OnPropertyChanged(nameof(AggregatedAttribute));
                 Validate();
@@ -159,15 +159,30 @@ namespace ClassDesigner.ViewModels
 
         private bool ValidateAttribute()
         {
-            var isValid = aggregatedAttribute is not null
-                  && aggregatedAttribute.Type == Source.Name;
+            var isValid = aggregatedAttribute is not null;
+            if (isValid)
+            {
+                isValid = aggregatedAttribute.Type == Source.Name || DataService.CheckModifiedType(Source.Name, aggregatedAttribute.Type);
+                if (Source is IInheritor i)
+                {
+                    isValid = isValid || i.Parents.Any(x => x.Name == aggregatedAttribute.Type);
+                }
+            }
             return isValid;
         }
 
         private bool ValidateAction()
         {
-            var isValid = aggregatedAction is not null
-                        && aggregatedAction.Parameters.Any(x => x.Type == Source.Name);
+            var isValid = aggregatedAction is not null;
+            if (isValid)
+            {
+                isValid = aggregatedAction.Parameters.Any(x => x.Type == Source.Name);
+                if (Source is IInheritor i)
+                {
+                    isValid = isValid || i.Parents.Any(x => aggregatedAction.Parameters.Any(y => y.Type == x.Name));
+                }
+            }
+                        
             return isValid;
         }
 
