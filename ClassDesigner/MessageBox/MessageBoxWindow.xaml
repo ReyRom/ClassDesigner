@@ -11,7 +11,7 @@
         ResizeMode="CanMinimize" Width="500" 
         Background="Transparent" SizeToContent="Height"
         FontSize="20" MouseDown="Window_MouseDown">
-    <Border CornerRadius="3" Background="{DynamicResource BackgroundColor}">
+    <Border CornerRadius="3" Background="{DynamicResource AlternateBackgroundColor}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

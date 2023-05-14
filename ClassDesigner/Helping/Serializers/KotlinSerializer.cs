@@ -1,19 +1,21 @@
 ﻿using ClassDesigner.Models;
 using ClassDesigner.ViewModels;
+using System;
 using System.Linq;
 using System.Text;
 
 namespace ClassDesigner.Helping
 {
-    public class CSharpSerializer: ISerializer
+    public class KotlinSerializer: ISerializer
     {
-        public string Extension => "cs";
+        public string Extension => "kt";
+
         public string SerializeEntry(IEntry entry)
         {
             switch (entry)
             {
                 case ClassViewModel e:
-                    return SerializeClass(e); 
+                    return SerializeClass(e);
                 case InterfaceViewModel e:
                     return SerializeInterface(e);
                 case StructViewModel e:
@@ -36,7 +38,7 @@ namespace ClassDesigner.Helping
 
             if (classView.IsStatic)
             {
-                sb.Append("static");
+                sb.Append("final");
                 sb.Space();
             }
             if (classView.IsAbstract)
@@ -51,7 +53,7 @@ namespace ClassDesigner.Helping
 
             sb.Append(classView.Name);
 
-            if (classView.Parents.Count>0)
+            if (classView.Parents.Count > 0)
             {
                 sb.Space();
                 sb.Append(":");
@@ -67,11 +69,10 @@ namespace ClassDesigner.Helping
                     sb.Append(parent.Name);
                     sb.Append(",");
                 }
-                sb.Remove(sb.Length-1,1);
+                sb.Remove(sb.Length - 1, 1);
             }
 
-            sb.AppendLine();
-            sb.Tab(tabLevel);
+            sb.Space();
             sb.Append('{');
             sb.AppendLine();
 
@@ -84,8 +85,6 @@ namespace ClassDesigner.Helping
             {
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
             }
-
-
             foreach (var attr in classView.Actions.OfType<ConstructorViewModel>())
             {
                 sb.AppendLine(SerializeConstructor(attr, tabLevel + 1));
@@ -110,7 +109,7 @@ namespace ClassDesigner.Helping
 
             sb.Space();
 
-            sb.Append("struct");
+            sb.Append("class");
 
             sb.Space();
 
@@ -120,7 +119,13 @@ namespace ClassDesigner.Helping
             {
                 sb.Space();
                 sb.Append(":");
-                foreach (var parent in structView.Parents)
+                foreach (var parent in structView.Parents.OfType<ClassViewModel>())
+                {
+                    sb.Space();
+                    sb.Append(parent.Name);
+                    sb.Append(",");
+                }
+                foreach (var parent in structView.Parents.OfType<InterfaceViewModel>())
                 {
                     sb.Space();
                     sb.Append(parent.Name);
@@ -129,8 +134,7 @@ namespace ClassDesigner.Helping
                 sb.Remove(sb.Length - 1, 1);
             }
 
-            sb.AppendLine();
-            sb.Tab(tabLevel);
+            sb.Space();
             sb.Append('{');
             sb.AppendLine();
 
@@ -178,7 +182,7 @@ namespace ClassDesigner.Helping
             {
                 sb.Space();
                 sb.Append(":");
-                foreach (var parent in interfaceView.Parents)
+                foreach (var parent in interfaceView.Parents.OfType<InterfaceViewModel>())
                 {
                     sb.Space();
                     sb.Append(parent.Name);
@@ -187,8 +191,7 @@ namespace ClassDesigner.Helping
                 sb.Remove(sb.Length - 1, 1);
             }
 
-            sb.AppendLine();
-            sb.Tab(tabLevel);
+            sb.Space();
             sb.Append('{');
             sb.AppendLine();
             foreach (var attr in interfaceView.Attributes.OfType<PropertyViewModel>())
@@ -216,28 +219,27 @@ namespace ClassDesigner.Helping
 
             sb.Space();
 
-            sb.Append("enum");
+            sb.Append("enum class");
 
             sb.Space();
 
             sb.Append(enumView.Name);
 
-            sb.AppendLine();
-            sb.Tab(tabLevel);
+            sb.Space();
             sb.Append('{');
             sb.AppendLine();
-            foreach (var enumChild in enumView.EnumChildren) 
+            foreach (var enumChild in enumView.EnumChildren)
             {
                 sb.Tab(tabLevel + 1);
                 sb.Append(enumChild.Name);
                 if (!string.IsNullOrWhiteSpace(enumChild.Value))
                 {
-                    sb.Append(" = " + enumChild.Value);
+                    sb.Append("("+enumChild.Value+")");
                 }
                 sb.Append(',');
                 sb.AppendLine();
             }
-            sb.Remove(sb.Length-1, 2);
+            sb.Remove(sb.Length - 1, 2);
             sb.Tab(tabLevel);
             sb.Append('}');
 
@@ -258,85 +260,151 @@ namespace ClassDesigner.Helping
                 sb.Append("static");
                 sb.Space();
             }
+            sb.Append("var");
 
-            sb.Append(string.IsNullOrWhiteSpace(attribute.Type)? "object": attribute.Type);
             sb.Space();
 
             sb.Append(attribute.Name);
+            sb.Append(":");
+            sb.Space();
+            sb.Append(string.IsNullOrWhiteSpace(attribute.Type) ? "Int" : attribute.Type);
 
             if (!string.IsNullOrWhiteSpace(attribute.DefaultValue))
             {
                 sb.Append(" = ");
                 sb.Append(attribute.DefaultValue);
             }
-
-            sb.Append(";");
             return sb.ToString();
         }
 
         public string SerializeProperty(PropertyViewModel property, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Tab(tabLevel);
-
-            sb.Append(ConvertVisibility(property.Visibility));
-
-            sb.Space();
-
-            if (property.IsAbstract)
+            if (property.IsGet && property.IsSet)
             {
-                sb.Append("abstract");
+                sb.Tab(tabLevel);
+
+                sb.Append(ConvertVisibility(property.Visibility));
+
                 sb.Space();
-            }
 
-            if (property.IsStatic)
-            {
-                sb.Append("static");
+                if (property.IsAbstract)
+                {
+                    sb.Append("abstract");
+                    sb.Space();
+                }
+
+                if (property.IsStatic)
+                {
+                    sb.Append("static");
+                    sb.Space();
+                }
+
+                sb.Append("var");
+
                 sb.Space();
+
+                sb.Append(property.Name);
+                sb.Append(":");
+                sb.Space();
+                sb.Append(string.IsNullOrWhiteSpace(property.Type) ? "Int" : property.Type);
+                sb.Space();
+                if (!string.IsNullOrWhiteSpace(property.DefaultValue))
+                {
+                    sb.Append(" = ");
+                    sb.Append(property.DefaultValue);
+                }
+                sb.AppendLine();
+                sb.Tab(tabLevel+1);
+                sb.Append("get");
+
+                sb.AppendLine();
+                sb.Tab(tabLevel + 1);
+                sb.Append("set");
             }
 
-            sb.Append(string.IsNullOrWhiteSpace(property.Type) ? "object" : property.Type);
-            sb.Space();
-
-            sb.Append(property.Name);
-
-            sb.Space();
-
-            sb.Append($"{{ {(property.IsGet ? "get; " : "")}{(property.IsSet ? "set; " : "")}}}");
-
-            if (!string.IsNullOrWhiteSpace(property.DefaultValue))
+            else if (property.IsGet)
             {
-                sb.Append(" = ");
-                sb.Append(property.DefaultValue);
-                sb.Append(";");
+                sb.Tab(tabLevel);
+
+                sb.Append(ConvertVisibility(property.Visibility));
+
+                sb.Space();
+
+                if (property.IsAbstract)
+                {
+                    sb.Append("abstract");
+                    sb.Space();
+                }
+
+                if (property.IsStatic)
+                {
+                    sb.Append("static");
+                    sb.Space();
+                }
+
+                sb.Append("val");
+
+                sb.Space();
+
+                sb.Append(property.Name);
+                sb.Append(":");
+                sb.Space();
+                sb.Append(string.IsNullOrWhiteSpace(property.Type) ? "Int" : property.Type);
+                sb.Space();
+                if (!string.IsNullOrWhiteSpace(property.DefaultValue))
+                {
+                    sb.Append(" = ");
+                    sb.Append(property.DefaultValue);
+                }
+                sb.AppendLine();
+                sb.Tab(tabLevel + 1);
+                sb.Append("get");
             }
+            else if (property.IsSet)
+            {
+                sb.Tab(tabLevel);
+
+                sb.Append(ConvertVisibility(property.Visibility));
+
+                sb.Space();
+
+                if (property.IsAbstract)
+                {
+                    sb.Append("abstract");
+                    sb.Space();
+                }
+
+                if (property.IsStatic)
+                {
+                    sb.Append("static");
+                    sb.Space();
+                }
+
+                sb.Append("var");
+
+                sb.Space();
+
+                sb.Append(property.Name);
+                sb.Append(":");
+                sb.Space();
+                sb.Append(string.IsNullOrWhiteSpace(property.Type) ? "Int" : property.Type);
+                sb.Space();
+                if (!string.IsNullOrWhiteSpace(property.DefaultValue))
+                {
+                    sb.Append(" = ");
+                    sb.Append(property.DefaultValue);
+                }
+
+                sb.AppendLine();
+                sb.Tab(tabLevel + 1);
+                sb.Append("set");
+            }
+
+
             return sb.ToString();
         }
 
-
-        public string SerializeConstructor(ConstructorViewModel method, int tabLevel = 0)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Tab(tabLevel);
-
-            sb.Append(ConvertVisibility(method.Visibility));
-
-            sb.Space();
-
-            sb.Append(method.Name);
-
-            sb.Append($"({string.Join(", ",method.Parameters.Select(x=>SerializeParameter(x)))})");
-
-            sb.AppendLine();
-            sb.Tab(tabLevel);
-            sb.Append('{');
-
-            sb.AppendLine();
-            sb.Tab(tabLevel);
-            sb.Append('}');
-
-            return sb.ToString();
-        }
 
         public string SerializeMethod(MethodViewModel method, int tabLevel = 0)
         {
@@ -359,10 +427,38 @@ namespace ClassDesigner.Helping
                 sb.Space();
             }
 
-            sb.Append(string.IsNullOrWhiteSpace(method.Type) ? "void" : method.Type);
+            sb.Append("fun");
+            sb.Space();
+            sb.Append(method.Name);
+
+            sb.Append($"({string.Join(", ", method.Parameters.Select(x => SerializeParameter(x)))})");
+            if (!string.IsNullOrWhiteSpace(method.Type))
+            {
+                sb.Append(':');
+                sb.Space();
+                sb.Append(method.Type);
+            }
+            
+            sb.Space();
+            sb.Append('{');
+
+            sb.AppendLine();
+            sb.Tab(tabLevel);
+            sb.Append('}');
+
+            return sb.ToString();
+        }
+
+        public string SerializeConstructor(ConstructorViewModel method, int tabLevel = 0)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Tab(tabLevel);
+
+            sb.Append(ConvertVisibility(method.Visibility));
+
             sb.Space();
 
-            sb.Append(method.Name);
+            sb.Append("constructor");
 
             sb.Append($"({string.Join(", ", method.Parameters.Select(x => SerializeParameter(x)))})");
 
@@ -380,18 +476,12 @@ namespace ClassDesigner.Helping
         public string SerializeParameter(ParameterViewModel parameter)
         {
             StringBuilder sb = new StringBuilder();
-            if (parameter.IsOut)
-            {
-                sb.Append("out");
-
-                sb.Space();
-            }
-
-            sb.Append(string.IsNullOrWhiteSpace(parameter.Type) ? "object" : parameter.Type);
+            sb.Append(parameter.Name);
 
             sb.Space();
 
-            sb.Append(parameter.Name);
+            sb.Append(": ");
+            sb.Append(string.IsNullOrWhiteSpace(parameter.Type) ? "Int" : parameter.Type);
 
             sb.Space();
 

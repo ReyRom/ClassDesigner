@@ -14,8 +14,8 @@ namespace ClassDesigner.Helping
     public class DataService : INotifyPropertyChanged
     {
         private static DataService instance;
-
         public static DataService Instance => instance ??= new DataService();
+
         public ObservableStringCollection Types => new ObservableStringCollection(Properties.Settings.Default.Types);
 
         ObservableCollection<string> typesNames = new ObservableCollection<string>();
@@ -30,7 +30,7 @@ namespace ClassDesigner.Helping
                 }
                 foreach (var type in Entries)
                 {
-                    typesNames.Add(type);
+                    typesNames.Add(type.Name);
                 }
                 return typesNames;
             }
@@ -56,7 +56,7 @@ namespace ClassDesigner.Helping
 
         public static bool CheckModifiedType(string type, string modified)
         {
-            Regex regex = new Regex(@"^\w+<"+type+">$");
+            Regex regex = new Regex(@"^\w+<" + type + ">$");
             if (regex.IsMatch(modified))
             {
                 return true;
@@ -73,8 +73,17 @@ namespace ClassDesigner.Helping
             }
             return false;
         }
+
+        private IEnumerable<IEntry> entries;
         
-        public ObservableCollection<String> Entries { get; set; } = new ObservableCollection<String>();
+
+        public void UpdateEntries(IEnumerable<IEntry> entries)
+        {
+            this.entries = entries;
+            OnPropertyChanged(nameof(Entries));
+        }
+
+        public IEnumerable<IEntry> Entries { get => entries; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

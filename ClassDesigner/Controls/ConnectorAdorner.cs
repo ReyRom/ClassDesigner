@@ -71,6 +71,7 @@ namespace ClassDesigner.Controls
 
                 Canvas.SetZIndex(newConnection, designerCanvas.Children.Count);
                 this.designerCanvas.Children.Add(newConnection);
+                designerCanvas.UpdateZIndex();
 
             }
             if (HitDesignerItem != null)

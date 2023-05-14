@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace ClassDesigner.ViewModels
 {
-    class ConstructorViewModel : ViewModelBase, IAction
+    public class ConstructorViewModel : ViewModelBase, IAction
     {
         public ConstructorViewModel(IEntry parent)
         {

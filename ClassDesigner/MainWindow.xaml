@@ -42,10 +42,10 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Command="{x:Static SystemCommands.MinimizeWindowCommand}">
-                <TextBlock Style="{StaticResource CollapseIcon}"/>
+                <TextBlock Style="{StaticResource CollapseIcon}" Margin="2"/>
             </Button>
             <Button Command="{x:Static SystemCommands.RestoreWindowCommand}">
-                <TextBlock Style="{StaticResource DeexpandIcon}"/>
+                <TextBlock Style="{StaticResource DeexpandIcon}" Margin="2"/>
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
                         <Style.Triggers>
@@ -57,7 +57,7 @@
                 </Button.Style>
             </Button>
             <Button Command="{x:Static SystemCommands.MaximizeWindowCommand}">
-                <TextBlock Style="{StaticResource ExpandIcon}"/>
+                <TextBlock Style="{StaticResource ExpandIcon}" Margin="2"/>
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
                         <Style.Triggers>
@@ -69,7 +69,7 @@
                 </Button.Style>
             </Button>
             <Button Command="{x:Static SystemCommands.CloseWindowCommand}">
-                <TextBlock Style="{StaticResource CrossIcon}"/>
+                <TextBlock Style="{StaticResource CrossIcon}" Margin="2"/>
             </Button>
         </StackPanel>
 

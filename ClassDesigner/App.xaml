@@ -17,8 +17,7 @@
                 <ResourceDictionary Source="Resources/DataObjects.xaml"/>
                 <ResourceDictionary Source="Resources/PropertiesPanel.xaml"/>
                 <ResourceDictionary Source="Resources/ApplicationToolbar.xaml"/>
-                <ResourceDictionary Source="Resources/VisualTreePanel.xaml"/>
-                
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

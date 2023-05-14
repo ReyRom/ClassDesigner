@@ -30,6 +30,20 @@ namespace ClassDesigner
             CommandBindings.Add(new CommandBinding(SystemCommands.MaximizeWindowCommand, MaximizeWindow_Executed));
             CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand, MinimizeWindow_Executed));
             CommandBindings.Add(new CommandBinding(SystemCommands.RestoreWindowCommand, RestoreWindow_Executed));
+
+            this.Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object? sender, CancelEventArgs e)
+        {
+            if (MessageBox.MessageBox.Show("Выход", "Вы уверены, что хотите выйти? Несохраненные изменения могут быть утеряны", MessageBox.MessageBoxButtons.YesNo) == MessageBox.MessageBoxResult.Yes)
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
 
         private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e)

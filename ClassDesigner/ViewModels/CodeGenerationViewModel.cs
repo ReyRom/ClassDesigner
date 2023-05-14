@@ -1,6 +1,5 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace ClassDesigner.ViewModels
@@ -16,7 +15,8 @@ namespace ClassDesigner.ViewModels
             {
                 if (item.IsSelected)
                 {
-
+                    var generator = new CodeGenerator(item.Name);
+                    generator.GenerateCode(DataService.Instance.Entries, Folder);
                 }
             }
         });
@@ -41,5 +41,6 @@ namespace ClassDesigner.ViewModels
             }
         });
 
+        public SettingsService SettingsService { get => SettingsService.Instance; }
     }
 }

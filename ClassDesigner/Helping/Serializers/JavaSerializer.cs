@@ -5,9 +5,11 @@ using System.Text;
 
 namespace ClassDesigner.Helping.Serializers
 {
-    public class JavaSerializer
+    public class JavaSerializer : ISerializer
     {
-        public static string SerializeEntry(IEntry entry)
+        public string Extension => "java";
+
+        public string SerializeEntry(IEntry entry)
         {
             switch (entry)
             {
@@ -24,7 +26,7 @@ namespace ClassDesigner.Helping.Serializers
             }
         }
 
-        public static string SerializeClass(ClassViewModel classView, int tabLevel = 0)
+        public string SerializeClass(ClassViewModel classView, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             sb.Tab(tabLevel);
@@ -35,7 +37,7 @@ namespace ClassDesigner.Helping.Serializers
 
             if (classView.IsStatic)
             {
-                sb.Append("static");
+                sb.Append("final");
                 sb.Space();
             }
             if (classView.IsAbstract)
@@ -74,9 +76,7 @@ namespace ClassDesigner.Helping.Serializers
                 }
                 sb.Remove(sb.Length - 1, 1);
             }
-
-            sb.AppendLine();
-            sb.Tab(tabLevel);
+            sb.Space();
             sb.Append('{');
             sb.AppendLine();
 
@@ -90,6 +90,11 @@ namespace ClassDesigner.Helping.Serializers
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
             }
 
+            foreach (var attr in classView.Actions.OfType<ConstructorViewModel>())
+            {
+                sb.AppendLine(SerializeConstructor(attr, tabLevel + 1));
+            }
+
             foreach (var attr in classView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
@@ -101,7 +106,7 @@ namespace ClassDesigner.Helping.Serializers
             return sb.ToString();
         }
 
-        public static string SerializeStruct(StructViewModel structView, int tabLevel = 0)
+        public string SerializeStruct(StructViewModel structView, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             sb.Tab(tabLevel);
@@ -144,6 +149,10 @@ namespace ClassDesigner.Helping.Serializers
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
             }
 
+            foreach (var attr in structView.Actions.OfType<ConstructorViewModel>())
+            {
+                sb.AppendLine(SerializeConstructor(attr, tabLevel + 1));
+            }
             foreach (var attr in structView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
@@ -155,7 +164,7 @@ namespace ClassDesigner.Helping.Serializers
             return sb.ToString();
         }
 
-        public static string SerializeInterface(InterfaceViewModel interfaceView, int tabLevel = 0)
+        public string SerializeInterface(InterfaceViewModel interfaceView, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             sb.Tab(tabLevel);
@@ -203,7 +212,7 @@ namespace ClassDesigner.Helping.Serializers
             return sb.ToString();
         }
 
-        public static string SerializeEnum(EnumViewModel enumView, int tabLevel = 0)
+        public string SerializeEnum(EnumViewModel enumView, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             sb.Tab(tabLevel);
@@ -225,17 +234,22 @@ namespace ClassDesigner.Helping.Serializers
             foreach (var enumChild in enumView.EnumChildren)
             {
                 sb.Tab(tabLevel + 1);
-                sb.AppendLine(enumChild.EnumString);
+                sb.Append(enumChild.Name);
+                if (!string.IsNullOrWhiteSpace(enumChild.Value))
+                {
+                    sb.Append(" = " + enumChild.Value);
+                }
                 sb.Append(',');
+                sb.AppendLine();
             }
-            sb.Remove(sb.Length - 1, 1);
+            sb.Remove(sb.Length - 1, 2);
             sb.Tab(tabLevel);
             sb.Append('}');
 
             return sb.ToString();
         }
 
-        public static string SerializeAttribute(FieldViewModel attribute, int tabLevel = 0)
+        public string SerializeAttribute(FieldViewModel attribute, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             sb.Tab(tabLevel);
@@ -265,7 +279,7 @@ namespace ClassDesigner.Helping.Serializers
             return sb.ToString();
         }
 
-        public static string SerializeProperty(PropertyViewModel property, int tabLevel = 0)
+        public string SerializeProperty(PropertyViewModel property, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             if (property.IsGet)
@@ -312,7 +326,7 @@ namespace ClassDesigner.Helping.Serializers
 
                 
             }
-
+            sb.AppendLine();
             if (property.IsSet)
             {
                 sb.Tab(tabLevel);
@@ -355,7 +369,7 @@ namespace ClassDesigner.Helping.Serializers
         }
 
 
-        public static string SerializeMethod(MethodViewModel method, int tabLevel = 0)
+        public string SerializeMethod(MethodViewModel method, int tabLevel = 0)
         {
             StringBuilder sb = new StringBuilder();
             sb.Tab(tabLevel);
@@ -394,7 +408,31 @@ namespace ClassDesigner.Helping.Serializers
             return sb.ToString();
         }
 
-        public static string SerializeParameter(ParameterViewModel parameter)
+        public string SerializeConstructor(ConstructorViewModel method, int tabLevel = 0)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Tab(tabLevel);
+
+            sb.Append(ConvertVisibility(method.Visibility));
+
+            sb.Space();
+
+            sb.Append(method.Name);
+
+            sb.Append($"({string.Join(", ", method.Parameters.Select(x => SerializeParameter(x)))})");
+
+            sb.AppendLine();
+            sb.Tab(tabLevel);
+            sb.Append('{');
+
+            sb.AppendLine();
+            sb.Tab(tabLevel);
+            sb.Append('}');
+
+            return sb.ToString();
+        }
+
+        public string SerializeParameter(ParameterViewModel parameter)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(string.IsNullOrWhiteSpace(parameter.Type) ? "int" : parameter.Type);
@@ -416,7 +454,7 @@ namespace ClassDesigner.Helping.Serializers
 
 
 
-        public static string ConvertVisibility(VisibilityType visibilityType)
+        public string ConvertVisibility(VisibilityType visibilityType)
         {
             return visibilityType switch
             {

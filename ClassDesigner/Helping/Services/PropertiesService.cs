@@ -15,7 +15,7 @@ namespace ClassDesigner.Helping
         private static PropertiesService instance;
         private object selected;
         private object selectedCollection;
-        private IEnumerable<IEntry> entries;
+        
 
         public static PropertiesService Instance { get => instance ??= new PropertiesService(); }
 
@@ -37,14 +37,8 @@ namespace ClassDesigner.Helping
                 OnPropertyChanged(nameof(SelectedCollection));
             }
         }
-        
-        public void UpdateEntries(IEnumerable<IEntry> entries)
-        {
-            this.entries = entries;
-            OnPropertyChanged(nameof(Entries));
-        }
 
-        public IEnumerable<IEntry> Entries{ get => entries; }
+        
 
 
 

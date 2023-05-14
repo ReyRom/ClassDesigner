@@ -72,16 +72,19 @@ namespace ClassDesigner.Controls
 
         private void GenerateCode_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClassDesignerOutputs");
+            //var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClassDesignerOutputs");
 
-            if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
+            //if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
 
-            var entries = this.Children.OfType<DesignerItem>().Select(x=>x.Content).OfType<IEntry>().ToList();
+            //var entries = this.Children.OfType<DesignerItem>().Select(x=>x.Content).OfType<IEntry>().ToList();
 
-            foreach (var item in entries)
-            {
-                File.WriteAllText(Path.Combine(path, $"{item.Name}.cs"), CSharpSerializer.SerializeEntry(item));
-            }
+            //foreach (var item in entries)
+            //{
+            //    File.WriteAllText(Path.Combine(path, $"{item.Name}.cs"), CSharpSerializer.SerializeEntry(item));
+            //}
+
+            CodeGenerationWindow codeGenerationWindow = new CodeGenerationWindow();
+            codeGenerationWindow.ShowDialog();
 
         }
 
@@ -124,6 +127,7 @@ namespace ClassDesigner.Controls
         {
             DeleteCurrentSelection();
             GC.Collect();
+            DataService.Instance.UpdateEntries(this.Children.OfType<DesignerItem>().Select(x => x.Content).OfType<IEntry>());
         }
 
         private void Paste_Enabled(object sender, CanExecuteRoutedEventArgs e)
@@ -133,9 +137,17 @@ namespace ClassDesigner.Controls
 
         private void Paste_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SelectionService.ClearSelection();
-            PasteFromClipboard();
-            CopyCurrentSelection();
+            try
+            {
+                SelectionService.ClearSelection();
+                PasteFromClipboard();
+                CopyCurrentSelection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok);
+            }
+            
         }
 
         private void Copy_Enabled(object sender, CanExecuteRoutedEventArgs e)
@@ -203,7 +215,7 @@ namespace ClassDesigner.Controls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.MessageBox.Show(ex.StackTrace, ex.Message, MessageBox.MessageBoxButtons.Ok);
+                    MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok);
                 }
             }
         }
@@ -302,6 +314,7 @@ namespace ClassDesigner.Controls
                 }
             }
             UpdateZIndex();
+            DataService.Instance.UpdateEntries(this.Children.OfType<DesignerItem>().Select(x => x.Content).OfType<IEntry>());
         }
 
         private static DesignerItem DeserializeDesignerItem(XElement itemXML, Guid id, double offsetX = 0, double offsetY = 0)
@@ -539,7 +552,7 @@ namespace ClassDesigner.Controls
                 }
                 catch (Exception e)
                 {
-                    MessageBox.MessageBox.Show(e.StackTrace, e.Message, MessageBox.MessageBoxButtons.Ok);
+                    MessageBox.MessageBox.Show("Ошибка", e.Message, MessageBox.MessageBoxButtons.Ok);
                 }
             }
 
@@ -839,12 +852,6 @@ namespace ClassDesigner.Controls
                     new XElement("ComposedAttribute", c.ComposedAttribute.ToString())
                     );
             }
-            //if (connectionData is AssotiationDataViewModel ass)
-            //{
-            //    return new XElement("ConnectionData",
-            //        new XElement("ComposedAttribute", ass.AssotiatedAttribute.ToString())
-            //        );
-            //}
             if (connectionData is DependencyDataViewModel d)
             {
                 return new XElement("ConnectionData",
@@ -870,11 +877,11 @@ namespace ClassDesigner.Controls
                     {
                         xElement.Save(saveFile.FileName);
                     }
-                    
+                    MessageBox.MessageBox.Show("Успех", "Файл сохранен", MessageBox.MessageBoxButtons.Ok);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.MessageBox.Show(ex.StackTrace, ex.Message, MessageBox.MessageBoxButtons.Ok);
+                    MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok);
                 }
             }
         }
@@ -894,7 +901,7 @@ namespace ClassDesigner.Controls
         }
 
 
-        private void UpdateZIndex()
+        public void UpdateZIndex()
         {
             List<Connection> connections = this.Children.OfType<Connection>().OrderBy(x => Canvas.GetZIndex(x)).ToList();
             List<DesignerItem> designerItems = this.Children.OfType<DesignerItem>().OrderBy(x => Canvas.GetZIndex(x)).ToList();
@@ -904,7 +911,7 @@ namespace ClassDesigner.Controls
             {
                 Canvas.SetZIndex(connections[i], i);
             }
-            for (int j = i; j < designerItems.Count; j++)
+            for (int j = i+1; j < designerItems.Count; j++)
             {
                 Canvas.SetZIndex(designerItems[j], j);
             }

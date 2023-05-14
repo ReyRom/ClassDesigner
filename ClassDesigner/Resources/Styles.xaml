@@ -857,7 +857,7 @@
     <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}"/>
 
 
-    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="{StaticResource LightShades}"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="Item.MouseOver.Border" Color="{StaticResource Gray}"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA"/>

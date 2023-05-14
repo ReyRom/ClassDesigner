@@ -7,18 +7,26 @@ namespace ClassDesigner.Models
     {
         public class Language
         {
-            public string Name { get; set; }
+            public Languages Name { get; set; }
             public bool IsSelected { get; set; }
         }
 
-        public List<Language> Languages = new List<Language>
+        public enum Languages
         {
-            new Language(){ Name = "C#", IsSelected = false },
-            new Language(){ Name = "Java", IsSelected = false },
-            new Language(){ Name = "Kotlin", IsSelected = false },
-            new Language(){ Name = "Python", IsSelected = false }
+            CSharp,
+            Java,
+            Python,
+            Kotlin
+        }
+
+        public List<Language> LanguageList = new List<Language>
+        {
+            new Language(){ Name = Languages.CSharp, IsSelected = false },
+            new Language(){ Name = Languages.Java, IsSelected = false },
+            new Language(){ Name = Languages.Python, IsSelected = false },
+            new Language(){ Name = Languages.Kotlin, IsSelected = false }
         };
 
-        public IEnumerator GetEnumerator() => Languages.GetEnumerator();
+        public IEnumerator GetEnumerator() => LanguageList.GetEnumerator();
     }
 }

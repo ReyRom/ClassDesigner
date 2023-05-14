@@ -3,8 +3,8 @@
                     xmlns:h="clr-namespace:ClassDesigner.Helping">
 
     <Style x:Key="BorderStyle" TargetType="Border">
-        <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor}"/>
+        <Setter Property="Background" Value="{DynamicResource AlternateBackgroundColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AlternateBackgroundColor}"/>
         <Setter Property="CornerRadius" Value="2"/>
         <Setter Property="Padding" Value="8"/>
         <Setter Property="MinWidth" Value="100"/>
@@ -155,10 +155,10 @@
                                     <TextBlock Text="Поле"/>
                                     <Separator/>
                                     <TextBlock Text="Имя"/>
-                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox Text="{Binding Name}"/>
 
                                     <TextBlock Text="Тип"/>
-                                    <TextBox Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox Text="{Binding Type}"/>
                                     
                                     <Separator/>
                                     <TextBlock Text="Видимость"/>
@@ -172,7 +172,7 @@
 
                                     <Separator/>
                                     <CheckBox IsChecked="{Binding IsStatic}">
-                                        <TextBlock Text="Статический"/>
+                                        <TextBlock Text="Статическое"/>
                                     </CheckBox>
                                 </StackPanel>
                             </Border>
@@ -203,10 +203,10 @@
                                     <Separator/>
 
                                     <CheckBox IsChecked="{Binding IsStatic}">
-                                        <TextBlock Text="Статический"/>
+                                        <TextBlock Text="Статическое"/>
                                     </CheckBox>
                                     <CheckBox IsChecked="{Binding IsAbstract}">
-                                        <TextBlock Text="Абстрактный"/>
+                                        <TextBlock Text="Абстрактное"/>
                                     </CheckBox>
                                     <Separator/>
 
@@ -271,7 +271,14 @@
                                         </ItemsControl>
                                     </ScrollViewer>
                                     <Button Command="{Binding AddParameterCommand}">
-                                        <TextBlock Style="{StaticResource AddIcon}"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0"  Style="{StaticResource AddIcon}" FontSize="16" Margin="2,2,5,2" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="Добавить параметр" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                        </Grid>
                                     </Button>
                                 </StackPanel>
                             </Border>
@@ -282,13 +289,11 @@
                         <DataTemplate>
                             <Border Style="{StaticResource BorderStyle}">
                                 <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
-                                    <TextBlock Text="Метод"/>
+                                    <TextBlock Text="Конструктор"/>
                                     <Separator/>
                                     <TextBlock Text="Имя"/>
-                                    <TextBox Text="{Binding Name}"/>
-
-                                    <TextBlock Text="Тип"/>
-                                    <TextBox Text="{Binding Type}"/>
+                                    <TextBlock Text="{Binding Name}"/>
+                                    
                                     <Separator/>
                                     <TextBlock Text="Видимость"/>
                                     <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
@@ -299,13 +304,6 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
 
-                                    <!--<Separator/>
-                                    <CheckBox IsChecked="{Binding IsStatic}">
-                                        <TextBlock Text="Статический"/>
-                                    </CheckBox>
-                                    <CheckBox IsChecked="{Binding IsAbstract}">
-                                        <TextBlock Text="Абстрактный"/>
-                                    </CheckBox>-->
                                     <Separator/>
                                     <TextBlock Text="Параметры"/>
                                     <ScrollViewer Height="100">
@@ -327,7 +325,14 @@
                                         </ItemsControl>
                                     </ScrollViewer>
                                     <Button Command="{Binding AddParameterCommand}">
-                                        <TextBlock Style="{StaticResource AddIcon}"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0"  Style="{StaticResource AddIcon}" FontSize="16" Margin="2,2,5,2" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="Добавить параметр" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                        </Grid>
                                     </Button>
                                 </StackPanel>
                             </Border>
@@ -348,7 +353,7 @@
                                     <Separator/>
                                     <TextBlock Text="Тип"/>
                                     <TextBlock Text="{Binding RelationType}"/>
-
+                                    <Separator/>
                                     <ContentControl Content="{Binding RelationType}">
                                         <ContentControl.ContentTemplateSelector>
                                             <h:RelationTemplateSelector>
@@ -360,11 +365,16 @@
                                                                 <ColumnDefinition/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <ComboBox ItemsSource="{Binding SourceEntry.Actions}" 
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="Auto"/>
+                                                            </Grid.RowDefinitions>
+                                                            <TextBlock Grid.ColumnSpan="2" Text="Зависимое действие"/>
+                                                            <ComboBox Grid.Row="1" ItemsSource="{Binding SourceEntry.Actions}" 
                                                                   SelectedItem="{Binding ConnectionData.DependencedAction}">
                                                             </ComboBox>
-                                                            <Button Grid.Column="1"  Command="{Binding ConnectionData.AddDependencedMethod}">
-                                                                <TextBlock Style="{StaticResource AddIcon}"/>
+                                                            <Button Grid.Row="1" Grid.Column="1"  Command="{Binding ConnectionData.AddDependencedMethod}">
+                                                                <TextBlock Style="{StaticResource AddIcon}" FontSize="16"/>
                                                             </Button>
                                                         </Grid>
                                                     </DataTemplate>
@@ -401,19 +411,23 @@
                                                                 <ColumnDefinition/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <ComboBox ItemsSource="{Binding TargetEntry.Attributes}" 
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="Auto"/>
+                                                            </Grid.RowDefinitions>
+                                                            <TextBlock Grid.ColumnSpan="2" Text="Аттрибут композиции"/>
+                                                            <ComboBox Grid.Row="1" ItemsSource="{Binding TargetEntry.Attributes}" 
                                                                   SelectedItem="{Binding ConnectionData.ComposedAttribute}">
                                                             </ComboBox>
-                                                            <Menu Grid.Column="1">
-                                                                <MenuItem>
+                                                            <Menu Grid.Row="1" Grid.Column="1">
+                                                                <MenuItem Padding="0">
                                                                     <MenuItem.Header>
-                                                                        <TextBlock Style="{StaticResource AddIcon}"/>
+                                                                        <TextBlock Style="{StaticResource AddIcon}" Margin="2"/>
                                                                     </MenuItem.Header>
                                                                     <MenuItem Header="Добавить поле" Command="{Binding ConnectionData.AddComposedAttribute}"/>
                                                                     <MenuItem Header="Добавить свойство" Command="{Binding ConnectionData.AddComposedProperty}"/>
                                                                 </MenuItem>
                                                             </Menu>
-
                                                         </Grid>
                                                     </DataTemplate>
                                                 </h:RelationTemplateSelector.CompositionTemplate>
@@ -428,27 +442,30 @@
                                                             <Grid.RowDefinitions>
                                                                 <RowDefinition Height="Auto"/>
                                                                 <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="Auto"/>
                                                             </Grid.RowDefinitions>
-                                                            <ComboBox ItemsSource="{Binding TargetEntry.Attributes}" 
+                                                            <TextBlock  Grid.ColumnSpan="2" Text="Аттрибут агрегации"/>
+                                                            <ComboBox Grid.Row="1" ItemsSource="{Binding TargetEntry.Attributes}" 
                                                                   SelectedItem="{Binding ConnectionData.AggregatedAttribute}">
                                                             </ComboBox>
-                                                            <Menu Grid.Column="1">
-                                                                <MenuItem>
+                                                            <Menu Grid.Column="1" Grid.Row="1">
+                                                                <MenuItem Padding="0">
                                                                     <MenuItem.Header>
-                                                                        <TextBlock Style="{StaticResource AddIcon}"/>
+                                                                        <TextBlock Style="{StaticResource AddIcon}" Margin="2"/>
                                                                     </MenuItem.Header>
                                                                     <MenuItem Header="Добавить поле" Command="{Binding ConnectionData.AddAggregatedField}"/>
                                                                     <MenuItem Header="Добавить свойство" Command="{Binding ConnectionData.AddAggregatedProperty}"/>
                                                                 </MenuItem>
                                                             </Menu>
-
-                                                            <ComboBox Grid.Row="1" ItemsSource="{Binding TargetEntry.Actions}" 
+                                                            <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="Действие агрегации"/>
+                                                            <ComboBox  Grid.Row="3" ItemsSource="{Binding TargetEntry.Actions}" 
                                                                   SelectedItem="{Binding ConnectionData.AggregatedAction}">
                                                             </ComboBox>
-                                                            <Menu Grid.Row="1" Grid.Column="1">
-                                                                <MenuItem>
+                                                            <Menu Grid.Row="3" Grid.Column="1">
+                                                                <MenuItem Padding="0">
                                                                     <MenuItem.Header>
-                                                                        <TextBlock Style="{StaticResource AddIcon}"/>
+                                                                        <TextBlock Style="{StaticResource AddIcon}" Margin="2"/>
                                                                     </MenuItem.Header>
                                                                     <MenuItem Header="Добавить метод" Command="{Binding ConnectionData.AddAggregatedMethod}"/>
                                                                     <MenuItem Header="Добавить конструктор" Command="{Binding ConnectionData.AddAggregatedConstructor}"/>
