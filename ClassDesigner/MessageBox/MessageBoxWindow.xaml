@@ -4,13 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClassDesigner.MessageBox"
+        xmlns:a="clr-namespace:ClassDesigner"
         mc:Ignorable="d"
         WindowStyle="None" 
         AllowsTransparency="True"
         Title="MessageBoxWindow" 
         ResizeMode="CanMinimize" Width="500" 
         Background="Transparent" SizeToContent="Height"
-        FontSize="20" MouseDown="Window_MouseDown">
+        FontSize="20" MouseDown="Window_MouseDown" Owner="{x:Static a:App.MainWindow}" WindowStartupLocation="CenterOwner">
     <Border CornerRadius="3" Background="{DynamicResource AlternateBackgroundColor}">
         <Grid>
             <Grid.RowDefinitions>

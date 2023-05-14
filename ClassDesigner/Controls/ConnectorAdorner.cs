@@ -72,10 +72,20 @@ namespace ClassDesigner.Controls
                 Canvas.SetZIndex(newConnection, designerCanvas.Children.Count);
                 this.designerCanvas.Children.Add(newConnection);
                 designerCanvas.UpdateZIndex();
-
+                this.HitDesignerItem.IsDragConnectionOver = false;
             }
-            if (HitDesignerItem != null)
+            else if (HitDesignerItem != null)
             {
+
+                Control connectorDecorator = hitDesignerItem.Template.FindName("PART_ConnectorDecorator", hitDesignerItem) as Control;
+                Connector sinkConnector = connectorDecorator.Template.FindName("Bottom", connectorDecorator) as Connector;
+                Connector sourceConnector = this.sourceConnector;
+                Connection newConnection = new Connection(sourceConnector, sinkConnector);
+
+                Canvas.SetZIndex(newConnection, designerCanvas.Children.Count);
+                this.designerCanvas.Children.Add(newConnection);
+                designerCanvas.UpdateZIndex();
+
                 this.HitDesignerItem.IsDragConnectionOver = false;
             }
 

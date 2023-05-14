@@ -89,7 +89,7 @@
             <!--<c:Connector x:Name="Top" Orientation="Top" VerticalAlignment="Top" HorizontalAlignment="Center"/>-->
             <c:Connector x:Name="Right" Orientation="Right" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <c:Connector x:Name="Bottom" Orientation="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-            <!--<c:Connector x:Name="Center" Orientation="None" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+            <!--<c:Connector x:Name="Center" Orientation="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>-->
         </Grid>
     </ControlTemplate>
     

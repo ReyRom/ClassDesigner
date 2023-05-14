@@ -1,14 +1,12 @@
-﻿using System;
+﻿using ClassDesigner.Helping;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows;
 
 namespace ClassDesigner.Controls
 {
@@ -127,6 +125,7 @@ namespace ClassDesigner.Controls
             info.DesignerItemSize = new Size(this.ParentDesignerItem.ActualWidth, this.ParentDesignerItem.ActualHeight);
             info.Orientation = this.Orientation;
             info.Position = this.Position;
+            info.ParentPosition = PathFinder.GetMiddlePoint(new Point(info.DesignerItemLeft, info.DesignerItemTop), new Point(info.DesignerItemLeft + info.DesignerItemSize.Width, info.DesignerItemTop + info.DesignerItemSize.Height));
             return info;
         }
 
@@ -163,6 +162,7 @@ namespace ClassDesigner.Controls
         public double DesignerItemTop { get; set; }
         public Size DesignerItemSize { get; set; }
         public Point Position { get; set; }
+        public Point ParentPosition { get; set; }
         public ConnectorOrientation Orientation { get; set; }
     }
 

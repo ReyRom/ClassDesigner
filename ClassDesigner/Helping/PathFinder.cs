@@ -24,9 +24,10 @@ namespace ClassDesigner.Helping
         }
         public static List<Point> GetConnectionLine(ConnectorInfo connectorInfo1, ConnectorInfo connectorInfo2, Nodes nodes)
         {
+
             if (nodes.Count==0)
             {
-                Point mid = new Point((connectorInfo1.Position.X + connectorInfo2.Position.X) / 2, (connectorInfo1.Position.Y + connectorInfo2.Position.Y) / 2);
+                Point mid = new Point((connectorInfo1.ParentPosition.X + connectorInfo2.ParentPosition.X) / 2, (connectorInfo1.ParentPosition.Y + connectorInfo2.ParentPosition.Y) / 2);
                 nodes.Add(new Node(mid));
             }
             

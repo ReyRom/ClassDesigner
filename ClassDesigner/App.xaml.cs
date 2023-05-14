@@ -13,5 +13,13 @@ namespace ClassDesigner
     /// </summary>
     public partial class App : Application
     {
+        public static MainWindow MainWindow;
+
+        public App()
+        {
+            InitializeComponent();
+            MainWindow = new MainWindow();
+            MainWindow.Show();
+        }
     }
 }
