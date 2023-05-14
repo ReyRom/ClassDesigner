@@ -842,20 +842,20 @@ namespace ClassDesigner.Controls
             if (connectionData is AggregationDataViewModel ag)
             {
                 return new XElement("ConnectionData",
-                    new XElement("AggregatedAttribute", ag.AggregatedAttribute.ToString()),
-                    new XElement("AggregatedMethod", ag.AggregatedAction.ToString())
+                    new XElement("AggregatedAttribute", ag.AggregatedAttribute?.ToString()),
+                    new XElement("AggregatedMethod", ag.AggregatedAction?.ToString())
                     );
             }
             if (connectionData is CompositionDataViewModel c)
             {
                 return new XElement("ConnectionData",
-                    new XElement("ComposedAttribute", c.ComposedAttribute.ToString())
+                    new XElement("ComposedAttribute", c.ComposedAttribute?.ToString())
                     );
             }
             if (connectionData is DependencyDataViewModel d)
             {
                 return new XElement("ConnectionData",
-                    new XElement("DependencedMethod", d.DependencedAction.ToString())
+                    new XElement("DependencedMethod", d.DependencedAction?.ToString())
                     );
             }
             return new XElement("ConnectionData");

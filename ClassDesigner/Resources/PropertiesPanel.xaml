@@ -263,7 +263,7 @@
                                                         </Grid.ColumnDefinitions>
                                                         <TextBox Text="{Binding ParameterString}"/>
                                                         <Button Grid.Column="1" Command="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content.RemoveParameterCommand}" CommandParameter="{Binding}">
-                                                            <TextBlock Style="{StaticResource RemoveIcon}"/>
+                                                            <TextBlock Style="{StaticResource DeleteIcon}"/>
                                                         </Button>
                                                     </Grid>
                                                 </DataTemplate>
@@ -317,7 +317,7 @@
                                                         </Grid.ColumnDefinitions>
                                                         <TextBox Text="{Binding ParameterString}"/>
                                                         <Button Grid.Column="1" Command="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content.RemoveParameterCommand}" CommandParameter="{Binding}">
-                                                            <TextBlock Style="{StaticResource RemoveIcon}"/>
+                                                            <TextBlock Style="{StaticResource DeleteIcon}"/>
                                                         </Button>
                                                     </Grid>
                                                 </DataTemplate>
