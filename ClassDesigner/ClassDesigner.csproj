@@ -6,10 +6,15 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
 	  <UseWindowsForms>true</UseWindowsForms>
+	  <ApplicationIcon>ClassDesigner.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\Fonts\IcoMoon-Free.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClassDesigner.ico" />
   </ItemGroup>
 
   <ItemGroup>

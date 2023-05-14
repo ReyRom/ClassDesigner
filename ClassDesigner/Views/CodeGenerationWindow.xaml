@@ -44,7 +44,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <Button Grid.Row="2" Command="{Binding GenerateCodeCommand}">
-            <TextBlock Text="Генерировать код"/>
+            <TextBlock Text="Генерировать код" FontSize="16"/>
         </Button>
     </Grid>
 </Window>

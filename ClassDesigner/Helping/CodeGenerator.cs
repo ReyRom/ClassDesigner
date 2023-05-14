@@ -33,8 +33,14 @@ namespace ClassDesigner.Helping
 
         public void GenerateCode(IEnumerable<IEntry> entries, string path)
         {
-            if (!string.IsNullOrWhiteSpace(path) && entries != null)
+            try
             {
+                if (entries is null)
+                {
+                    MessageBox.MessageBox.Show("Ошибка", "В рабочей области нет сущностей для генерации кода", MessageBox.MessageBoxButtons.Ok);
+                    return;
+                }
+
                 var dir = Path.Combine(path, Language.ToString());
                 if (!Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
 
@@ -42,6 +48,11 @@ namespace ClassDesigner.Helping
                 {
                     File.WriteAllText(Path.Combine(dir, $"{item.Name}.{Serializer.Extension}"), Serializer.SerializeEntry(item));
                 }
+                MessageBox.MessageBox.Show("Ошибка", "В рабочей области нет сущностей для генерации кода", MessageBox.MessageBoxButtons.Ok);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok);
             }
         }
     }
