@@ -83,8 +83,8 @@ namespace ClassDesigner.Controls
             //    File.WriteAllText(Path.Combine(path, $"{item.Name}.cs"), CSharpSerializer.SerializeEntry(item));
             //}
 
-            CodeGenerationWindow codeGenerationWindow = new CodeGenerationWindow();
-            codeGenerationWindow.ShowDialog();
+            
+            App.CodeGenerationWindow.Show();
 
         }
 

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ClassDesigner.Views"
         xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
         mc:Ignorable="d"
-        Title="CodeGenerationWindow" Height="300" Width="400"
+        Title="CodeGenerationWindow" Height="300" Width="450"
         Background="{DynamicResource AppColor}" 
         WindowState="Normal" WindowStyle="None"
         AllowsTransparency="True" 
@@ -15,7 +15,7 @@
         <vm:CodeGenerationViewModel x:Key="viewModel"/>
     </Window.Resources>
     
-    <Grid Margin="15" DataContext="{StaticResource viewModel}">
+    <Grid Background="{DynamicResource AlternateBackgroundColor}" Margin="15" DataContext="{StaticResource viewModel}">
         <Grid.LayoutTransform>
             <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding SettingsService.InterfaceScale}" ScaleY="{Binding SettingsService.InterfaceScale}"/>
         </Grid.LayoutTransform>
@@ -24,13 +24,13 @@
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Grid >
+        <Grid Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBox Text="{Binding Folder}"/>
-            <Button Grid.Column="1" Command="{Binding SelectFolderCommand}">
+            <Button Grid.Column="1" Command="{Binding SelectFolderCommand}" Width="50">
                 <TextBlock Text="Обзор"/>
             </Button>
         </Grid>
@@ -43,8 +43,14 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Button Grid.Row="2" Command="{Binding GenerateCodeCommand}">
-            <TextBlock Text="Генерировать код" FontSize="16"/>
-        </Button>
+        <UniformGrid Grid.Row="2" Columns="2">
+            <Button  Command="{x:Static SystemCommands.CloseWindowCommand}" Margin="5">
+                <TextBlock Text="Закрыть" FontSize="16"/>
+            </Button>
+            <Button  Command="{Binding GenerateCodeCommand}" Margin="5">
+                <TextBlock Text="Генерировать код" FontSize="16"/>
+            </Button>
+        </UniformGrid>
+        
     </Grid>
 </Window>

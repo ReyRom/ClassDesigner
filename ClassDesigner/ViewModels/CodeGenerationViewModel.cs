@@ -11,13 +11,20 @@ namespace ClassDesigner.ViewModels
         private Command generateCodeCommand;
         public Command GenerateCodeCommand => generateCodeCommand ??= new Command(obj =>
         {
-            foreach (LanguagesList.Language item in LanguagesList)
+            try
             {
-                if (item.IsSelected)
+                foreach (LanguagesList.Language item in LanguagesList)
                 {
-                    var generator = new CodeGenerator(item.Name);
-                    generator.GenerateCode(DataService.Instance.Entries, Folder);
+                    if (item.IsSelected)
+                    {
+                        var generator = new CodeGenerator(item.Name);
+                        generator.GenerateCode(DataService.Instance.Entries, Folder);
+                    }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok);
             }
         });
 
@@ -30,6 +37,7 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(Folder));
             }
         }
+
 
         private Command selectFolderCommand;
         public Command SelectFolderCommand => selectFolderCommand ??= new Command(obj =>

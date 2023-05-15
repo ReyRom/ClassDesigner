@@ -1,20 +1,6 @@
-﻿using ClassDesigner.Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ClassDesigner
 {
@@ -36,14 +22,7 @@ namespace ClassDesigner
 
         private void MainWindow_Closing(object? sender, CancelEventArgs e)
         {
-            if (MessageBox.MessageBox.Show("Выход", "Вы уверены, что хотите выйти? Несохраненные изменения могут быть утеряны", MessageBox.MessageBoxButtons.YesNo) == MessageBox.MessageBoxResult.Yes)
-            {
-                e.Cancel = false;
-            }
-            else
-            {
-                e.Cancel = true;
-            }
+            e.Cancel = MessageBox.MessageBox.Show("Выход", "Вы уверены, что хотите выйти? Несохраненные изменения могут быть утеряны", MessageBox.MessageBoxButtons.YesNo) != MessageBox.MessageBoxResult.Yes;
         }
 
         private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e)

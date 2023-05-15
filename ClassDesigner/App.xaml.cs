@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ClassDesigner.Views;
 using System.Windows;
 
 namespace ClassDesigner
@@ -13,13 +8,24 @@ namespace ClassDesigner
     /// </summary>
     public partial class App : Application
     {
-        public static MainWindow MainWindow;
+        private static MainWindow mainWindow;
+        private static CodeGenerationWindow codeGenerationWindow;
+
+        public static MainWindow MainWindow => mainWindow ??= new MainWindow();
+
+        public static CodeGenerationWindow CodeGenerationWindow => codeGenerationWindow ??= new CodeGenerationWindow();
 
         public App()
         {
             InitializeComponent();
-            MainWindow = new MainWindow();
             MainWindow.Show();
+            App.Current.Exit += Current_Exit;
+        }
+
+        private void Current_Exit(object sender, ExitEventArgs e)
+        {
+            MainWindow.Close();
+            CodeGenerationWindow.Close();
         }
     }
 }

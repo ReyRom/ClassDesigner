@@ -23,7 +23,7 @@
     </Window.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome     
-            CaptionHeight="1"
+            CaptionHeight="40"
             CornerRadius="0"
             ResizeBorderThickness="4"         
             GlassFrameThickness="0">
@@ -42,10 +42,10 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Command="{x:Static SystemCommands.MinimizeWindowCommand}">
+            <Button Command="{x:Static SystemCommands.MinimizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
                 <TextBlock Style="{StaticResource CollapseIcon}" Margin="2"/>
             </Button>
-            <Button Command="{x:Static SystemCommands.RestoreWindowCommand}">
+            <Button Command="{x:Static SystemCommands.RestoreWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
                 <TextBlock Style="{StaticResource DeexpandIcon}" Margin="2"/>
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
@@ -57,7 +57,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Command="{x:Static SystemCommands.MaximizeWindowCommand}">
+            <Button Command="{x:Static SystemCommands.MaximizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
                 <TextBlock Style="{StaticResource ExpandIcon}" Margin="2"/>
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
@@ -69,7 +69,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Command="{x:Static SystemCommands.CloseWindowCommand}">
+            <Button Command="{x:Static SystemCommands.CloseWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
                 <TextBlock Style="{StaticResource CrossIcon}" Margin="2"/>
             </Button>
         </StackPanel>

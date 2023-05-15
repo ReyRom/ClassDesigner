@@ -22,6 +22,12 @@ namespace ClassDesigner.Views
         public CodeGenerationWindow()
         {
             InitializeComponent();
+            CommandBindings.Add(new CommandBinding(SystemCommands.CloseWindowCommand, CloseWindow_Executed));
+        }
+
+        private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.CloseWindow(this);
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
