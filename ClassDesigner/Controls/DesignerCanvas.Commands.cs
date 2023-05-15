@@ -350,6 +350,10 @@ namespace ClassDesigner.Controls
         {
             ClassViewModel model = new ClassViewModel();
             model.Name = itemXML.Element("Name").Value;
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                DataService.Instance.ProvideName(model);
+            }
             model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
             model.IsStatic = bool.Parse(itemXML.Element("IsStatic").Value);
             model.IsAbstract = bool.Parse(itemXML.Element("IsAbstract").Value);
@@ -416,6 +420,10 @@ namespace ClassDesigner.Controls
         {
             StructViewModel model = new StructViewModel();
             model.Name = itemXML.Element("Name").Value;
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                DataService.Instance.ProvideName(model);
+            }
             model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
             foreach (var attrXML in itemXML.Element("Attributes").Elements("Attribute"))
             {
@@ -479,6 +487,10 @@ namespace ClassDesigner.Controls
         {
             InterfaceViewModel model = new InterfaceViewModel();
             model.Name = itemXML.Element("Name").Value;
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                DataService.Instance.ProvideName(model);
+            }
             model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
             foreach (var propXML in itemXML.Element("Attributes").Elements("Property"))
             {
@@ -518,6 +530,10 @@ namespace ClassDesigner.Controls
         {
             EnumViewModel model = new EnumViewModel();
             model.Name = itemXML.Element("Name").Value;
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                DataService.Instance.ProvideName(model);
+            }
             model.Visibility = (VisibilityType)Enum.Parse(typeof(VisibilityType), itemXML.Element("Visibility").Value);
             foreach (var childXML in itemXML.Element("EnumChildren").Elements("EnumChild"))
             {

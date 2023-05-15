@@ -10,7 +10,7 @@
       <ZIndex>0</ZIndex>
       <Content>
         <Class>
-          <Name>Class</Name>
+          <Name></Name>
           <Visibility>Public</Visibility>
           <IsStatic>false</IsStatic>
           <IsAbstract>false</IsAbstract>

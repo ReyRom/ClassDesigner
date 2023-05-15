@@ -40,39 +40,49 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Command="{x:Static SystemCommands.MinimizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
-                <TextBlock Style="{StaticResource CollapseIcon}" Margin="2"/>
-            </Button>
-            <Button Command="{x:Static SystemCommands.RestoreWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
-                <TextBlock Style="{StaticResource DeexpandIcon}" Margin="2"/>
-                <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-                        <Style.Triggers>
-                            <DataTrigger  Binding="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=WindowState}" Value="Normal">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Command="{x:Static SystemCommands.MaximizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
-                <TextBlock Style="{StaticResource ExpandIcon}" Margin="2"/>
-                <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-                        <Style.Triggers>
-                            <DataTrigger  Binding="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=WindowState}" Value="Maximized">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Command="{x:Static SystemCommands.CloseWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
-                <TextBlock Style="{StaticResource CrossIcon}" Margin="2"/>
-            </Button>
-        </StackPanel>
+        <Border Background="{DynamicResource AlternateBackgroundColor}" CornerRadius="3" Padding="1">
+            <DockPanel HorizontalAlignment="Stretch">
+                <Button WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding OpenAboutCommand}" ToolTip="О программе" Cursor="Help" Style="{x:Null}">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="{StaticResource AppIconDrawingImage}" Height="20" DockPanel.Dock="Left" Margin="5,0,5,0"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Command="{x:Static SystemCommands.CloseWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Right">
+                    <TextBlock Style="{StaticResource CrossIcon}" Margin="2"/>
+                </Button>
+                <Button Command="{x:Static SystemCommands.RestoreWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Right">
+                    <TextBlock Style="{StaticResource DeexpandIcon}" Margin="2"/>
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=WindowState}" Value="Normal">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Command="{x:Static SystemCommands.MaximizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Right">
+                    <TextBlock Style="{StaticResource ExpandIcon}" Margin="2"/>
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=WindowState}" Value="Maximized">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Command="{x:Static SystemCommands.MinimizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Right">
+                    <TextBlock Style="{StaticResource CollapseIcon}" Margin="2"/>
+                </Button>
+                <TextBlock Text="Class Designer" FontSize="16" VerticalAlignment="Center"/>
+            </DockPanel>
+        </Border>
+        
 
         <ContentControl Grid.Row="1" Content="{StaticResource ApplicationToolbar}" Margin="2"/>
 
@@ -143,7 +153,7 @@
             </StackPanel>
             
 
-            <ScrollViewer Height="50" Grid.Column="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Hidden" Margin="5">
+            <ScrollViewer Grid.Column="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Hidden" Margin="5">
                 <ItemsControl ItemsSource="{Binding ErrorService.Errors}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>

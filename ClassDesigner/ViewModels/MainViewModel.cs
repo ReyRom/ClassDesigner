@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,5 +45,13 @@ namespace ClassDesigner.ViewModels
                 return Properties.Settings.Default.InterfaceScale;
             }
         }
+
+        
+
+        Command openAboutCommand;
+        public Command OpenAboutCommand => openAboutCommand ??= new Command(obj =>
+        {
+            MessageBox.MessageBox.Show("О программе", $"Class Designer - CASE-средство проектирования классов на основе UML-нотации. \n©Садовский Роман Викторович, 2023. v{Assembly.GetExecutingAssembly().GetName().Version}", MessageBox.MessageBoxButtons.Ok);
+        });
     }
 }

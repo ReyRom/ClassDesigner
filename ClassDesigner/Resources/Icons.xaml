@@ -193,4 +193,46 @@
             </PathGeometry>
         </Path.Data>
     </Path>
+
+
+
+    <DrawingImage x:Key="AppIconDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V297 H210 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="{DynamicResource StrokeColor}" Thickness="0.839" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <RectangleGeometry RadiusX="0" RadiusY="0" Rect="8.0582,4.4621,4.3912,2.7139" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                    <GeometryDrawing>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="{DynamicResource StrokeColor}" Thickness="0.839" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <RectangleGeometry RadiusX="0" RadiusY="0" Rect="15.4299,4.4621,4.3912,2.7139" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="F1 M210,297z M0,0z M10.352163,7.2286658L10.396783,12.850961 17.670071,12.895581 17.625451,10.653677">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="{DynamicResource StrokeColor}" Thickness="0.765" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <DrawingGroup Transform="0.53015866,-0.84789846,0.53015866,0.84789846,0,0">
+                        <GeometryDrawing Brush="{DynamicResource StrokeColor}">
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="{DynamicResource StrokeColor}" Thickness="0.683246" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                            </GeometryDrawing.Pen>
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="10.3404,21.4307,1.4746,1.4746" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

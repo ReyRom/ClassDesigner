@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassDesigner.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -36,6 +37,25 @@ namespace ClassDesigner.Helping
             }
         }
 
+        
+
+        int classCounter = 0;
+        int interfaceCounter = 0;
+        int structCounter = 0;
+        int enumCounter = 0;
+
+        public void ProvideName(IEntry entry)
+        {
+            entry.Name = entry switch
+            {
+                ClassViewModel =>  "Class" + ++classCounter,
+                InterfaceViewModel =>  "Interface" + ++interfaceCounter,
+                StructViewModel =>  "Struct" + ++structCounter,
+                EnumViewModel =>  "Enum" + ++enumCounter,
+                _ => throw new InvalidOperationException()
+            };
+        }
+        
 
         public void AddType(string type)
         {
@@ -75,12 +95,47 @@ namespace ClassDesigner.Helping
         }
 
         private IEnumerable<IEntry> entries;
-        
+
+        public DataService()
+        {
+            errorViewModel = new ErrorViewModel();
+            ErrorService.Instance.ObservableErrors.Add(errorViewModel);
+        }
+
+        ErrorViewModel errorViewModel;
 
         public void UpdateEntries(IEnumerable<IEntry> entries)
         {
+            foreach (var entry in entries)
+            {
+                entry.PropertyChanged -= Entry_PropertyChanged;
+            }
+
             this.entries = entries;
+
+            foreach (var entry in entries)
+            {
+                entry.PropertyChanged += Entry_PropertyChanged;
+            }
+
+            var repeat = entries.GroupBy(x => x.Name).FirstOrDefault(g => g.Count() > 1);
+            if (repeat is not null)
+            {
+                errorViewModel.Source = (IErrorProvider)repeat.First();
+                errorViewModel.Text = $"Сущность с именем {repeat.Key} определена более одного раза";
+            }
+
             OnPropertyChanged(nameof(Entries));
+        }
+
+        private void Entry_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            var repeat = entries.GroupBy(x => x.Name).FirstOrDefault(g => g.Count() > 1);
+            if (repeat is not null)
+            {
+                errorViewModel.Source = (IErrorProvider)repeat.First();
+                errorViewModel.Text = $"Сущность с именем {repeat.Key} определена более одного раза";
+            }
         }
 
         public IEnumerable<IEntry> Entries { get => entries; }
