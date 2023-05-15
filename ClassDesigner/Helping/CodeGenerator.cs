@@ -23,7 +23,7 @@ namespace ClassDesigner.Helping
                     Serializer = new JavaSerializer();
                     break;
                 case LanguagesList.Languages.Python:
-
+                    Serializer = new PythonSerializer();
                     break;
                 case LanguagesList.Languages.Kotlin:
                     Serializer = new KotlinSerializer();

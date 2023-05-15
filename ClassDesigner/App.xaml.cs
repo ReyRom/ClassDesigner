@@ -13,7 +13,7 @@ namespace ClassDesigner
 
         public static MainWindow MainWindow => mainWindow ??= new MainWindow();
 
-        public static CodeGenerationWindow CodeGenerationWindow => codeGenerationWindow ??= new CodeGenerationWindow();
+        public static CodeGenerationWindow CodeGenerationWindow =>  new CodeGenerationWindow();
 
         public App()
         {
