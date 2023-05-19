@@ -13,19 +13,18 @@ namespace ClassDesigner
 
         public static MainWindow MainWindow => mainWindow ??= new MainWindow();
 
-        public static CodeGenerationWindow CodeGenerationWindow =>  new CodeGenerationWindow();
+        public static CodeGenerationWindow CodeGenerationWindow => codeGenerationWindow ??= new CodeGenerationWindow();
 
         public App()
         {
             InitializeComponent();
             MainWindow.Show();
-            App.Current.Exit += Current_Exit;
+            MainWindow.Closed += MainWindow_Closed;
         }
 
-        private void Current_Exit(object sender, ExitEventArgs e)
+        private void MainWindow_Closed(object? sender, System.EventArgs e)
         {
-            MainWindow.Close();
-            CodeGenerationWindow.Close();
+            codeGenerationWindow?.Close();
         }
     }
 }

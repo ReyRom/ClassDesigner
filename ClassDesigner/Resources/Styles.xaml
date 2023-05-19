@@ -69,6 +69,7 @@
     </Style>
 
 
+
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource TextBox.Static.Border}"/>
@@ -114,6 +115,7 @@
     
     <Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
         <Setter Property="AllowDrop" Value="true"/>
         <Setter Property="MinWidth" Value="0"/>
         <Setter Property="MinHeight" Value="0"/>
@@ -759,7 +761,7 @@
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{DynamicResource ComboBox.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ComboBox.Static.Border}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>

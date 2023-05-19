@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using ClassDesigner.Helping;
+using System;
+using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -17,7 +20,25 @@ namespace ClassDesigner
             CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand, MinimizeWindow_Executed));
             CommandBindings.Add(new CommandBinding(SystemCommands.RestoreWindowCommand, RestoreWindow_Executed));
 
+            this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            var args = Environment.GetCommandLineArgs();
+            //foreach (var arg in args)
+            //{
+            //    MessageBox.MessageBox.Show("1", arg.ToString());
+            //}
+            if (args.Length > 1)
+            {
+                if (File.Exists(args[1]))
+                {
+                    this.Designer.OpenFile(args[1]);
+                }
+            }
+
         }
 
         private void MainWindow_Closing(object? sender, CancelEventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ClassDesigner.Models
 {
@@ -26,6 +27,14 @@ namespace ClassDesigner.Models
             new Language(){ Name = Languages.Python, IsSelected = false },
             new Language(){ Name = Languages.Kotlin, IsSelected = false }
         };
+
+        public bool IsAnySelected
+        {
+            get
+            {
+                return LanguageList.Any(x => x.IsSelected);
+            }
+        }
 
         public IEnumerator GetEnumerator() => LanguageList.GetEnumerator();
     }

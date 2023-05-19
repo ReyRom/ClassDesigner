@@ -27,7 +27,7 @@ namespace ClassDesigner.Views
 
         private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SystemCommands.CloseWindow(this);
+            this.Hide();
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

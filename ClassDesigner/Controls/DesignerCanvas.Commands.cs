@@ -51,6 +51,7 @@ namespace ClassDesigner.Controls
             this.CommandBindings.Add(new CommandBinding(DesignerCanvas.GenerateCode, GenerateCode_Executed, GenerateCode_Enabled));
             SelectAll.InputGestures.Add(new KeyGesture(Key.A, ModifierKeys.Control));
             this.AllowDrop = true;
+
             Clipboard.Clear();
         }
 
@@ -203,20 +204,26 @@ namespace ClassDesigner.Controls
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
-            openFile.Filter = "Files (*.xml)|*.xml|All Files (*.*)|*.*";
+            openFile.Filter = "Class Designer Files|*.classdsgn|Files (*.xml)|*.xml|All Files (*.*)|*.*";
             if (openFile.ShowDialog() == true)
             {
-                try
-                {
-                    XElement xElement = XElement.Load(openFile.FileName);
-                    this.Children.Clear();
-                    this.SelectionService.ClearSelection();
-                    PasteXml(xElement);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok);
-                }
+                OpenFile(openFile.FileName);
+            }
+        }
+
+        public void OpenFile(string filename)
+        {
+            try
+            {
+                XElement xElement = XElement.Load(filename);
+                this.Children.Clear();
+                this.SelectionService.ClearSelection();
+                PasteXml(xElement);
+                SelectionService.ClearSelection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok);
             }
         }
 
@@ -880,7 +887,7 @@ namespace ClassDesigner.Controls
         void SaveFile(XElement xElement)
         {
             SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Filter = "XML-файлы (*.xml)|*.xml|Изображения (*.png)|*.png";
+            saveFile.Filter = "Class Designer Files (*.classdsgn)|*.classdsgn|XML-файлы (*.xml)|*.xml|Изображения (*.png)|*.png";
             if (saveFile.ShowDialog() == true)
             {
                 try

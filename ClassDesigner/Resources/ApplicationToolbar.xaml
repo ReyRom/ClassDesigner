@@ -184,7 +184,7 @@
                     HorizontalContentAlignment="Left"
                     Command="{x:Static c:DesignerCanvas.OpenSettings}" 
                     CommandTarget="{Binding ElementName=Designer}"
-                    ToolTip="Сгенерировать код">
+                    ToolTip="Настройки">
                 <StackPanel Margin="5">
                     <TextBlock Style="{StaticResource SettingsIcon}" FontSize="50" HorizontalAlignment="Center"/>
                 </StackPanel>

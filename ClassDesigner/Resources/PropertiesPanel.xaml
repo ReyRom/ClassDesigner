@@ -158,8 +158,8 @@
                                     <TextBox Text="{Binding Name}"/>
 
                                     <TextBlock Text="Тип"/>
-                                    <TextBox Text="{Binding Type}"/>
-                                    
+                                    <!--<TextBox Text="{Binding Type}"/>-->
+                                    <ComboBox IsEditable="True" IsReadOnly="False" StaysOpenOnEdit="True" Text="{Binding Type}" ItemsSource="{Binding TypesNames, Source={x:Static h:DataService.Instance}}" />
                                     <Separator/>
                                     <TextBlock Text="Видимость"/>
                                     <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
@@ -189,7 +189,8 @@
                                     <TextBox Text="{Binding Name}"/>
 
                                     <TextBlock Text="Тип"/>
-                                    <TextBox Text="{Binding Type}"/>
+                                    <!--<TextBox Text="{Binding Type}"/>-->
+                                    <ComboBox IsEditable="True" IsReadOnly="False" StaysOpenOnEdit="True" Text="{Binding Type}" ItemsSource="{Binding TypesNames, Source={x:Static h:DataService.Instance}}" />
                                     <Separator/>
                                     <TextBlock Text="Видимость"/>
                                     <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
@@ -232,7 +233,8 @@
                                     <TextBox Text="{Binding Name}"/>
 
                                     <TextBlock Text="Тип"/>
-                                    <TextBox Text="{Binding Type}"/>
+                                    <!--<TextBox Text="{Binding Type}"/>-->
+                                    <ComboBox IsEditable="True" IsReadOnly="False" StaysOpenOnEdit="True" Text="{Binding Type}" ItemsSource="{Binding TypesNames, Source={x:Static h:DataService.Instance}}" />
                                     <Separator/>
                                     <TextBlock Text="Видимость"/>
                                     <ComboBox ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">

@@ -29,9 +29,12 @@ namespace ClassDesigner.Helping
                 {
                     typesNames.Add(type);
                 }
-                foreach (var type in Entries)
+                if (Entries != null)
                 {
-                    typesNames.Add(type.Name);
+                    foreach (var type in Entries)
+                    {
+                        typesNames.Add(type.Name);
+                    }
                 }
                 return typesNames;
             }
@@ -99,6 +102,7 @@ namespace ClassDesigner.Helping
         public DataService()
         {
             errorViewModel = new ErrorViewModel();
+            errorViewModel.ErrorCriticalFor = ErrorCriticalFor.CodeGeneration;
             ErrorService.Instance.ObservableErrors.Add(errorViewModel);
         }
 
@@ -124,6 +128,11 @@ namespace ClassDesigner.Helping
                 errorViewModel.Source = (IErrorProvider)repeat.First();
                 errorViewModel.Text = $"Сущность с именем {repeat.Key} определена более одного раза";
             }
+            else
+            {
+                errorViewModel.Source = null;
+                errorViewModel.Text = String.Empty;
+            }
 
             OnPropertyChanged(nameof(Entries));
         }
@@ -135,6 +144,11 @@ namespace ClassDesigner.Helping
             {
                 errorViewModel.Source = (IErrorProvider)repeat.First();
                 errorViewModel.Text = $"Сущность с именем {repeat.Key} определена более одного раза";
+            }
+            else
+            {
+                errorViewModel.Source = null;
+                errorViewModel.Text = String.Empty;
             }
         }
 

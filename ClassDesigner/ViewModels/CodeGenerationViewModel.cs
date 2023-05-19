@@ -1,5 +1,6 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ClassDesigner.ViewModels
@@ -13,6 +14,14 @@ namespace ClassDesigner.ViewModels
         {
             try
             {
+                if (!LanguagesList.IsAnySelected)
+                {
+                    throw new System.Exception("Не выбран ни один язык для генерации");
+                }
+                if (ErrorService.Instance.Errors.Any(x => x.ErrorCriticalFor == ErrorCriticalFor.CodeGeneration))
+                {
+                    throw new System.Exception("В проекте присутствуют ошибки критичные для генерации кода");
+                }
                 foreach (LanguagesList.Language item in LanguagesList)
                 {
                     if (item.IsSelected)

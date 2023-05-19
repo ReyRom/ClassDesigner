@@ -137,20 +137,20 @@ namespace ClassDesigner.ViewModels
         }
 
 
-        Command openPropertiesCommand;
-        public Command OpenPropertiesCommand
-        {
-            get => openPropertiesCommand ??= new Command(obj =>
-            {
-                PropertiesService.Instance.SelectedCollection = obj;
+        //Command openPropertiesCommand;
+        //public Command OpenPropertiesCommand
+        //{
+        //    get => openPropertiesCommand ??= new Command(obj =>
+        //    {
+        //        PropertiesService.Instance.SelectedCollection = obj;
 
-                PropertiesCollectionWindow window = new PropertiesCollectionWindow();
+        //        PropertiesCollectionWindow window = new PropertiesCollectionWindow();
 
-                window.ShowDialog();
+        //        window.ShowDialog();
 
-                PropertiesService.Instance.SelectedCollection = null;
-            });
-        }
+        //        PropertiesService.Instance.SelectedCollection = null;
+        //    });
+        //}
 
         private ObservableCollection<IInheritable> parents = new ObservableCollection<IInheritable>();
         public ObservableCollection<IInheritable> Parents

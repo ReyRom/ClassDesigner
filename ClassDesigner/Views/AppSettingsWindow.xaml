@@ -15,7 +15,7 @@
     <Window.Resources>
         <vm:AppSettingsViewModel x:Key="viewModel"/>
     </Window.Resources>
-    <Grid Background="{DynamicResource BackgroundColor}" DataContext="{StaticResource viewModel}" Margin="10" Height="300" Width="400">
+    <Grid Background="{DynamicResource AlternateBackgroundColor}" DataContext="{StaticResource viewModel}" Margin="10" Height="300" Width="400">
         <Grid.LayoutTransform>
             <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding SettingsService.InterfaceScale, Mode=OneTime}" ScaleY="{Binding SettingsService.InterfaceScale, Mode=OneTime}"/>
         </Grid.LayoutTransform>
@@ -44,12 +44,18 @@
             <CheckBox IsChecked="{Binding SettingsService.IsDarkTheme}" Margin="5" Grid.Row="1">
                 <TextBlock Text="Темная тема"/>
             </CheckBox>
+        
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Типы данных" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="16"/>
+            <Grid Margin="5" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition/>
@@ -68,6 +74,7 @@
                     <ItemsControl ItemsSource="{Binding DataService.Types}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
+                                <Border Background="{DynamicResource BackgroundColor}">
                                 <Grid Background="{DynamicResource AlternateBackgroundColor}" Margin="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto"/>
@@ -78,16 +85,25 @@
                                     </Button>
                                     <TextBlock Text="{Binding}" Margin="3" TextWrapping="Wrap" Grid.Column="1"/>
                                 </Grid>
-                                
+                                </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
-
-            <ItemsControl ItemsSource="{Binding DataService.Entries}" Grid.Column="1">
-
-            </ItemsControl>
+            <ScrollViewer Grid.Column="1" Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding DataService.Entries}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{DynamicResource BackgroundColor}" >
+                                <Grid Background="{DynamicResource AlternateBackgroundColor}" Margin="1">
+                                    <TextBlock Text="{Binding Name}" Margin="3" TextWrapping="Wrap" Grid.Column="1"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
         <Button Click="Button_Click" Grid.Row="3" Width="150">
             <TextBlock Text="Назад" FontSize="18"/>

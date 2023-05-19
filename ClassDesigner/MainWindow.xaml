@@ -130,7 +130,6 @@
                                   Focusable="True" 
                                   FocusVisualStyle="{x:Null}" 
                                   Background="{DynamicResource BackgroundColor}">
-
                 </c:DesignerCanvas>
             </ScrollViewer>
             <GridSplitter Grid.Column="2" Width="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="Transparent"/>
@@ -144,7 +143,7 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width ="10*"/>
+                <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Ошибки:" VerticalAlignment="Center" />
             <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top"  HorizontalAlignment="Left">
