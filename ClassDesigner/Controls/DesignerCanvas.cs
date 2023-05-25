@@ -65,7 +65,14 @@ namespace ClassDesigner.Controls
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
-            string dragObject = e.Data.GetData(typeof(string)) as string;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                OpenFile(files[0]);
+                e.Handled = true;
+                return;
+            }
+            var dragObject = e.Data.GetData(typeof(string)) as string;
             if (dragObject != null)
             {
                 Point position = e.GetPosition(this);
@@ -74,7 +81,6 @@ namespace ClassDesigner.Controls
                     PasteXml(XElement.Load(sr), position.X, position.Y);
                 }
 
-                
                 e.Handled = true;
             }
         }

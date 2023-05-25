@@ -13,7 +13,7 @@ namespace ClassDesigner.ViewModels
             Target = connection.TargetEntry;
             ErrorSource = connection;
 
-            generalizationError = new ErrorViewModel() { Source = ErrorSource };
+            generalizationError = new ErrorViewModel() { Source = ErrorSource, ErrorCriticalFor = ErrorCriticalFor.CodeGeneration };
             ErrorService.Instance.ObservableErrors.Add(generalizationError);
             if (ValidateSource())
             {
@@ -66,7 +66,8 @@ namespace ClassDesigner.ViewModels
             if (generalizationError != null)
             {
                 ErrorService.Instance.ObservableErrors.Remove(generalizationError);
-                ((IInheritor)Source).Parents.Remove((IInheritable)Target);
+                if (ValidateSource())
+                    ((IInheritor)Source).Parents.Remove((IInheritable)Target);
                 generalizationError = null;
             }
         }

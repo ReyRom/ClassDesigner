@@ -10,6 +10,7 @@ namespace ClassDesigner.Helping
     public class ErrorService : INotifyPropertyChanged
     {
         private static ErrorService instance;
+        private bool isCriticalForCode;
 
         public ErrorService()
         {
@@ -34,12 +35,14 @@ namespace ClassDesigner.Helping
             }
             OnPropertyChanged(nameof(Errors));
             OnPropertyChanged(nameof(ErrorsCount));
+            OnPropertyChanged(nameof(IsCriticalForCode));
         }
 
         private void Error_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             OnPropertyChanged(nameof(Errors));
             OnPropertyChanged(nameof(ErrorsCount));
+            OnPropertyChanged(nameof(IsCriticalForCode));
         }
 
         public static ErrorService Instance { get => instance ??= new ErrorService(); }
@@ -49,6 +52,11 @@ namespace ClassDesigner.Helping
         public List<ErrorViewModel> Errors { get => ObservableErrors.Where(x => !string.IsNullOrWhiteSpace(x.Text)).ToList(); }
 
         public int ErrorsCount { get => Errors.Count(); }
+
+        public bool IsCriticalForCode
+        {
+            get => Errors.Any(x => x.ErrorCriticalFor == ErrorCriticalFor.CodeGeneration);
+        }
 
 
 

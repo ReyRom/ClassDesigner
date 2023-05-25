@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Root TemplateName="Enum">
+<Root TemplateName="Структура">
   <DesignerItems>
     <DesignerItem>
       <Left>0</Left>
       <Top>0</Top>
-      <Width>74</Width>
+      <Width>75</Width>
       <Heigth>48</Heigth>
-      <ID>7806e9d6-1170-4032-9a94-64c5ab323efd</ID>
+      <ID>4a97abb5-2960-42be-abf5-9411cabcd093</ID>
       <ZIndex>0</ZIndex>
       <Content>
-        <Enum>
+        <Struct>
           <Name></Name>
           <Visibility>Public</Visibility>
-          <EnumChildren />
-        </Enum>
+          <Attributes />
+          <Actions />
+        </Struct>
       </Content>
     </DesignerItem>
   </DesignerItems>

@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClassDesigner.MessageBox
 {
     public static class MessageBox
     {
-        public static MessageBoxResult Show(string header = "", string message = "", MessageBoxButtons buttons = MessageBoxButtons.Ok)
+        public static MessageBoxResult Show(string header = "", string message = "", MessageBoxButtons buttons = MessageBoxButtons.Ok, Window owner = null)
         {
             var mbox = new MessageBoxWindow();
             mbox.Header = header;
             mbox.Message = message;
-
+            if (owner != null) { mbox.Owner = owner; }
             switch (buttons)
             {
                 case MessageBoxButtons.Ok:

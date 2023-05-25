@@ -9,11 +9,15 @@
         WindowStyle="None" 
         AllowsTransparency="True"
         Title="MessageBoxWindow" 
-        ResizeMode="CanMinimize" Width="500" 
-        Background="Transparent" SizeToContent="Height"
-        FontSize="20" MouseDown="Window_MouseDown" Owner="{x:Static a:App.MainWindow}" WindowStartupLocation="CenterOwner">
+        ResizeMode="CanMinimize" 
+        SizeToContent="WidthAndHeight"
+        Background="Transparent"
+        FontSize="16" MouseDown="Window_MouseDown" Owner="{x:Static a:App.MainWindow}" WindowStartupLocation="CenterOwner">
     <Border CornerRadius="3" Background="{DynamicResource AlternateBackgroundColor}">
-        <Grid>
+        <Grid Width="400" Height="auto">
+            <Grid.LayoutTransform>
+                <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding SettingsService.InterfaceScale}" ScaleY="{Binding SettingsService.InterfaceScale}"/>
+            </Grid.LayoutTransform>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

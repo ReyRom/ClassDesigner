@@ -13,7 +13,7 @@ namespace ClassDesigner.ViewModels
             Target = connection.TargetEntry;
             ErrorSource = connection;
 
-            realizationError = new ErrorViewModel() { Source = ErrorSource };
+            realizationError = new ErrorViewModel() { Source = ErrorSource, ErrorCriticalFor = ErrorCriticalFor.CodeGeneration };
             ErrorService.Instance.ObservableErrors.Add(realizationError);
             if (ValidateSource()) 
             {
@@ -32,8 +32,9 @@ namespace ClassDesigner.ViewModels
         {
             if (realizationError != null)
             {
-                ErrorService.Instance.ObservableErrors.Remove(realizationError);
-                ((IInheritor)Source).Parents.Remove((IInheritable)Target);
+                ErrorService.Instance.ObservableErrors.Remove(realizationError); 
+                if (ValidateSource())
+                    ((IInheritor)Source).Parents.Remove((IInheritable)Target);
                 realizationError = null;
             }
         }

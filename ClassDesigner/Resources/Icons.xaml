@@ -194,7 +194,39 @@
         </Path.Data>
     </Path>
 
-
+    <Path x:Key="AppIcon" Stroke="{DynamicResource StrokeColor}" Fill="{DynamicResource StrokeColor}" StrokeThickness="2" StrokeLineJoin="Round">
+        <Path.Data>
+            <PathGeometry>
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure StartPoint ="0 0" IsFilled="False" IsClosed="True">
+                            <LineSegment Point="15 0"/>
+                            <LineSegment Point="15 10"/>
+                            <LineSegment Point="0 10"/>
+                            <LineSegment Point="0 0"/>
+                        </PathFigure>
+                        <PathFigure StartPoint ="7.5 10" IsFilled="False">
+                            <LineSegment Point="7.5 30"/>
+                            <LineSegment Point="32.5 30"/>
+                            <LineSegment Point="32.5 20"/>
+                        </PathFigure>
+                        <PathFigure StartPoint ="32.5 20" IsFilled="True">
+                            <LineSegment Point="35 15"/>
+                            <LineSegment Point="32.5 10"/>
+                            <LineSegment Point="30 15"/>
+                            <LineSegment Point="32.5 20"/>
+                        </PathFigure>
+                        <PathFigure StartPoint ="25 0" IsFilled="False"  IsClosed="True">
+                            <LineSegment Point="40 0"/>
+                            <LineSegment Point="40 10"/>
+                            <LineSegment Point="25 10"/>
+                            <LineSegment Point="25 0"/>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+        </Path.Data>
+    </Path>
 
     <DrawingImage x:Key="AppIconDrawingImage">
         <DrawingImage.Drawing>

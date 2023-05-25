@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassDesigner.Helping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,8 @@ namespace ClassDesigner.MessageBox
 
         public string Message { get; set; } = string.Empty;
         public string Header { get; set; } = string.Empty;
+
+        public SettingsService SettingsService => SettingsService.Instance;
 
         public MessageBoxResult Result { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using ClassDesigner.Helping;
+using ClassDesigner.Helping.Interfaces;
 using ClassDesigner.Models;
 using ClassDesigner.Views;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace ClassDesigner.ViewModels
 {
-    public class ClassViewModel : ViewModelBase, IEntry, IHaveActions, IHaveFields, IHaveProperties, IInheritable, IInheritor, IErrorProvider
+    public class ClassViewModel : ViewModelBase, IEntry, IHaveConstructors, IHaveMethods, IHaveFields, IHaveProperties, IInheritable, IInheritor, IErrorProvider
     {
         private string name = "Class";
         public string Name
@@ -231,6 +232,10 @@ namespace ClassDesigner.ViewModels
             {
                 ErrorService.Instance.ObservableErrors.Remove(classError);
                 classError = null;
+            }
+            foreach (IRelease item in Actions)
+            {
+                item?.ReleaseData();
             }
         }
     }

@@ -1,7 +1,11 @@
 ﻿using ClassDesigner.Models;
 using ClassDesigner.ViewModels;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Windows.Documents;
 
 namespace ClassDesigner.Helping.Serializers
 {
@@ -33,7 +37,7 @@ namespace ClassDesigner.Helping.Serializers
 
             //sb.Append(ConvertVisibility(classView.Visibility));
 
-            sb.Space();
+            //sb.Space();
 
             //if (classView.IsAbstract)
             //{
@@ -52,19 +56,12 @@ namespace ClassDesigner.Helping.Serializers
             {
                 sb.Space();
                 sb.Append("(");
-                foreach (var parent in classView.Parents.OfType<ClassViewModel>())
+                sb.Append(string.Join(", ", classView.Parents.OfType<ClassViewModel>().Select(x => x.Name)));
+                if (classView.Parents.Any(x => x is ClassViewModel) && classView.Parents.Any(x => x is InterfaceViewModel))
                 {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
+                    sb.Append(", ");
                 }
-                foreach (var parent in classView.Parents.OfType<InterfaceViewModel>())
-                {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
-                }
-                sb.Remove(sb.Length - 1, 1);
+                sb.Append(string.Join(", ", classView.Parents.OfType<InterfaceViewModel>().Select(x => x.Name)));
                 sb.Append(")");
             }
             sb.Append(":");
@@ -80,19 +77,24 @@ namespace ClassDesigner.Helping.Serializers
             foreach (var attr in classView.Attributes.OfType<FieldViewModel>())
             {
                 sb.AppendLine(SerializeAttribute(attr, tabLevel + 1));
+
+                sb.AppendLine();
             }
 
             foreach (var attr in classView.Attributes.OfType<PropertyViewModel>())
             {
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
+                sb.AppendLine();
             }
             foreach (var attr in classView.Actions.OfType<ConstructorViewModel>())
             {
                 sb.AppendLine(SerializeConstructor(attr, tabLevel + 1));
+                sb.AppendLine();
             }
             foreach (var attr in classView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             return sb.ToString();
@@ -105,7 +107,7 @@ namespace ClassDesigner.Helping.Serializers
 
             //sb.Append(ConvertVisibility(classView.Visibility));
 
-            sb.Space();
+            //sb.Space();
 
             //if (classView.IsAbstract)
             //{
@@ -122,21 +124,13 @@ namespace ClassDesigner.Helping.Serializers
 
             if (structView.Parents.Count > 0)
             {
-                sb.Space();
                 sb.Append("(");
-                foreach (var parent in structView.Parents.OfType<ClassViewModel>())
+                sb.Append(string.Join(", ", structView.Parents.OfType<ClassViewModel>().Select(x => x.Name)));
+                if (structView.Parents.Any(x => x is ClassViewModel) && structView.Parents.Any(x => x is InterfaceViewModel))
                 {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
+                    sb.Append(", ");
                 }
-                foreach (var parent in structView.Parents.OfType<InterfaceViewModel>())
-                {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
-                }
-                sb.Remove(sb.Length - 1, 1);
+                sb.Append(string.Join(", ", structView.Parents.OfType<InterfaceViewModel>().Select(x => x.Name)));
                 sb.Append(")");
             }
             sb.Append(":");
@@ -152,19 +146,23 @@ namespace ClassDesigner.Helping.Serializers
             foreach (var attr in structView.Attributes.OfType<FieldViewModel>())
             {
                 sb.AppendLine(SerializeAttribute(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             foreach (var attr in structView.Attributes.OfType<PropertyViewModel>())
             {
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
+                sb.AppendLine();
             }
             foreach (var attr in structView.Actions.OfType<ConstructorViewModel>())
             {
                 sb.AppendLine(SerializeConstructor(attr, tabLevel + 1));
+                sb.AppendLine();
             }
             foreach (var attr in structView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             return sb.ToString();
@@ -177,7 +175,7 @@ namespace ClassDesigner.Helping.Serializers
 
             //sb.Append(ConvertVisibility(classView.Visibility));
 
-            sb.Space();
+            //sb.Space();
 
             //if (classView.IsAbstract)
             //{
@@ -197,19 +195,12 @@ namespace ClassDesigner.Helping.Serializers
             {
                 sb.Space();
                 sb.Append("(");
-                foreach (var parent in interfaceView.Parents.OfType<ClassViewModel>())
+                sb.Append(string.Join(", ", interfaceView.Parents.OfType<ClassViewModel>().Select(x => x.Name)));
+                if (interfaceView.Parents.Any(x => x is ClassViewModel) && interfaceView.Parents.Any(x => x is InterfaceViewModel))
                 {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
+                    sb.Append(", ");
                 }
-                foreach (var parent in interfaceView.Parents.OfType<InterfaceViewModel>())
-                {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
-                }
-                sb.Remove(sb.Length - 1, 1);
+                sb.Append(string.Join(", ", interfaceView.Parents.OfType<InterfaceViewModel>().Select(x => x.Name)));
                 sb.Append(")");
             }
             sb.Append(":");
@@ -225,19 +216,23 @@ namespace ClassDesigner.Helping.Serializers
             foreach (var attr in interfaceView.Attributes.OfType<FieldViewModel>())
             {
                 sb.AppendLine(SerializeAttribute(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             foreach (var attr in interfaceView.Attributes.OfType<PropertyViewModel>())
             {
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
+                sb.AppendLine();
             }
             foreach (var attr in interfaceView.Actions.OfType<ConstructorViewModel>())
             {
                 sb.AppendLine(SerializeConstructor(attr, tabLevel + 1));
+                sb.AppendLine();
             }
             foreach (var attr in interfaceView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             return sb.ToString();
@@ -283,11 +278,15 @@ namespace ClassDesigner.Helping.Serializers
             sb.Append(ConvertVisibility(attribute.Visibility));
 
             sb.Append(attribute.Name);
+            sb.Append(" = ");
 
             if (!string.IsNullOrWhiteSpace(attribute.DefaultValue))
             {
-                sb.Append(" = ");
                 sb.Append(attribute.DefaultValue);
+            }
+            else
+            {
+                sb.Append("0");
             }
             return sb.ToString();
         }
@@ -325,16 +324,23 @@ namespace ClassDesigner.Helping.Serializers
                     sb.Append("return ");
                     sb.Append(property.DefaultValue);
                 }
+                else
+                {
+                    sb.Tab(tabLevel + 1);
+                    sb.Append("pass");
+                }
                 sb.AppendLine();
                 sb.Tab(tabLevel);
                 sb.Append($"@{property.Name}.setter");
+                sb.AppendLine();
+                sb.Tab(tabLevel);
                 sb.Append("def");
                 sb.Space();
                 sb.Append(ConvertVisibility(property.Visibility));
                 sb.Append(property.Name);
                 sb.AppendLine("(self, value):");
                 sb.Tab(tabLevel + 1);
-                sb.Append("\"\"\"do something\"\"\"");
+                sb.Append("pass");
             }
 
             else if (property.IsGet)
@@ -367,6 +373,11 @@ namespace ClassDesigner.Helping.Serializers
                     sb.Append("return ");
                     sb.Append(property.DefaultValue);
                 }
+                else
+                {
+                    sb.Tab(tabLevel + 1);
+                    sb.Append("pass");
+                }
 
             }
             else if (property.IsSet)
@@ -385,14 +396,13 @@ namespace ClassDesigner.Helping.Serializers
                 //    sb.Space();
                 //}
                 sb.Tab(tabLevel);
-                sb.Append($"@{property.Name}.setter");
                 sb.Append("def");
                 sb.Space();
                 sb.Append(ConvertVisibility(property.Visibility));
-                sb.Append("set_"+property.Name);
+                sb.Append("set_" + property.Name);
                 sb.AppendLine("(self, value):");
                 sb.Tab(tabLevel + 1);
-                sb.Append("\"\"\"do something\"\"\"");
+                sb.Append("pass");
             }
 
 
@@ -424,18 +434,19 @@ namespace ClassDesigner.Helping.Serializers
             //    sb.Space();
             //}
 
-            
+
             sb.Append(method.Name);
 
             sb.Append("(self");
-            if (method.Parameters.Count>0)
+            if (method.Parameters.Count > 0)
             {
                 sb.Append(", ");
                 sb.Append(string.Join(", ", method.Parameters.Select(x => SerializeParameter(x))));
             }
-            sb.Append(")");
+            sb.Append("):");
+            sb.AppendLine();
             sb.Tab(tabLevel + 1);
-            sb.Append("\"\"\"do something\"\"\"");
+            sb.Append("pass");
             //if (!string.IsNullOrWhiteSpace(method.Type))
             //{
             //    sb.Append(':');
@@ -469,9 +480,10 @@ namespace ClassDesigner.Helping.Serializers
                 sb.Append(", ");
                 sb.Append(string.Join(", ", method.Parameters.Select(x => SerializeParameter(x))));
             }
-            sb.Append(")");
+            sb.Append("):");
+            sb.AppendLine();
             sb.Tab(tabLevel + 1);
-            sb.Append("\"\"\"do something\"\"\"");
+            sb.Append("pass");
             //if (!string.IsNullOrWhiteSpace(method.Type))
             //{
             //    sb.Append(':');

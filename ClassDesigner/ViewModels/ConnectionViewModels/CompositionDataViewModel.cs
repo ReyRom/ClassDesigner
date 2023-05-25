@@ -34,6 +34,7 @@ namespace ClassDesigner.ViewModels
                 //}
                 composedAttribute.PropertyChanged += ComposedAttribute_PropertyChanged;
                 OnPropertyChanged(nameof(ComposedAttribute));
+                Validate();
             }
         }
 
@@ -68,7 +69,7 @@ namespace ClassDesigner.ViewModels
             attribute.Type = Source.Name;
             (Target as IHaveFields).Attributes.Add(attribute);
             ComposedAttribute = attribute;
-        });
+        }, obj => Target is IHaveFields);
 
 
         Command addComposedProperty;
@@ -78,7 +79,7 @@ namespace ClassDesigner.ViewModels
             property.Type = Source.Name;
             (Target as IHaveProperties).Attributes.Add(property);
             ComposedAttribute = property;
-        });
+        }, obj => Target is IHaveProperties);
 
         public bool ValidateSource()
         {
@@ -109,7 +110,7 @@ namespace ClassDesigner.ViewModels
             {
                 if (!ValidateAttribute())
                 {
-                    sb.AppendLine("Не указан атрибут ассоциации");
+                    sb.AppendLine("Не указан атрибут композиции");
                 }
             }
             compositionError.Text = sb.ToString().TrimEnd();

@@ -16,7 +16,7 @@
         MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
         MaxWidth="{x:Static SystemParameters.MaximizedPrimaryScreenWidth}"
         Background="{DynamicResource AppColor}" 
-        WindowState="Normal" WindowStyle="None"
+        WindowState="Normal" WindowStyle="None" WindowStartupLocation="CenterScreen"
         AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <vm:MainViewModel x:Key="viewModel"/>
@@ -42,10 +42,14 @@
         </Grid.RowDefinitions>
         <Border Background="{DynamicResource AlternateBackgroundColor}" CornerRadius="3" Padding="1">
             <DockPanel HorizontalAlignment="Stretch">
-                <Button WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding OpenAboutCommand}" ToolTip="О программе" Cursor="Help" Style="{x:Null}">
+                <Button Margin="3" WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding OpenAboutCommand}" ToolTip="О программе" Cursor="Help" Style="{x:Null}">
                     <Button.Template>
                         <ControlTemplate>
-                            <Image Source="{StaticResource AppIconDrawingImage}" Height="20" DockPanel.Dock="Left" Margin="5,0,5,0"/>
+                            <Viewbox Height="25">
+                                <Grid Background="Transparent">
+                                    <ContentControl  Content="{StaticResource AppIcon}"/>
+                                </Grid>
+                            </Viewbox>
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
@@ -79,7 +83,7 @@
                 <Button Command="{x:Static SystemCommands.MinimizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Right">
                     <TextBlock Style="{StaticResource CollapseIcon}" Margin="2"/>
                 </Button>
-                <TextBlock Text="Class Designer" FontSize="16" VerticalAlignment="Center"/>
+                <TextBlock Text="Дизайнер классов" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
             </DockPanel>
         </Border>
         
@@ -96,28 +100,59 @@
 
             <!--<ItemsControl ItemsSource="{Binding PropertiesService.Entries}" Template="{StaticResource VisualTreePanel}" Margin="2"/>-->
             <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Hidden" Margin="2" Background="{DynamicResource AlternateBackgroundColor}">
-                <ItemsControl ItemsSource="{Binding Templates}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <c:DragItem DragContent="{Binding Content}" Width="100" Margin="2,2,2,0">
-                                <Grid Background="{DynamicResource BackgroundColor}" >
-                                    <TextBlock Margin="15" 
+                <StackPanel>
+
+
+                    <Expander Header="Элементы">
+                        <ItemsControl ItemsSource="{Binding Templates}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <c:DragItem DragContent="{Binding Content}" Width="130" Margin="2,2,2,0">
+                                        <Grid Background="{DynamicResource BackgroundColor}" >
+                                            <TextBlock Margin="5" 
                                                Text="{Binding Name}" 
                                                TextWrapping="Wrap" 
-                                               FontSize="18" 
+                                               FontSize="16" 
                                                VerticalAlignment="Center" 
                                                HorizontalAlignment="Center" 
                                                Foreground="{DynamicResource TextColor}"/>
-                                </Grid>
-                            </c:DragItem>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                        </Grid>
+                                    </c:DragItem>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Expander>
+                    <Expander Header="Паттерны">
+                        <ItemsControl ItemsSource="{Binding PatternTemplates}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <c:DragItem DragContent="{Binding Content}" Width="130" Margin="2,2,2,0">
+                                        <Grid Background="{DynamicResource BackgroundColor}" >
+                                            <TextBlock Margin="5" 
+                                               Text="{Binding Name}" 
+                                               TextWrapping="Wrap" 
+                                               FontSize="16" 
+                                               VerticalAlignment="Center" 
+                                               HorizontalAlignment="Center" 
+                                               Foreground="{DynamicResource TextColor}"/>
+                                        </Grid>
+                                    </c:DragItem>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Expander>
+                </StackPanel>
+
             </ScrollViewer>
 
             <ScrollViewer Grid.Column="1" 
@@ -133,7 +168,9 @@
                 </c:DesignerCanvas>
             </ScrollViewer>
             <GridSplitter Grid.Column="2" Width="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="Transparent"/>
-            <ContentControl Grid.Column="3" Content="{Binding Item}" Template="{StaticResource PropertiesPanel}" Margin="2"/>
+            <ScrollViewer  VerticalScrollBarVisibility="Hidden" Grid.Column="3">
+                <ContentControl  Content="{Binding Item}" Template="{StaticResource PropertiesPanel}" Margin="2"/>
+            </ScrollViewer>
         </Grid>
         <GridSplitter Grid.Row="3" Height="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Background="Transparent"/>
         <Grid Grid.Row="4" Margin="2" MinHeight="50">
@@ -157,7 +194,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource WarningIcon}" Foreground="Yellow" VerticalAlignment="Center" FontSize="14" Margin="3"/>
+                                <TextBlock Style="{StaticResource WarningIcon}" Foreground="Red" VerticalAlignment="Center" FontSize="14" Margin="3"/>
                                 <TextBlock Text="{Binding Text}" TextWrapping="Wrap" FontSize="14"/>
                             </StackPanel>
                         </DataTemplate>

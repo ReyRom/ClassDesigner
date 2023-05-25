@@ -11,7 +11,7 @@ namespace ClassDesigner.ViewModels
     public class ParameterViewModel : ViewModelBase
     {
         private string name = "name";
-        private string type = "Type";
+        private string type;
 
         public string Name
         {
@@ -74,7 +74,7 @@ namespace ClassDesigner.ViewModels
 
         public override string ToString()
         {
-            return Name + (Type != String.Empty ? " : " + Type : "");
+            return Name + ( !String.IsNullOrWhiteSpace(Type) ? " : " + Type : "");
         }
     }
 }

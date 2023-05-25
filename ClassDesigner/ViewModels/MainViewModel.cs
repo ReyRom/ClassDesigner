@@ -1,26 +1,32 @@
 ﻿using ClassDesigner.Helping;
-using ClassDesigner.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class MainViewModel:ViewModelBase
+    public class MainViewModel : ViewModelBase
     {
         public MainViewModel()
         {
             PropertiesService.Instance.PropertyChanged += Instance_PropertyChanged;
-            var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates"));
-            foreach (var file in files)
+            if (Directory.Exists(Path.Combine(Environment.CurrentDirectory, "Templates\\Elements")))
             {
-                Templates.Add(new TemplateViewModel(file));
+                var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates\\Elements"));
+                foreach (var file in files)
+                {
+                    Templates.Add(new TemplateViewModel(file));
+                }
+            }
+            if (Directory.Exists(Path.Combine(Environment.CurrentDirectory, "Templates\\Patterns")))
+            {
+                var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates\\Patterns"));
+                foreach (var file in files)
+                {
+                    PatternTemplates.Add(new TemplateViewModel(file));
+                }
             }
         }
 
@@ -31,6 +37,7 @@ namespace ClassDesigner.ViewModels
         public ErrorService ErrorService { get => ErrorService.Instance; }
 
         public ObservableCollection<TemplateViewModel> Templates { get; set; } = new ObservableCollection<TemplateViewModel>();
+        public ObservableCollection<TemplateViewModel> PatternTemplates { get; set; } = new ObservableCollection<TemplateViewModel>();
 
         private void Instance_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -46,7 +53,7 @@ namespace ClassDesigner.ViewModels
             }
         }
 
-        
+
 
         Command openAboutCommand;
         public Command OpenAboutCommand => openAboutCommand ??= new Command(obj =>

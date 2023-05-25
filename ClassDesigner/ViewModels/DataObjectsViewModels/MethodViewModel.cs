@@ -1,20 +1,27 @@
 ﻿using ClassDesigner.Helping;
+using ClassDesigner.Helping.Interfaces;
 using ClassDesigner.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ClassDesigner.ViewModels
 {
-    public class MethodViewModel : ViewModelBase, IAction
+    public class MethodViewModel : ViewModelBase, IAction, IErrorProvider, IRelease
     {
         public MethodViewModel(IEntry parent)
         {
             Parent = parent;
+
+
             Parameters.CollectionChanged += Parameters_CollectionChanged;
+            methodError = new ErrorViewModel() { Source = this, ErrorCriticalFor = ErrorCriticalFor.CodeGeneration };
+
+            ErrorService.Instance.ObservableErrors.Add(methodError);
         }
 
         public MethodViewModel(IEntry parent, MethodViewModel model) : this(parent)
@@ -40,11 +47,14 @@ namespace ClassDesigner.ViewModels
                 foreach (INotifyPropertyChanged item in e.NewItems)
                     item.PropertyChanged += Update;
             }
+
+            Validate();
         }
 
         private void Update(object? sender, PropertyChangedEventArgs e)
         {
             OnPropertyChanged(nameof(ActionString));
+            Validate();
         }
 
         private bool isStatic = false;
@@ -96,7 +106,7 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(ActionString));
             }
         }
-        
+
         private string type;
         public string Type
         {
@@ -107,7 +117,7 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(ActionString));
             }
         }
-        
+
         private ObservableCollection<ParameterViewModel> parameters = new ObservableCollection<ParameterViewModel>();
         public ObservableCollection<ParameterViewModel> Parameters
         {
@@ -118,7 +128,7 @@ namespace ClassDesigner.ViewModels
                 OnPropertyChanged(nameof(ActionString));
             }
         }
-        
+
         public virtual string ActionString
         {
             get => this.ToString();
@@ -163,15 +173,35 @@ namespace ClassDesigner.ViewModels
             return (char)Visibility + " " + Name + "(" + String.Join(", ", Parameters) + ")" + (string.IsNullOrWhiteSpace(Type) ? "" : " : " + Type);
         }
 
+        int parameterCounter = 0;
+
         private Command addParameterCommand;
         public Command AddParameterCommand => addParameterCommand ??= new Command(obj =>
         {
-            this.Parameters.Add(new ParameterViewModel());
+            this.Parameters.Add(new ParameterViewModel() { Name = "param" + ++parameterCounter });
         });
 
-        private Command removeParameterCommand;
-        
+        ErrorViewModel methodError;
 
+        public void Validate()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (!ValidateParameter())
+            {
+                sb.AppendLine("Определено несколько параметров с одинаковым именем");
+            }
+
+            methodError.Text = sb.ToString().TrimEnd();
+        }
+
+        private bool ValidateParameter()
+        {
+            var isValid = !Parameters.GroupBy(x => x.Name).Any(g => g.Count() > 1);
+            return isValid;
+        }
+
+        private Command removeParameterCommand;
         public Command RemoveParameterCommand => removeParameterCommand ??= new Command(obj =>
         {
             this.Parameters.Remove((ParameterViewModel)obj);
@@ -185,6 +215,14 @@ namespace ClassDesigner.ViewModels
 
             var m = obj as MethodViewModel;
             return m.ActionString == this.ActionString && m.IsStatic == this.IsStatic;
+        }
+        public void ReleaseData()
+        {
+            if (methodError != null)
+            {
+                ErrorService.Instance.ObservableErrors.Remove(methodError);
+                methodError = null;
+            }
         }
     }
 }

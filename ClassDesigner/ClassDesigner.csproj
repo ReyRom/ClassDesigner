@@ -5,12 +5,24 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-	  <UseWindowsForms>true</UseWindowsForms>
-	  <ApplicationIcon>ClassDesigner.ico</ApplicationIcon>
+	<UseWindowsForms>true</UseWindowsForms>
+	<ApplicationIcon>ClassDesigner.ico</ApplicationIcon>
+	 <StartupObject>ClassDesigner.App</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\Fonts\IcoMoon-Free.ttf" />
+    <None Remove="Templates\Elements\Class.xml" />
+    <None Remove="Templates\Elements\Enum.xml" />
+    <None Remove="Templates\Elements\Interface.xml" />
+    <None Remove="Templates\Elements\Struct.xml" />
+    <None Remove="Templates\Patterns\Command.xml" />
+    <None Remove="Templates\Patterns\Factory.xml" />
+    <None Remove="Templates\Patterns\Memento.xml" />
+    <None Remove="Templates\Patterns\Observer.xml" />
+    <None Remove="Templates\Patterns\Prototype.xml" />
+    <None Remove="Templates\Patterns\State.xml" />
+    <None Remove="Templates\Patterns\Strategy.xml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +35,39 @@
 
   <ItemGroup>
     <Resource Include="Resources\Fonts\IcoMoon-Free.ttf" />
+    <Content Include="Templates\Elements\Class.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Elements\Enum.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Elements\Interface.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Elements\Struct.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Patterns\Command.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Patterns\Factory.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Patterns\Memento.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Patterns\Observer.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Patterns\Prototype.xml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Patterns\State.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Patterns\Strategy.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

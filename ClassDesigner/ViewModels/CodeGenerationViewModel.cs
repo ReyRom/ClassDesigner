@@ -1,6 +1,8 @@
 ﻿using ClassDesigner.Helping;
 using ClassDesigner.Models;
+using System;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ClassDesigner.ViewModels
@@ -14,26 +16,41 @@ namespace ClassDesigner.ViewModels
         {
             try
             {
+                if (DataService.Instance.Entries is null)
+                {
+                    throw new Exception("В рабочей области нет сущностей для генерации кода");
+                }
+                if (string.IsNullOrWhiteSpace(Folder))
+                {
+                    throw new Exception("Указан некорректный путь");
+                }
                 if (!LanguagesList.IsAnySelected)
                 {
-                    throw new System.Exception("Не выбран ни один язык для генерации");
-                }
-                if (ErrorService.Instance.Errors.Any(x => x.ErrorCriticalFor == ErrorCriticalFor.CodeGeneration))
-                {
-                    throw new System.Exception("В проекте присутствуют ошибки критичные для генерации кода");
+                    throw new Exception("Не выбран ни один язык для генерации");
                 }
                 foreach (LanguagesList.Language item in LanguagesList)
                 {
                     if (item.IsSelected)
                     {
                         var generator = new CodeGenerator(item.Name);
-                        generator.GenerateCode(DataService.Instance.Entries, Folder);
+                        item.IsSuccess = generator.GenerateCode(DataService.Instance.Entries, Folder);
                     }
                 }
+                MessageBox.MessageBox.Show("Успех", "Операция выполнена", MessageBox.MessageBoxButtons.Ok, App.CodeGenerationWindow);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok);
+                MessageBox.MessageBox.Show("Ошибка", ex.Message, MessageBox.MessageBoxButtons.Ok, App.CodeGenerationWindow);
+            }
+        });
+
+        private Command resetCommand;
+        public Command ResetCommand => resetCommand ??= new Command(obj =>
+        {
+            foreach (LanguagesList.Language item in LanguagesList)
+            {
+                item.IsSelected = false;
+                item.IsSuccess = null;
             }
         });
 
@@ -59,5 +76,7 @@ namespace ClassDesigner.ViewModels
         });
 
         public SettingsService SettingsService { get => SettingsService.Instance; }
+
+        public ErrorService ErrorService { get => ErrorService.Instance; }
     }
 }

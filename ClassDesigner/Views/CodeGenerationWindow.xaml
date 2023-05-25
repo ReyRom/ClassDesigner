@@ -5,23 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClassDesigner.Views"
         xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:a ="clr-namespace:ClassDesigner"
         mc:Ignorable="d"
-        Title="CodeGenerationWindow" Height="300" Width="450"
+        Title="CodeGenerationWindow" SizeToContent="WidthAndHeight"
         Background="{DynamicResource AppColor}" 
         WindowState="Normal" WindowStyle="None"
+        WindowStartupLocation="CenterOwner" Owner="{x:Static a:App.MainWindow}"
         AllowsTransparency="True" 
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <vm:CodeGenerationViewModel x:Key="viewModel"/>
     </Window.Resources>
-    
-    <Grid Background="{DynamicResource AlternateBackgroundColor}" Margin="15" DataContext="{StaticResource viewModel}">
+    <Grid Background="{DynamicResource AlternateBackgroundColor}" Margin="15" DataContext="{StaticResource viewModel}" Height="200" Width="450">
         <Grid.LayoutTransform>
             <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding SettingsService.InterfaceScale}" ScaleY="{Binding SettingsService.InterfaceScale}"/>
         </Grid.LayoutTransform>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid Margin="5">
@@ -37,17 +40,45 @@
         <ItemsControl Grid.Row="1" ItemsSource="{Binding LanguagesList}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox IsChecked ="{Binding IsSelected}" Margin="5">
-                        <TextBlock Text="{Binding Name}"/>
-                    </CheckBox>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked ="{Binding IsSelected}" Margin="5">
+                            <TextBlock Text="{Binding Name}"/>
+                        </CheckBox>
+                        <TextBlock Grid.Column="1" Margin="5,5,15,5" FontSize="15">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontFamily" Value="{StaticResource Icon}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSuccess}" Value="{x:Null}">
+                                            <Setter Property="Text" Value=""/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsSuccess}" Value="True">
+                                            <Setter Property="Text" Value="&#xea10;"/>
+                                            <Setter Property="Foreground" Value="YellowGreen"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsSuccess}" Value="False">
+                                            <Setter Property="Text" Value="&#xea0f;"/>
+                                            <Setter Property="Foreground" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <UniformGrid Grid.Row="2" Columns="2">
+        <TextBlock HorizontalAlignment="Center" Text="В проекте присутствуют ошибки критичные для генерации кода" Grid.Row="2" Visibility="{Binding ErrorService.IsCriticalForCode, Converter={StaticResource visibilityConverter}}"/>
+        <UniformGrid Grid.Row="3" Columns="2">
             <Button  Command="{x:Static SystemCommands.CloseWindowCommand}" Margin="5">
                 <TextBlock Text="Закрыть" FontSize="16"/>
             </Button>
-            <Button  Command="{Binding GenerateCodeCommand}" Margin="5">
+            <Button  Command="{Binding GenerateCodeCommand}" Margin="5" IsEnabled="{Binding ErrorService.IsCriticalForCode, Converter={StaticResource notConverter}}">
                 <TextBlock Text="Генерировать код" FontSize="16"/>
             </Button>
         </UniformGrid>

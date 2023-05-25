@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Root TemplateName="Interface">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root TemplateName="Перечисление">
   <DesignerItems>
     <DesignerItem>
       <Left>0</Left>
       <Top>0</Top>
-      <Width>85</Width>
-      <Heigth>45</Heigth>
-      <ID>7c2f1b94-0676-408c-82e4-a553583b356e</ID>
+      <Width>74</Width>
+      <Heigth>48</Heigth>
+      <ID>7806e9d6-1170-4032-9a94-64c5ab323efd</ID>
       <ZIndex>0</ZIndex>
       <Content>
-        <Interface>
+        <Enum>
           <Name></Name>
           <Visibility>Public</Visibility>
-          <Attributes />
-          <Actions />
-        </Interface>
+          <EnumChildren />
+        </Enum>
       </Content>
     </DesignerItem>
   </DesignerItems>

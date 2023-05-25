@@ -15,6 +15,8 @@ namespace ClassDesigner
 
         public static CodeGenerationWindow CodeGenerationWindow => codeGenerationWindow ??= new CodeGenerationWindow();
 
+        public static CodeGenerationWindow NewCodeGenerationWindow => codeGenerationWindow = new CodeGenerationWindow();
+
         public App()
         {
             InitializeComponent();

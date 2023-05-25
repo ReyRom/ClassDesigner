@@ -54,27 +54,15 @@ namespace ClassDesigner.Helping.Serializers
 
             if (classView.Parents.OfType<ClassViewModel>().Count() > 0)
             {
-                sb.Space();
-                sb.Append("extends");
-                foreach (var parent in classView.Parents.OfType<ClassViewModel>())
-                {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
-                }
-                sb.Remove(sb.Length - 1, 1);
+                sb.Append(" extends ");
+
+                sb.Append(string.Join(", ", classView.Parents.OfType<ClassViewModel>().Select(x => x.Name)));
             }
             if (classView.Parents.OfType<InterfaceViewModel>().Count() > 0)
             {
-                sb.Space();
-                sb.Append("implements");
-                foreach (var parent in classView.Parents.OfType<InterfaceViewModel>())
-                {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
-                }
-                sb.Remove(sb.Length - 1, 1);
+                sb.Append(" implements ");
+
+                sb.Append(string.Join(", ", classView.Parents.OfType<InterfaceViewModel>().Select(x => x.Name)));
             }
             sb.Space();
             sb.Append('{');
@@ -83,21 +71,25 @@ namespace ClassDesigner.Helping.Serializers
             foreach (var attr in classView.Attributes.OfType<FieldViewModel>())
             {
                 sb.AppendLine(SerializeAttribute(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             foreach (var attr in classView.Attributes.OfType<PropertyViewModel>())
             {
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             foreach (var attr in classView.Actions.OfType<ConstructorViewModel>())
             {
                 sb.AppendLine(SerializeConstructor(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             foreach (var attr in classView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             sb.Tab(tabLevel);
@@ -123,15 +115,8 @@ namespace ClassDesigner.Helping.Serializers
 
             if (structView.Parents.OfType<InterfaceViewModel>().Count() > 0)
             {
-                sb.Space();
-                sb.Append("implements");
-                foreach (var parent in structView.Parents.OfType<InterfaceViewModel>())
-                {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
-                }
-                sb.Remove(sb.Length - 1, 1);
+                sb.Append(" implements ");
+                sb.Append(string.Join(", ", structView.Parents.Select(x => x.Name)));
             }
 
             sb.AppendLine();
@@ -142,20 +127,24 @@ namespace ClassDesigner.Helping.Serializers
             foreach (var attr in structView.Attributes.OfType<FieldViewModel>())
             {
                 sb.AppendLine(SerializeAttribute(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             foreach (var attr in structView.Attributes.OfType<PropertyViewModel>())
             {
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             foreach (var attr in structView.Actions.OfType<ConstructorViewModel>())
             {
                 sb.AppendLine(SerializeConstructor(attr, tabLevel + 1));
+                sb.AppendLine();
             }
             foreach (var attr in structView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             sb.Tab(tabLevel);
@@ -181,15 +170,8 @@ namespace ClassDesigner.Helping.Serializers
 
             if (interfaceView.Parents.OfType<InterfaceViewModel>().Count() > 0)
             {
-                sb.Space();
-                sb.Append("extends");
-                foreach (var parent in interfaceView.Parents.OfType<InterfaceViewModel>())
-                {
-                    sb.Space();
-                    sb.Append(parent.Name);
-                    sb.Append(",");
-                }
-                sb.Remove(sb.Length - 1, 1);
+                sb.Append(" extends ");
+                sb.Append(string.Join(", ", interfaceView.Parents.OfType<InterfaceViewModel>().Select(x => x.Name)));
             }
 
             sb.AppendLine();
@@ -199,11 +181,13 @@ namespace ClassDesigner.Helping.Serializers
             foreach (var attr in interfaceView.Attributes.OfType<PropertyViewModel>())
             {
                 sb.AppendLine(SerializeProperty(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             foreach (var attr in interfaceView.Actions.OfType<MethodViewModel>())
             {
                 sb.AppendLine(SerializeMethod(attr, tabLevel + 1));
+                sb.AppendLine();
             }
 
             sb.Tab(tabLevel);
@@ -239,10 +223,12 @@ namespace ClassDesigner.Helping.Serializers
                 {
                     sb.Append(" = " + enumChild.Value);
                 }
-                sb.Append(',');
+                if (enumChild != enumView.EnumChildren.Last())
+                {
+                    sb.Append(',');
+                }
                 sb.AppendLine();
             }
-            sb.Remove(sb.Length - 1, 2);
             sb.Tab(tabLevel);
             sb.Append('}');
 
@@ -324,9 +310,9 @@ namespace ClassDesigner.Helping.Serializers
                 sb.Tab(tabLevel);
                 sb.Append('}');
 
-                
+                sb.AppendLine();
             }
-            sb.AppendLine();
+           
             if (property.IsSet)
             {
                 sb.Tab(tabLevel);
@@ -441,7 +427,6 @@ namespace ClassDesigner.Helping.Serializers
 
             sb.Append(parameter.Name);
 
-            sb.Space();
 
             if (!string.IsNullOrWhiteSpace(parameter.DefaultValue))
             {

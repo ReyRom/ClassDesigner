@@ -1,14 +1,17 @@
 ﻿using ClassDesigner.Helping;
+using ClassDesigner.Helping.Interfaces;
 using ClassDesigner.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ClassDesigner.ViewModels
 {
-    public class ConstructorViewModel : ViewModelBase, IAction
+    public class ConstructorViewModel : ViewModelBase, IAction, IErrorProvider, IRelease
     {
         public ConstructorViewModel(IEntry parent)
         {
@@ -16,11 +19,15 @@ namespace ClassDesigner.ViewModels
             this.Name = Parent.Name;
             Parent.PropertyChanged += Parent_PropertyChanged; ;
             Parameters.CollectionChanged += Parameters_CollectionChanged;
+
+            conctructorError = new ErrorViewModel() { Source = this, ErrorCriticalFor = ErrorCriticalFor.CodeGeneration };
+
+            ErrorService.Instance.ObservableErrors.Add(conctructorError);
         }
 
         private void Parent_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == "Name")
+            if (e.PropertyName == "Name")
             {
                 this.Name = Parent.Name;
             }
@@ -49,11 +56,14 @@ namespace ClassDesigner.ViewModels
                 foreach (INotifyPropertyChanged item in e.NewItems)
                     item.PropertyChanged += Update;
             }
+
+            Validate();
         }
 
         private void Update(object? sender, PropertyChangedEventArgs e)
         {
             OnPropertyChanged(nameof(ActionString));
+            Validate();
         }
 
         //private bool isStatic = false;
@@ -158,12 +168,34 @@ namespace ClassDesigner.ViewModels
         }
 
 
+        int parameterCounter = 0;
 
         private Command addParameterCommand;
         public Command AddParameterCommand => addParameterCommand ??= new Command(obj =>
         {
-            this.Parameters.Add(new ParameterViewModel());
+            this.Parameters.Add(new ParameterViewModel() { Name = "param" + ++parameterCounter });
         });
+
+        ErrorViewModel conctructorError;
+
+        public void Validate()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (!ValidateParameter())
+            {
+                sb.AppendLine("Определено несколько параметров с одинаковым именем");
+            }
+
+            conctructorError.Text = sb.ToString().TrimEnd();
+        }
+
+        private bool ValidateParameter()
+        {
+            var isValid = !Parameters.GroupBy(x => x.Name).Any(g => g.Count() > 1);
+            return isValid;
+        }
+
 
         private Command removeParameterCommand;
 
@@ -195,6 +227,14 @@ namespace ClassDesigner.ViewModels
                 this.Name = m.Groups["Name"].Value;
                 this.Visibility = (VisibilityType)(m.Groups["Visible"].Value[0]);
                 this.Parameters = ParseParameters(m.Groups["Parameters"].Value);
+            }
+        }
+        public void ReleaseData()
+        {
+            if (conctructorError != null)
+            {
+                ErrorService.Instance.ObservableErrors.Remove(conctructorError);
+                conctructorError = null;
             }
         }
     }

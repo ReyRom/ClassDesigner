@@ -32,18 +32,11 @@ namespace ClassDesigner.Helping
 
         }
 
-        public void GenerateCode(IEnumerable<IEntry> entries, string path)
+        public bool GenerateCode(IEnumerable<IEntry> entries, string path)
         {
-            
-                if (entries is null)
-                {
-                    throw new Exception("В рабочей области нет сущностей для генерации кода");
-                }
-                if (string.IsNullOrWhiteSpace(path))
-                {
-                    throw new Exception("Указан некорректный путь");
-                }
 
+            try
+            {
                 var dir = Path.Combine(path, Language.ToString());
                 if (!Directory.Exists(dir)) { Directory.CreateDirectory(dir); }
 
@@ -51,8 +44,12 @@ namespace ClassDesigner.Helping
                 {
                     File.WriteAllText(Path.Combine(dir, $"{item.Name}.{Serializer.Extension}"), Serializer.SerializeEntry(item));
                 }
-                MessageBox.MessageBox.Show("Успех", "Код успешно сгенерирован", MessageBox.MessageBoxButtons.Ok);
-            
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

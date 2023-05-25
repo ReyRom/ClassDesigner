@@ -147,6 +147,26 @@
                             </Border>
                         </DataTemplate>
                     </h:PropertiesTemplateSelector.EnumTemplate>
+                    
+                    <h:PropertiesTemplateSelector.EnumChildTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <StackPanel DataContext="{Binding Source={x:Reference Name=PropertiesPanel}, Path=Content}">
+                                    <TextBlock Text="Элемент перечисления"/>
+                                    <Separator/>
+                                    <TextBlock Text="Имя"/>
+                                    <TextBox Text="{Binding Name}"/>
+                                    <Separator/>
+                                    <TextBlock Text="Значение"/>
+                                    <TextBox Text="{Binding DefaultValue}"/>
+
+                                    <Separator/>
+
+
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </h:PropertiesTemplateSelector.EnumChildTemplate>
 
                     <h:PropertiesTemplateSelector.FieldTemplate>
                         <DataTemplate>
@@ -169,7 +189,9 @@
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-
+                                    <Separator/>
+                                    <TextBlock Text="Значение"/>
+                                    <TextBox Text="{Binding DefaultValue}"/>
                                     <Separator/>
                                     <CheckBox IsChecked="{Binding IsStatic}">
                                         <TextBlock Text="Статическое"/>
@@ -200,7 +222,9 @@
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-
+                                    <Separator/>
+                                    <TextBlock Text="Значение"/>
+                                    <TextBox Text="{Binding DefaultValue}"/>
                                     <Separator/>
 
                                     <CheckBox IsChecked="{Binding IsStatic}">
@@ -354,7 +378,7 @@
                                     <TextBlock Text="{Binding TargetEntry.Name}"/>
                                     <Separator/>
                                     <TextBlock Text="Тип"/>
-                                    <TextBlock Text="{Binding RelationType}"/>
+                                    <TextBlock Text="{Binding RelationType, Converter={StaticResource enumConverter}}"/>
                                     <Separator/>
                                     <ContentControl Content="{Binding RelationType}">
                                         <ContentControl.ContentTemplateSelector>

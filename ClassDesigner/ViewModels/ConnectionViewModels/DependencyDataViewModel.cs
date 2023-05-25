@@ -40,6 +40,7 @@ namespace ClassDesigner.ViewModels
                     dependencedAction.Parameters.Add(new ParameterViewModel() { Name = Target.Name.ToLower(), Type = Target.Name });
                 }
                 dependencedAction.PropertyChanged += DependencedMethod_PropertyChanged;
+                Validate();
                 OnPropertyChanged(nameof(DependencedAction));
             }
         }

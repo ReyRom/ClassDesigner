@@ -80,7 +80,7 @@ namespace ClassDesigner.ViewModels
             attribute.Type = Source.Name;
             (Target as IHaveFields).Attributes.Add(attribute);
             AggregatedAttribute = attribute;
-        });
+        }, obj => (Target is IHaveFields));
 
 
         Command addAggregatedProperty;
@@ -91,7 +91,7 @@ namespace ClassDesigner.ViewModels
             property.Type = Source.Name;
             (Target as IHaveProperties).Attributes.Add(property);
             AggregatedAttribute = property;
-        });
+        }, obj => (Target is IHaveProperties));
 
         Command addAggregatedConstructor;
         public Command AddAggregatedConstructor => addAggregatedConstructor ??= new Command(obj =>
@@ -102,7 +102,7 @@ namespace ClassDesigner.ViewModels
             method.Parameters.Add(paramether);
             (Target as IHaveActions).Actions.Add(method);
             AggregatedAction = method;
-        });
+        }, obj => (Target is IHaveConstructors));
 
         Command addAggregatedMethod;
         public Command AddAggregatedMethod => addAggregatedMethod ??= new Command(obj =>
@@ -113,7 +113,7 @@ namespace ClassDesigner.ViewModels
             method.Parameters.Add(paramether);
             (Target as IHaveActions).Actions.Add(method);
             AggregatedAction = method;
-        });
+        }, obj => (Target is IHaveMethods));
 
         private bool isValidSource = true;
         public bool IsValidSource
@@ -131,7 +131,7 @@ namespace ClassDesigner.ViewModels
 
         public bool ValidateSource()
         {
-            return IsValidSource = (Target is IHaveFields || Target is IHaveProperties) && Target is IHaveActions;
+            return IsValidSource = Target is IHaveAttributes && Target is IHaveActions;
         }
 
         ErrorViewModel aggregationError;

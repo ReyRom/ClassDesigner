@@ -85,7 +85,7 @@ namespace ClassDesigner.Controls
             //}
 
             
-            App.CodeGenerationWindow.Show();
+            App.NewCodeGenerationWindow.Show();
 
         }
 
@@ -237,91 +237,99 @@ namespace ClassDesigner.Controls
 
         private void PasteXml(XElement xElement, double offsetX = 0, double offsetY = 0)
         {
-            var itemsXML = xElement.Elements("DesignerItems").Elements("DesignerItem");
-
-            this.SelectionService.ClearSelection();
-
-            Dictionary<Guid, Guid> mappingOldToNewIDs = new Dictionary<Guid, Guid>();
-
-            foreach (var item in itemsXML)
+            try
             {
-                var id = Guid.NewGuid();
-                mappingOldToNewIDs.Add(Guid.Parse(item.Element("ID").Value), id);
-                var di = DeserializeDesignerItem(item, id, offsetX, offsetY);
-                SetConnectorDecoratorTemplate(di);
-                this.Children.Add(di);
-                SelectionService.AddSelection(di);
-            }
+                var itemsXML = xElement.Elements("DesignerItems").Elements("DesignerItem");
 
-            var items = this.Children.OfType<DesignerItem>();
-            var connections = xElement.Elements("Connections").Elements("Connection");
+                this.SelectionService.ClearSelection();
 
-            IEnumerable<XElement> connectionsXML = xElement.Elements("Connections").Elements("Connection");
-            foreach (XElement connectionXML in connectionsXML)
-            {
-                Guid oldSourceID = new Guid(connectionXML.Element("SourceID").Value);
-                Guid oldSinkID = new Guid(connectionXML.Element("SinkID").Value);
+                Dictionary<Guid, Guid> mappingOldToNewIDs = new Dictionary<Guid, Guid>();
 
-                if (mappingOldToNewIDs.ContainsKey(oldSourceID) && mappingOldToNewIDs.ContainsKey(oldSinkID))
+                foreach (var item in itemsXML)
                 {
-                    Guid newSourceID = mappingOldToNewIDs[oldSourceID];
-                    Guid newSinkID = mappingOldToNewIDs[oldSinkID];
-
-                    String sourceConnectorName = connectionXML.Element("SourceConnectorName").Value;
-                    String sinkConnectorName = connectionXML.Element("SinkConnectorName").Value;
-
-                    Connector sourceConnector = GetConnector(newSourceID, sourceConnectorName);
-                    Connector sinkConnector = GetConnector(newSinkID, sinkConnectorName);
-
-                    Connection connection = new Connection(sourceConnector, sinkConnector, (RelationType)Enum.Parse(typeof(RelationType), connectionXML.Element("RelationType").Value));
-
-                    Nodes n = new Nodes();
-
-                    foreach (var node in connectionXML.Element("Nodes").Elements("Node"))
-                    {
-                        n.Add(new Node(new Point(Double.Parse(node.Element("X").Value, CultureInfo.InvariantCulture) + offsetX, Double.Parse(node.Element("Y").Value, CultureInfo.InvariantCulture) + offsetY)));
-                    }
-
-                    connection.Nodes = n;
-
-                    Canvas.SetZIndex(connection, Int32.Parse(connectionXML.Element("ZIndex").Value));
-
-                    switch ((RelationType)Enum.Parse(typeof(RelationType), connectionXML.Element("RelationType").Value))
-                    {
-                        case RelationType.Association:
-                            break;
-                        case RelationType.Aggregation:
-                            (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedAttribute
-                                = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
-                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AggregatedAttribute").Value);
-                            (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedAction
-                                = (connection.ConnectionViewModel.TargetEntry as IHaveActions).Actions
-                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AggregatedMethod").Value);
-                            break;
-                        case RelationType.Composition:
-                            (connection.ConnectionViewModel.ConnectionData as CompositionDataViewModel).ComposedAttribute
-                                = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
-                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("ComposedAttribute").Value);
-                            break;
-                        case RelationType.Generalization:
-                            break;
-                        case RelationType.Realization:
-                            break;
-                        case RelationType.Dependency:
-                            (connection.ConnectionViewModel.ConnectionData as DependencyDataViewModel).DependencedAction
-                                = (connection.ConnectionViewModel.SourceEntry as IHaveActions).Actions
-                                .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("DependencedMethod").Value);
-                            break;
-                        default:
-                            break;
-                    }
-                    this.Children.Add(connection);
-                    connection.UpdateConnection();
-                    SelectionService.AddSelection(connection);
+                    var id = Guid.NewGuid();
+                    mappingOldToNewIDs.Add(Guid.Parse(item.Element("ID").Value), id);
+                    var di = DeserializeDesignerItem(item, id, offsetX, offsetY);
+                    SetConnectorDecoratorTemplate(di);
+                    this.Children.Add(di);
+                    SelectionService.AddSelection(di);
                 }
+
+                var items = this.Children.OfType<DesignerItem>();
+                var connections = xElement.Elements("Connections").Elements("Connection");
+
+                IEnumerable<XElement> connectionsXML = xElement.Elements("Connections").Elements("Connection");
+                foreach (XElement connectionXML in connectionsXML)
+                {
+                    Guid oldSourceID = new Guid(connectionXML.Element("SourceID").Value);
+                    Guid oldSinkID = new Guid(connectionXML.Element("SinkID").Value);
+
+                    if (mappingOldToNewIDs.ContainsKey(oldSourceID) && mappingOldToNewIDs.ContainsKey(oldSinkID))
+                    {
+                        Guid newSourceID = mappingOldToNewIDs[oldSourceID];
+                        Guid newSinkID = mappingOldToNewIDs[oldSinkID];
+
+                        String sourceConnectorName = connectionXML.Element("SourceConnectorName").Value;
+                        String sinkConnectorName = connectionXML.Element("SinkConnectorName").Value;
+
+                        Connector sourceConnector = GetConnector(newSourceID, sourceConnectorName);
+                        Connector sinkConnector = GetConnector(newSinkID, sinkConnectorName);
+
+                        Connection connection = new Connection(sourceConnector, sinkConnector, (RelationType)Enum.Parse(typeof(RelationType), connectionXML.Element("RelationType").Value));
+
+                        Nodes n = new Nodes();
+
+                        foreach (var node in connectionXML.Element("Nodes").Elements("Node"))
+                        {
+                            n.Add(new Node(new Point(Double.Parse(node.Element("X").Value, CultureInfo.InvariantCulture) + offsetX, Double.Parse(node.Element("Y").Value, CultureInfo.InvariantCulture) + offsetY)));
+                        }
+
+                        connection.Nodes = n;
+
+                        Canvas.SetZIndex(connection, Int32.Parse(connectionXML.Element("ZIndex").Value));
+
+                        switch ((RelationType)Enum.Parse(typeof(RelationType), connectionXML.Element("RelationType").Value))
+                        {
+                            case RelationType.Association:
+                                break;
+                            case RelationType.Aggregation:
+                                (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedAttribute
+                                    = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
+                                    .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AggregatedAttribute").Value);
+                                (connection.ConnectionViewModel.ConnectionData as AggregationDataViewModel).AggregatedAction
+                                    = (connection.ConnectionViewModel.TargetEntry as IHaveActions).Actions
+                                    .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("AggregatedMethod").Value);
+                                break;
+                            case RelationType.Composition:
+                                (connection.ConnectionViewModel.ConnectionData as CompositionDataViewModel).ComposedAttribute
+                                    = (connection.ConnectionViewModel.TargetEntry as IHaveAttributes).Attributes
+                                    .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("ComposedAttribute").Value);
+                                break;
+                            case RelationType.Generalization:
+                                break;
+                            case RelationType.Realization:
+                                break;
+                            case RelationType.Dependency:
+                                (connection.ConnectionViewModel.ConnectionData as DependencyDataViewModel).DependencedAction
+                                    = (connection.ConnectionViewModel.SourceEntry as IHaveActions).Actions
+                                    .FirstOrDefault(x => x.ToString() == connectionXML.Element("ConnectionData").Element("DependencedMethod").Value);
+                                break;
+                            default:
+                                break;
+                        }
+                        this.Children.Add(connection);
+                        connection.UpdateConnection();
+                        SelectionService.AddSelection(connection);
+                    }
+                }
+                UpdateZIndex();
+                DataService.Instance.UpdateEntries(this.Children.OfType<DesignerItem>().Select(x => x.Content).OfType<IEntry>());
             }
-            UpdateZIndex();
-            DataService.Instance.UpdateEntries(this.Children.OfType<DesignerItem>().Select(x => x.Content).OfType<IEntry>());
+            catch (Exception)
+            {
+                MessageBox.MessageBox.Show("Ошибка", "Не удалось вставить объект", MessageBox.MessageBoxButtons.Ok);
+            }
+            
         }
 
         private static DesignerItem DeserializeDesignerItem(XElement itemXML, Guid id, double offsetX = 0, double offsetY = 0)
@@ -934,9 +942,9 @@ namespace ClassDesigner.Controls
             {
                 Canvas.SetZIndex(connections[i], i);
             }
-            for (int j = i+1; j < designerItems.Count; j++)
+            for (int j = 0; j < designerItems.Count; j++)
             {
-                Canvas.SetZIndex(designerItems[j], j);
+                Canvas.SetZIndex(designerItems[j], j+i+1);
             }
         }
 

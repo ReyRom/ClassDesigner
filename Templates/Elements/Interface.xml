@@ -1,20 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Root TemplateName="Struct">
+<?xml version="1.0" encoding="utf-8"?>
+<Root TemplateName="Интерфейс">
   <DesignerItems>
     <DesignerItem>
       <Left>0</Left>
       <Top>0</Top>
-      <Width>75</Width>
-      <Heigth>48</Heigth>
-      <ID>4a97abb5-2960-42be-abf5-9411cabcd093</ID>
+      <Width>85</Width>
+      <Heigth>45</Heigth>
+      <ID>7c2f1b94-0676-408c-82e4-a553583b356e</ID>
       <ZIndex>0</ZIndex>
       <Content>
-        <Struct>
+        <Interface>
           <Name></Name>
           <Visibility>Public</Visibility>
           <Attributes />
           <Actions />
-        </Struct>
+        </Interface>
       </Content>
     </DesignerItem>
   </DesignerItems>

@@ -5,13 +5,21 @@
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:c="clr-namespace:ClassDesigner.Controls">
 
-    <ContextMenu x:Key="ClassContextMenu">
+    
+    
+    <ContextMenu x:Key="ClassContextMenu" FontStyle="Normal">
         <MenuItem Header="Видимость">
             <MenuItem>
                 <MenuItem.Template>
                     <ControlTemplate>
-                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" SelectedItem="{Binding Visibility}">
-
+                        <ComboBox HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
+                                  SelectedItem="{Binding Visibility}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
                         </ComboBox>
                     </ControlTemplate>
                 </MenuItem.Template>
@@ -22,12 +30,12 @@
         <MenuItem Header="Добавить метод" Command="{Binding  AddMethodCommand}"/>
         <MenuItem Header="Добавить конструктор" Command="{Binding AddConstructorCommand}"/>
         <MenuItem Header="Свойства">
-            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
-            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+            <MenuItem Header="Абстрактный" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+            <MenuItem Header="Статический" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
         </MenuItem>
     </ContextMenu>
 
-    <ContextMenu x:Key="FieldContextMenu">
+    <ContextMenu x:Key="FieldContextMenu" FontStyle="Normal">
         <MenuItem Header="Видимость">
             <MenuItem>
                 <MenuItem.Template>
@@ -35,19 +43,26 @@
                         <ComboBox 
                             HorizontalAlignment="Stretch" 
                             ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
-                            SelectedItem="{Binding Visibility}"/>
+                            SelectedItem="{Binding Visibility}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
                     </ControlTemplate>
                 </MenuItem.Template>
             </MenuItem>
         </MenuItem>
         <MenuItem Header="Свойства">
-            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+            <MenuItem Header="Статическое" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
 
         </MenuItem>
         <MenuItem Header="Удалить" Command="{Binding Parent.RemoveFieldCommand}" CommandParameter="{Binding}"/>
     </ContextMenu>
 
-    <ContextMenu x:Key="PropertyContextMenu">
+    <ContextMenu x:Key="PropertyContextMenu" FontStyle="Normal">
         <MenuItem Header="Видимость">
             <MenuItem>
                 <MenuItem.Template>
@@ -55,14 +70,20 @@
                         <ComboBox 
                             HorizontalAlignment="Stretch" 
                             ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
-                            SelectedItem="{Binding Visibility}"/>
+                            SelectedItem="{Binding Visibility}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </ControlTemplate>
                 </MenuItem.Template>
             </MenuItem>
         </MenuItem>
         <MenuItem Header="Свойства">
-            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
-            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+            <MenuItem Header="Статическое" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+            <MenuItem Header="Абстрактное" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
 
             <MenuItem Header="Get-метод" IsCheckable="True" IsChecked="{Binding IsGet}"/>
             <MenuItem Header="Set-метод" IsCheckable="True" IsChecked="{Binding IsSet}"/>
@@ -70,7 +91,7 @@
         <MenuItem Header="Удалить" Command="{Binding Parent.RemovePropertyCommand}" CommandParameter="{Binding}"/>
     </ContextMenu>
 
-    <ContextMenu x:Key="MethodContextMenu">
+    <ContextMenu x:Key="MethodContextMenu" FontStyle="Normal">
         <MenuItem Header="Видимость">
             <MenuItem>
                 <MenuItem.Template>
@@ -78,19 +99,25 @@
                         <ComboBox 
                             HorizontalAlignment="Stretch" 
                             ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
-                            SelectedItem="{Binding Visibility}"/>
+                            SelectedItem="{Binding Visibility}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </ControlTemplate>
                 </MenuItem.Template>
             </MenuItem>
         </MenuItem>
         <MenuItem Header="Свойства">
-            <MenuItem Header="Static" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
-            <MenuItem Header="Abstract" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
+            <MenuItem Header="Статический" IsCheckable="True" IsChecked="{Binding IsStatic}"/>
+            <MenuItem Header="Абстрактный" IsCheckable="True" IsChecked="{Binding IsAbstract}"/>
         </MenuItem>
         <MenuItem Header="Удалить" Command="{Binding Parent.RemoveMethodCommand}" CommandParameter="{Binding}"/>
     </ContextMenu>
 
-    <ContextMenu x:Key="ConstructorContextMenu">
+    <ContextMenu x:Key="ConstructorContextMenu" FontStyle="Normal">
         <MenuItem Header="Видимость">
             <MenuItem>
                 <MenuItem.Template>
@@ -98,7 +125,13 @@
                         <ComboBox 
                             HorizontalAlignment="Stretch" 
                             ItemsSource="{Binding Source={StaticResource VisibilityTypes}}" 
-                            SelectedItem="{Binding Visibility}"/>
+                            SelectedItem="{Binding Visibility}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </ControlTemplate>
                 </MenuItem.Template>
             </MenuItem>

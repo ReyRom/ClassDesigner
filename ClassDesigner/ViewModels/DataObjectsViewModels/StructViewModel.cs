@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ClassDesigner.ViewModels
 {
-    public class StructViewModel : ViewModelBase, IEntry, IHaveActions, IHaveFields, IHaveProperties, IInheritor, IErrorProvider
+    public class StructViewModel : ViewModelBase, IEntry, IHaveConstructors, IHaveMethods, IHaveFields, IHaveProperties, IInheritor, IErrorProvider
     {
         private string name = "Struct";
         public string Name
