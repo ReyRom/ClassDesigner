@@ -16,7 +16,7 @@
         MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
         MaxWidth="{x:Static SystemParameters.MaximizedPrimaryScreenWidth}"
         Background="{DynamicResource AppColor}" 
-        WindowState="Normal" WindowStyle="None" WindowStartupLocation="CenterScreen"
+        WindowState="Maximized" WindowStyle="None" WindowStartupLocation="CenterScreen"
         AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <vm:MainViewModel x:Key="viewModel"/>
