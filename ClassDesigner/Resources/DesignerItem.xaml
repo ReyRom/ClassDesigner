@@ -149,13 +149,10 @@
                                  Template="{StaticResource ConnectorDecoratorTemplate}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <!--<DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Self},Path=IsGroup}">
-                            <Setter TargetName="PART_DragThumb" Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>-->
+
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Value="True" Binding="{Binding RelativeSource={RelativeSource Self},Path=IsSelected}"/>
-                                <!--<Condition Value="{x:Static sys:Guid.Empty}" Binding="{Binding RelativeSource={RelativeSource Self},Path=ParentID}"/>-->
                             </MultiDataTrigger.Conditions>
                             <Setter TargetName="PART_ResizeDecorator" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="PART_DragThumb" Property="Visibility" Value="Visible"/>
@@ -166,9 +163,6 @@
                         <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Self},Path=IsDragConnectionOver}">
                             <Setter TargetName="PART_ConnectorDecorator" Property="Visibility" Value="Visible"/>
                         </DataTrigger>
-                        <!--<DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Self},Path=IsGroup}">
-                            <Setter TargetName="PART_ConnectorDecorator" Property="Visibility" Value="Hidden"/>
-                        </DataTrigger>-->
                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">
                             <Setter TargetName="PART_Block" Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>

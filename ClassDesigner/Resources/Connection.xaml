@@ -46,16 +46,7 @@
                 </Setter>
             </Style>
             
-            <!-- Arrow Grid Style --><!--
-            <Style x:Key="ArrowGridStyle" TargetType="Grid">
-                <Setter Property="Width" Value="10"/>
-                <Setter Property="Height" Value="10"/>
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <TranslateTransform X="-5" Y="-5"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>-->
+
             <!-- base style for all arrow shapes -->
             <Style x:Key="ArrowSymbolBaseStyle" TargetType="Path">
                 <Setter Property="Stroke" Value="{DynamicResource StrokeColor}"/>
@@ -114,36 +105,6 @@
                               Data="{Binding HeaderSourcePathGeometry}">
                         </Path>
 
-                        <!--<Grid Style="{StaticResource ArrowGridStyle}"
-                              Canvas.Left="{Binding AnchorPositionSource.X}"
-                              Canvas.Top="{Binding AnchorPositionSource.Y}">
-                            <Path Name="PART_SourceAnchorPath"/>
-                            <Grid.LayoutTransform>
-                                <RotateTransform Angle="{Binding AnchorAngleSource}"/>
-                            </Grid.LayoutTransform>
-                        </Grid>
-                        <Grid Style="{StaticResource ArrowGridStyle}"
-                              Canvas.Left="{Binding AnchorPositionSink.X}"
-                              Canvas.Top="{Binding AnchorPositionSink.Y}">
-                            <Path Name="PART_SinkAnchorPath"/>
-                            <Grid.LayoutTransform>
-                                <RotateTransform Angle="{Binding AnchorAngleSink}"/>
-                            </Grid.LayoutTransform>
-                        </Grid>-->
-
-                        <!--Uncomment this to show default label text-->
-                        <!--<TextBlock Width="100" Height="35"
-                                       Text="{Binding Path=(Canvas.ZIndex)}"
-                                       Canvas.Left="{Binding LabelPosition.X}"
-                                       Canvas.Top="{Binding LabelPosition.Y}">
-                            <TextBlock.RenderTransform>
-                                <TranslateTransform X="5" Y="5"/>
-                            </TextBlock.RenderTransform>
-                        </TextBlock>-->
-
-                        <!--<Canvas.BitmapEffect>
-                            <DropShadowBitmapEffect Color="Gray" Direction="315" ShadowDepth="10" Softness="0" Opacity="0.1"/>
-                        </Canvas.BitmapEffect>-->
                     </Canvas>
 
                     <ControlTemplate.Triggers>
@@ -171,15 +132,7 @@
                             <Setter TargetName="PART_ConnectionPath" Property="Style" Value="{StaticResource DashedLine}"/>
                             <Setter TargetName="PART_HeaderSinkConnectionPath" Property="Style" Value="{StaticResource FilledWhite}"/>
                         </DataTrigger>
-                        <!--<DataTrigger Value="Diamond" Binding="{Binding RelativeSource={RelativeSource Self},Path=SourceArrowSymbol}">
-                            <Setter TargetName="PART_SourceAnchorPath" Property="Style" Value="{StaticResource Diamond}"/>
-                        </DataTrigger>
-                        <DataTrigger Value="Arrow" Binding="{Binding RelativeSource={RelativeSource Self},Path=SinkArrowSymbol}">
-                            <Setter TargetName="PART_SinkAnchorPath" Property="Style" Value="{StaticResource Arrow}"/>
-                        </DataTrigger>
-                        <DataTrigger Value="Diamond" Binding="{Binding RelativeSource={RelativeSource Self},Path=SinkArrowSymbol}">
-                            <Setter TargetName="PART_SinkAnchorPath" Property="Style" Value="{StaticResource Diamond}"/>
-                        </DataTrigger>-->
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

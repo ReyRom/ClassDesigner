@@ -152,6 +152,16 @@ namespace ClassDesigner.ViewModels
 
         public void ReleaseData()
         {
+            Attributes.CollectionChanged -= CollectionChanged;
+            foreach (var item in Attributes)
+            {
+                item.PropertyChanged -= Item_PropertyChanged;
+            }
+            Actions.CollectionChanged -= CollectionChanged;
+            foreach (var item in Actions)
+            {
+                item.PropertyChanged -= Item_PropertyChanged;
+            }
             if (interfaceError != null)
             {
                 ErrorService.Instance.ObservableErrors.Remove(interfaceError);
@@ -159,21 +169,5 @@ namespace ClassDesigner.ViewModels
             }
         }
 
-
-
-        //Command openPropertiesCommand;
-        //public Command OpenPropertiesCommand
-        //{
-        //    get => openPropertiesCommand ??= new Command(obj =>
-        //    {
-        //        PropertiesService.Instance.SelectedCollection = obj;
-
-        //        PropertiesCollectionWindow window = new PropertiesCollectionWindow();
-
-        //        window.ShowDialog();
-
-        //        PropertiesService.Instance.SelectedCollection = null;
-        //    });
-        //}
     }
 }

@@ -17,25 +17,6 @@ namespace ClassDesigner.Controls
         }
         #endregion
 
-        //#region ParentID
-        //public Guid ParentID
-        //{
-        //    get { return (Guid)GetValue(ParentIDProperty); }
-        //    set { SetValue(ParentIDProperty, value); }
-        //}
-        //public static readonly DependencyProperty ParentIDProperty = DependencyProperty.Register("ParentID", typeof(Guid), typeof(DesignerItem));
-        //#endregion
-
-        //#region IsGroup
-        //public bool IsGroup
-        //{
-        //    get { return (bool)GetValue(IsGroupProperty); }
-        //    set { SetValue(IsGroupProperty, value); }
-        //}
-        //public static readonly DependencyProperty IsGroupProperty =
-        //    DependencyProperty.Register("IsGroup", typeof(bool), typeof(DesignerItem));
-        //#endregion
-
         #region IsSelected Property
 
         public bool IsSelected

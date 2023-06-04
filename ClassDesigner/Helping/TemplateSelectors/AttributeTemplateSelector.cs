@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace ClassDesigner.Helping
 {
-    internal class AttributeTemplateSelector:DataTemplateSelector
+    public class AttributeTemplateSelector:DataTemplateSelector
     {
         public DataTemplate FieldTemplate { get; set; }
         public DataTemplate PropertyTemplate { get; set; }
@@ -19,6 +19,19 @@ namespace ClassDesigner.Helping
         {
             if (item is FieldViewModel) return FieldTemplate;
             if (item is PropertyViewModel) return PropertyTemplate;
+            else return DefaultTemplate;
+        }
+    }
+    public class ActionTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate MethodTemplate { get; set; }
+        public DataTemplate ConstructorTemplate { get; set; }
+        public DataTemplate DefaultTemplate { get; set; }
+
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            if (item is MethodViewModel) return MethodTemplate;
+            if (item is ConstructorViewModel) return ConstructorTemplate;
             else return DefaultTemplate;
         }
     }

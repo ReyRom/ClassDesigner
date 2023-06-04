@@ -100,16 +100,6 @@ namespace ClassDesigner.Controls
 
         void thumbDragThumb_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            //if (HitConnector != null)
-            //{
-            //    if (connection != null)
-            //    {
-            //        if (connection.Source == fixConnector)
-            //            connection.Sink = this.HitConnector;
-            //        else
-            //            connection.Source = this.HitConnector;
-            //    }
-            //}
 
             this.HitDesignerItem = null;
             this.HitConnector = null;
@@ -130,22 +120,12 @@ namespace ClassDesigner.Controls
 
             if (draggingNode != null)
             {
-                //this.HitDesignerItem = null;
-                //this.HitConnector = null;
+
                 this.pathGeometry = null;
                 this.Cursor = Cursors.Cross;
                 this.connection.StrokeDashArray = new DoubleCollection(new double[] { 1, 2 });
 
-                //if (sender == sourceDragThumb)
-                //{
-                //    fixConnector = connection.Sink;
-                //    dragConnector = connection.Source;
-                //}
-                //else if (sender == sinkDragThumb)
-                //{
-                //    dragConnector = connection.Sink;
-                //    fixConnector = connection.Source;
-                //}
+
             }
 
         }
@@ -153,7 +133,6 @@ namespace ClassDesigner.Controls
         void thumbDragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             Point currentPosition = Mouse.GetPosition(this);
-            //this.HitTesting(currentPosition);
 
             Point point = new Point(currentPosition.X < 0 ? 0 : currentPosition.X,
                                     currentPosition.Y < 0 ? 0 : currentPosition.Y);
@@ -178,13 +157,6 @@ namespace ClassDesigner.Controls
 
         private void ConnectionAdorner_Unloaded(object sender, RoutedEventArgs e)
         {
-            //sourceDragThumb.DragDelta -= new DragDeltaEventHandler(thumbDragThumb_DragDelta);
-            //sourceDragThumb.DragStarted -= new DragStartedEventHandler(thumbDragThumb_DragStarted);
-            //sourceDragThumb.DragCompleted -= new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
-
-            //sinkDragThumb.DragDelta -= new DragDeltaEventHandler(thumbDragThumb_DragDelta);
-            //sinkDragThumb.DragStarted -= new DragStartedEventHandler(thumbDragThumb_DragStarted);
-            //sinkDragThumb.DragCompleted -= new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
 
             foreach (var item in thumbs)
             {
@@ -274,30 +246,6 @@ namespace ClassDesigner.Controls
 
             thumbs.Add(addNodeThumb2);
 
-
-            ////source drag thumb
-            //sourceDragThumb = new Thumb();
-            //Canvas.SetLeft(sourceDragThumb, connection.AnchorPositionSource.X);
-            //Canvas.SetTop(sourceDragThumb, connection.AnchorPositionSource.Y);
-            //this.adornerCanvas.Children.Add(sourceDragThumb);
-            //if (dragThumbStyle != null)
-            //    sourceDragThumb.Style = dragThumbStyle;
-
-            //sourceDragThumb.DragDelta += new DragDeltaEventHandler(thumbDragThumb_DragDelta);
-            //sourceDragThumb.DragStarted += new DragStartedEventHandler(thumbDragThumb_DragStarted);
-            //sourceDragThumb.DragCompleted += new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
-
-            //// sink drag thumb
-            //sinkDragThumb = new Thumb();
-            //Canvas.SetLeft(sinkDragThumb, connection.AnchorPositionSink.X);
-            //Canvas.SetTop(sinkDragThumb, connection.AnchorPositionSink.Y);
-            //this.adornerCanvas.Children.Add(sinkDragThumb);
-            //if (dragThumbStyle != null)
-            //    sinkDragThumb.Style = dragThumbStyle;
-
-            //sinkDragThumb.DragDelta += new DragDeltaEventHandler(thumbDragThumb_DragDelta);
-            //sinkDragThumb.DragStarted += new DragStartedEventHandler(thumbDragThumb_DragStarted);
-            //sinkDragThumb.DragCompleted += new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
         }
 
         private void AddNodeThumb_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -338,12 +286,6 @@ namespace ClassDesigner.Controls
             PathGeometry geometry = new PathGeometry();
 
             connection.Nodes.UpdateNode(draggingNode.Id, position);
-
-            //ConnectorOrientation targetOrientation;
-            //if (HitConnector != null)
-            //    targetOrientation = HitConnector.Orientation;
-            //else
-            //    targetOrientation = dragConnector.Orientation;
 
             List<Point> linePoints = PathFinder.GetConnectionLine(connection.Source.GetInfo(), connection.Sink.GetInfo(), connection.Nodes);
 

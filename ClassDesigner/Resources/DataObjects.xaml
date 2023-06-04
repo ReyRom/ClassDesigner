@@ -273,7 +273,12 @@
                 
                 <Separator />
 
-                <ItemsControl ItemsSource="{Binding Actions}" ItemTemplate="{StaticResource MethodTemplate}">
+                <ItemsControl ItemsSource="{Binding Actions}">
+                    <ItemsControl.ItemTemplateSelector>
+                        <h:ActionTemplateSelector 
+                            MethodTemplate="{StaticResource MethodTemplate}" 
+                            ConstructorTemplate="{StaticResource ConstructorTemplate}"/>
+                    </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="2"  BorderBrush="{DynamicResource StrokeColor}"/>
@@ -332,7 +337,12 @@
 
                 <Separator />
 
-                <ItemsControl ItemsSource="{Binding Actions}" ItemTemplate="{StaticResource MethodTemplate}">
+                <ItemsControl ItemsSource="{Binding Actions}">
+                    <ItemsControl.ItemTemplateSelector>
+                        <h:ActionTemplateSelector 
+                            MethodTemplate="{StaticResource MethodTemplate}" 
+                            ConstructorTemplate="{StaticResource ConstructorTemplate}"/>
+                    </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="2"  BorderBrush="{DynamicResource StrokeColor}"/>
@@ -394,7 +404,12 @@
 
                 <Separator />
 
-                <ItemsControl ItemsSource="{Binding Actions}" ItemTemplate="{StaticResource MethodTemplate}">
+                <ItemsControl ItemsSource="{Binding Actions}">
+                    <ItemsControl.ItemTemplateSelector>
+                        <h:ActionTemplateSelector 
+                            MethodTemplate="{StaticResource MethodTemplate}" 
+                            ConstructorTemplate="{StaticResource ConstructorTemplate}"/>
+                    </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
             </StackPanel>
             <Border BorderThickness="2"  BorderBrush="{DynamicResource StrokeColor}"/>

@@ -17,7 +17,11 @@ namespace ClassDesigner.ViewModels
                 var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates\\Elements"));
                 foreach (var file in files)
                 {
-                    Templates.Add(new TemplateViewModel(file));
+                    try
+                    {
+                        Templates.Add(new TemplateViewModel(file));
+                    }
+                    catch { }
                 }
             }
             if (Directory.Exists(Path.Combine(Environment.CurrentDirectory, "Templates\\Patterns")))
@@ -25,7 +29,11 @@ namespace ClassDesigner.ViewModels
                 var files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates\\Patterns"));
                 foreach (var file in files)
                 {
-                    PatternTemplates.Add(new TemplateViewModel(file));
+                    try
+                    {
+                        PatternTemplates.Add(new TemplateViewModel(file));
+                    }
+                    catch { }
                 }
             }
         }

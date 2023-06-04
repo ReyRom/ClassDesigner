@@ -17,7 +17,7 @@
     <Window.Resources>
         <vm:CodeGenerationViewModel x:Key="viewModel"/>
     </Window.Resources>
-    <Grid Background="{DynamicResource AlternateBackgroundColor}" Margin="15" DataContext="{StaticResource viewModel}" Height="200" Width="450">
+    <Grid Background="{DynamicResource AlternateBackgroundColor}" Margin="15" DataContext="{StaticResource viewModel}" Width="450">
         <Grid.LayoutTransform>
             <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding SettingsService.InterfaceScale}" ScaleY="{Binding SettingsService.InterfaceScale}"/>
         </Grid.LayoutTransform>
@@ -27,7 +27,8 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Grid Margin="5">
+        <GroupBox Header="Каталог сохранения">
+            <Grid Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
@@ -37,7 +38,10 @@
                 <TextBlock Text="Обзор"/>
             </Button>
         </Grid>
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding LanguagesList}">
+        </GroupBox>
+        <GroupBox Header="Языки программирования" Grid.Row="1">
+         
+        <ItemsControl  ItemsSource="{Binding LanguagesList}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -73,6 +77,8 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        </GroupBox>
         <TextBlock HorizontalAlignment="Center" Text="В проекте присутствуют ошибки критичные для генерации кода" Grid.Row="2" Visibility="{Binding ErrorService.IsCriticalForCode, Converter={StaticResource visibilityConverter}}"/>
         <UniformGrid Grid.Row="3" Columns="2">
             <Button  Command="{x:Static SystemCommands.CloseWindowCommand}" Margin="5">

@@ -362,21 +362,11 @@ namespace ClassDesigner.Controls
                     else
                     {
                         designer.SelectionService.AddSelection(this);
-                        //if (!this.Sink.ParentDesignerItem.IsSelected) 
-                        //    designer.SelectionService.AddSelection(this.Sink.ParentDesignerItem);
-
-                        //if (!this.Source.ParentDesignerItem.IsSelected) 
-                        //    designer.SelectionService.AddSelection(this.Source.ParentDesignerItem);
                     }
                 else if (!this.IsSelected)
                 {
                     designer.SelectionService.SelectItem(this);
 
-                    //if (!this.Sink.ParentDesignerItem.IsSelected)
-                    //    designer.SelectionService.AddSelection(this.Sink.ParentDesignerItem);
-
-                    //if (!this.Source.ParentDesignerItem.IsSelected)
-                    //    designer.SelectionService.AddSelection(this.Source.ParentDesignerItem);
                 }
 
                 //Focus();

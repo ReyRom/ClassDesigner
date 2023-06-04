@@ -107,6 +107,12 @@ namespace ClassDesigner.ViewModels
 
         public void ReleaseData()
         {
+            EnumChildren.CollectionChanged -= CollectionChanged;
+            foreach (var item in EnumChildren)
+            {
+                item.PropertyChanged -= Item_PropertyChanged;
+            }
+
             if (enumError != null)
             {
                 ErrorService.Instance.ObservableErrors.Remove(enumError);
@@ -114,19 +120,5 @@ namespace ClassDesigner.ViewModels
             }
         }
 
-        //Command openPropertiesCommand;
-        //public Command OpenPropertiesCommand
-        //{
-        //    get => openPropertiesCommand ??= new Command(obj =>
-        //    {
-        //        PropertiesService.Instance.SelectedCollection = obj;
-
-        //        PropertiesCollectionWindow window = new PropertiesCollectionWindow();
-
-        //        window.ShowDialog();
-
-        //        PropertiesService.Instance.SelectedCollection = null;
-        //    });
-        //}
     }
 }

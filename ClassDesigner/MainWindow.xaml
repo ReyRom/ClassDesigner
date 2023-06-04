@@ -194,7 +194,20 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource WarningIcon}" Foreground="Red" VerticalAlignment="Center" FontSize="14" Margin="3"/>
+                                <TextBlock VerticalAlignment="Center" FontSize="14" Margin="3">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource WarningIcon}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ErrorCriticalFor}" Value="CodeGeneration">
+                                                    <Setter Property="Foreground" Value="Red"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ErrorCriticalFor}" Value="None">
+                                                    <Setter Property="Foreground" Value="Yellow"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <TextBlock Text="{Binding Text}" TextWrapping="Wrap" FontSize="14"/>
                             </StackPanel>
                         </DataTemplate>

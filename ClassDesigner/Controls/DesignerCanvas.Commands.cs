@@ -41,10 +41,6 @@ namespace ClassDesigner.Controls
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, Copy_Executed, Copy_Enabled));
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Paste, Paste_Executed, Paste_Enabled));
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Delete, Delete_Executed, Delete_Enabled));
-            this.CommandBindings.Add(new CommandBinding(DesignerCanvas.BringForward, BringForward_Executed, Order_Enabled));
-            this.CommandBindings.Add(new CommandBinding(DesignerCanvas.BringToFront, BringToFront_Executed, Order_Enabled));
-            this.CommandBindings.Add(new CommandBinding(DesignerCanvas.SendBackward, SendBackward_Executed, Order_Enabled));
-            this.CommandBindings.Add(new CommandBinding(DesignerCanvas.SendToBack, SendToBack_Executed, Order_Enabled));
             this.CommandBindings.Add(new CommandBinding(DesignerCanvas.SelectAll, SelectAll_Executed));
             this.CommandBindings.Add(new CommandBinding(DesignerCanvas.FocusProperty, FocusProperty_Executed));
             this.CommandBindings.Add(new CommandBinding(DesignerCanvas.OpenSettings, OpenSettings_Executed));
@@ -68,23 +64,11 @@ namespace ClassDesigner.Controls
 
         private void GenerateCode_Enabled(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = !App.CodeGenerationWindow.IsLoaded;
         }
 
         private void GenerateCode_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            //var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClassDesignerOutputs");
-
-            //if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
-
-            //var entries = this.Children.OfType<DesignerItem>().Select(x=>x.Content).OfType<IEntry>().ToList();
-
-            //foreach (var item in entries)
-            //{
-            //    File.WriteAllText(Path.Combine(path, $"{item.Name}.cs"), CSharpSerializer.SerializeEntry(item));
-            //}
-
-            
             App.NewCodeGenerationWindow.Show();
 
         }
@@ -94,30 +78,6 @@ namespace ClassDesigner.Controls
             this.SelectionService.SelectAll();
         }
 
-        private void SendToBack_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void SendBackward_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void BringToFront_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Order_Enabled(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = SelectionService.Selection.Count > 0;
-        }
-
-        private void BringForward_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         private void Delete_Enabled(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -340,6 +300,12 @@ namespace ClassDesigner.Controls
             Canvas.SetLeft(item, Double.Parse(itemXML.Element("Left").Value, CultureInfo.InvariantCulture) + offsetX);
             Canvas.SetTop(item, Double.Parse(itemXML.Element("Top").Value, CultureInfo.InvariantCulture) + offsetY);
             Canvas.SetZIndex(item, Int32.Parse(itemXML.Element("ZIndex").Value));
+            item.Content = DeserializeContent(itemXML);
+            return item;
+        }
+
+        private static Object DeserializeContent(XElement itemXML)
+        {
             Object content = null;
             if (itemXML.Element("Content").Element("Class") is not null)
             {
@@ -357,8 +323,7 @@ namespace ClassDesigner.Controls
             {
                 content = DeserializeEnum(itemXML.Element("Content").Element("Enum"));
             }
-            item.Content = content;
-            return item;
+            return content;
         }
 
         private static ClassViewModel DeserializeClass(XElement itemXML)

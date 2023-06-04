@@ -38,8 +38,6 @@ namespace ClassDesigner.ViewModels
             Name = model.Name;
             Type = model.Type;
             Visibility = model.Visibility;
-            //IsStatic = model.IsStatic;
-            //IsAbstract = model.IsAbstract;
             Parameters = new ObservableCollection<ParameterViewModel>(model.Parameters);
         }
 
@@ -66,32 +64,6 @@ namespace ClassDesigner.ViewModels
             Validate();
         }
 
-        //private bool isStatic = false;
-        //public bool IsStatic
-        //{
-        //    get => isStatic; set
-        //    {
-        //        isStatic = value;
-
-        //        IsAbstract = isStatic ? false : isAbstract;
-        //        OnPropertyChanged(nameof(IsStatic));
-        //        OnPropertyChanged(nameof(ActionString));
-        //    }
-        //}
-
-        //private bool isAbstract = false;
-        //public bool IsAbstract
-        //{
-        //    get => isAbstract; set
-        //    {
-        //        isAbstract = value;
-
-        //        IsStatic = isAbstract ? false : isStatic;
-        //        OnPropertyChanged(nameof(IsAbstract));
-
-        //        OnPropertyChanged(nameof(ActionString));
-        //    }
-        //}
 
         private string name = "Method";
         public string Name

@@ -30,8 +30,8 @@ namespace ClassDesigner.Controls
 
                 // if you click directly on the canvas all 
                 // selected items are 'de-selected'
-                SelectionService.ClearSelection();
                 Focus();
+                SelectionService.ClearSelection();
                 e.Handled = true;
             }
         }

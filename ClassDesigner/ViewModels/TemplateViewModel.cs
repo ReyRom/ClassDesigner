@@ -15,7 +15,6 @@ namespace ClassDesigner.ViewModels
             XElement template = XElement.Load(path);
             Content = template;
             Name = template.Attribute("TemplateName").Value;
-            
         }
 
         public string Path { get; set; }
