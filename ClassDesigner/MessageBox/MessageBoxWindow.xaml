@@ -22,11 +22,13 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="{Binding Header}" Grid.Row="0" TextWrapping="Wrap" Margin="5"/>
             <TextBlock Text="{Binding Message}" Grid.Row="1" TextWrapping="Wrap" Margin="10"/>
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <TextBox Text="{Binding InputText}" Grid.Row="2" Margin="10,5,10,5" Visibility="{Binding InputField, Converter={StaticResource visibilityConverter}}"/>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" >
                 <Button Width="100" Click="OkButton_Click" Visibility="{Binding OkButton, Converter={StaticResource visibilityConverter}}">
                     <TextBlock Text="ОК"/>
                 </Button>

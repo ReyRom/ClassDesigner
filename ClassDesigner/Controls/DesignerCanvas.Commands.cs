@@ -64,12 +64,12 @@ namespace ClassDesigner.Controls
 
         private void GenerateCode_Enabled(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !App.CodeGenerationWindow.IsLoaded;
+            e.CanExecute = true;
         }
 
         private void GenerateCode_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            App.NewCodeGenerationWindow.Show();
+            App.NewCodeGenerationWindow.ShowDialog();
 
         }
 
@@ -164,7 +164,7 @@ namespace ClassDesigner.Controls
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
-            openFile.Filter = "Class Designer Files|*.classdsgn|Files (*.xml)|*.xml|All Files (*.*)|*.*";
+            openFile.Filter = "Class Designer Files|*.cldsg|Files (*.xml)|*.xml|All Files (*.*)|*.*";
             if (openFile.ShowDialog() == true)
             {
                 OpenFile(openFile.FileName);
@@ -860,7 +860,7 @@ namespace ClassDesigner.Controls
         void SaveFile(XElement xElement)
         {
             SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Filter = "Class Designer Files (*.classdsgn)|*.classdsgn|XML-файлы (*.xml)|*.xml|Изображения (*.png)|*.png";
+            saveFile.Filter = "Class Designer Files (*.cldsg)|*.cldsg|Class Designer Template (*.cldsgtmpl)|*.cldsgtmpl|XML-файлы (*.xml)|*.xml|Изображения (*.png)|*.png";
             if (saveFile.ShowDialog() == true)
             {
                 try
@@ -868,6 +868,15 @@ namespace ClassDesigner.Controls
                     if (Path.GetExtension(saveFile.FileName) == ".png")
                     {
                         ToImageSource(this, saveFile.FileName);
+                    }
+                    else if(Path.GetExtension(saveFile.FileName) == ".cldsgtmpl")
+                    {
+                        string input;
+                        if (MessageBox.MessageBox.ShowInput(out input,"Сохранение шаблона", "Укажите имя шаблона") == MessageBox.MessageBoxResult.Ok)
+                        {
+                            xElement.Add(new XAttribute("TemplateName", input));
+                            xElement.Save(saveFile.FileName);
+                        }
                     }
                     else
                     {

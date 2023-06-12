@@ -8,6 +8,7 @@
 	<UseWindowsForms>true</UseWindowsForms>
 	<ApplicationIcon>ClassDesigner.ico</ApplicationIcon>
 	 <StartupObject>ClassDesigner.App</StartupObject>
+	 <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

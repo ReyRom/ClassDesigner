@@ -28,9 +28,11 @@ namespace ClassDesigner.Helping
             if (nodes.Count==0)
             {
                 Point p1 = GetPoint(new Rect(new Point(connectorInfo1.DesignerItemLeft, connectorInfo1.DesignerItemTop), connectorInfo1.DesignerItemSize), 
-                    GetMiddlePoint(new Point(connectorInfo2.DesignerItemLeft,connectorInfo2.DesignerItemTop), new Point(connectorInfo2.DesignerItemLeft+connectorInfo2.DesignerItemSize.Width, connectorInfo2.DesignerItemTop + connectorInfo2.DesignerItemSize.Height)));
+                    GetMiddlePoint(new Point(connectorInfo2.DesignerItemLeft,connectorInfo2.DesignerItemTop), 
+                                   new Point(connectorInfo2.DesignerItemLeft+connectorInfo2.DesignerItemSize.Width, connectorInfo2.DesignerItemTop + connectorInfo2.DesignerItemSize.Height)));
                 Point p2 = GetPoint(new Rect(new Point(connectorInfo2.DesignerItemLeft, connectorInfo2.DesignerItemTop), connectorInfo2.DesignerItemSize),
-                    GetMiddlePoint(new Point(connectorInfo1.DesignerItemLeft, connectorInfo1.DesignerItemTop), new Point(connectorInfo1.DesignerItemLeft + connectorInfo1.DesignerItemSize.Width, connectorInfo1.DesignerItemTop + connectorInfo1.DesignerItemSize.Height)));
+                    GetMiddlePoint(new Point(connectorInfo1.DesignerItemLeft, connectorInfo1.DesignerItemTop), 
+                                   new Point(connectorInfo1.DesignerItemLeft + connectorInfo1.DesignerItemSize.Width, connectorInfo1.DesignerItemTop + connectorInfo1.DesignerItemSize.Height)));
                 Point mid = GetMiddlePoint(p1,p2);
                 nodes.Add(new Node(mid));
             }

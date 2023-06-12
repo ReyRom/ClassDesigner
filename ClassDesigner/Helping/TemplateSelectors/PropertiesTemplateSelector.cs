@@ -1,16 +1,10 @@
-﻿using ClassDesigner.Models;
-using ClassDesigner.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ClassDesigner.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace ClassDesigner.Helping
 {
-    public class PropertiesTemplateSelector:DataTemplateSelector
+    public class PropertiesTemplateSelector : DataTemplateSelector
     {
         public DataTemplate ClassTemplate { get; set; }
         public DataTemplate ConnectionTemplate { get; set; }
@@ -34,19 +28,19 @@ namespace ClassDesigner.Helping
                     return ConnectionTemplate;
                 case MethodViewModel:
                     return MethodTemplate;
-                case ConstructorViewModel: 
+                case ConstructorViewModel:
                     return ConstructorTemplate;
                 case FieldViewModel:
                     return FieldTemplate;
-                case PropertyViewModel: 
+                case PropertyViewModel:
                     return PropertyTemplate;
-                case InterfaceViewModel: 
+                case InterfaceViewModel:
                     return InterfaceTemplate;
-                case StructViewModel: 
+                case StructViewModel:
                     return StructTemplate;
-                case EnumViewModel: 
+                case EnumViewModel:
                     return EnumTemplate;
-                case EnumChildViewModel: 
+                case EnumChildViewModel:
                     return EnumChildTemplate;
                 default:
                     return DefaultTemplate;

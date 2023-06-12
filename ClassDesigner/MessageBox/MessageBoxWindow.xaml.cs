@@ -24,9 +24,11 @@ namespace ClassDesigner.MessageBox
         public bool NoButton { get; set; } = false;
         public bool OkButton { get; set; } = false;
         public bool CancelButton { get; set; } = false;
+        public bool InputField { get; set; } = false;
 
         public string Message { get; set; } = string.Empty;
         public string Header { get; set; } = string.Empty;
+        public string InputText { get; set; } = string.Empty;
 
         public SettingsService SettingsService => SettingsService.Instance;
 

@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace ClassDesigner.Helping
 {
-    internal class EntryTemplateSelector : DataTemplateSelector
+    public class EntryTemplateSelector : DataTemplateSelector
     {
         public DataTemplate ClassTemplate { get; set; }
         public DataTemplate InterfaceTemplate { get; set; }

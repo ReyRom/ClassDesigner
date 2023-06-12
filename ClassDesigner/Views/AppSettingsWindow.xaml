@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:a="clr-namespace:ClassDesigner"
       xmlns:local="clr-namespace:ClassDesigner.Views"
       xmlns:vm="clr-namespace:ClassDesigner.ViewModels"
       mc:Ignorable="d" 
@@ -10,6 +11,7 @@
       Title="AppSettingsWindow"
       Background="{DynamicResource AppColor}" 
       WindowState="Normal" WindowStyle="None"
+      WindowStartupLocation="CenterOwner" Owner="{x:Static a:App.MainWindow}"
       AllowsTransparency="True" 
       MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>

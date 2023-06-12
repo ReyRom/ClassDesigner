@@ -15,6 +15,7 @@
         Title="Class Designer" Height="450" Width="800"
         MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
         MaxWidth="{x:Static SystemParameters.MaximizedPrimaryScreenWidth}"
+        MinHeight="100" MinWidth="100"
         Background="{DynamicResource AppColor}" 
         WindowState="Maximized" WindowStyle="None" WindowStartupLocation="CenterScreen"
         AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
@@ -112,7 +113,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <c:DragItem DragContent="{Binding Content}" Width="130" Margin="2,2,2,0">
+                                    <c:DragItem DragContent="{Binding Content}" Width="130" Margin="2,2,2,0" Cursor="Hand">
                                         <Grid Background="{DynamicResource BackgroundColor}" >
                                             <TextBlock Margin="5" 
                                                Text="{Binding Name}" 
@@ -136,7 +137,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <c:DragItem DragContent="{Binding Content}" Width="130" Margin="2,2,2,0">
+                                    <c:DragItem DragContent="{Binding Content}" Width="130" Margin="2,2,2,0" Cursor="Hand">
                                         <Grid Background="{DynamicResource BackgroundColor}" >
                                             <TextBlock Margin="5" 
                                                Text="{Binding Name}" 
@@ -179,7 +180,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Ошибки:" VerticalAlignment="Center" />
