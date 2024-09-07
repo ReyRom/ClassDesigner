@@ -29,6 +29,11 @@ namespace ClassDesigner.Controls
                 double dragDeltaVertical, dragDeltaHorizontal, scale;
 
                 IEnumerable<DesignerItem> selectedDesignerItems = designer.SelectionService.Selection.OfType<DesignerItem>();
+                
+                if (selectedDesignerItems.Count() > 1)
+                {
+                    return;
+                }
 
                 CalculateDragLimits(selectedDesignerItems, out minLeft, out minTop,
                                     out minDeltaHorizontal, out minDeltaVertical);
